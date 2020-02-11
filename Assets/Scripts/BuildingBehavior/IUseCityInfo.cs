@@ -1,0 +1,4 @@
+﻿interface IActionOnBuild 
+{
+	 void OnBuild();
+}
