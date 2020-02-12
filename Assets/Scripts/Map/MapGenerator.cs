@@ -16,8 +16,7 @@ public class MapGenerator : MonoBehaviour
 	[SerializeField] Team[] teams = default;
 	public ColorToObject[] colorObjectMappings;
 	[SerializeField] ColorToHeight[] colorHeightMappings = default;
-
-	[SerializeField] Material waterMaterialEditor;
+	
 	Mesh waterMesh;
 	public int gridSpacing { get; private set; } = 1;
 	public int xSize { get; private set; }
@@ -243,8 +242,6 @@ public class MapGenerator : MonoBehaviour
 		waterObj.transform.parent = transform;
 		waterMesh = new Mesh();
 		waterObj.GetComponent<MeshFilter>().sharedMesh = waterMesh;
-		//waterObj.GetComponent<MeshRenderer>().material = waterMaterialEditor;
-		waterMaterialEditor.SetFloat("Offset", waterMaterial.GetFloat("YOffset"));
 
 
 		waterMesh.name = "Water";

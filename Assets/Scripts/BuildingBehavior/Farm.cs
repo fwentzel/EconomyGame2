@@ -24,6 +24,10 @@
 		return true;
 
 	}
+	protected override void TriggerBonusLevel()
+	{
+		unitsPerDay *= 2;
+	}
 	protected override string GetStats()
 	{
 		string stats = "Name: " + name + "\nTeam: " + team.teamID + "\nLevel: " + level;

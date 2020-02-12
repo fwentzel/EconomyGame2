@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager instance { get; private set; }
 	public static event Action OnNewDay=delegate { };
+	public static int dayIndex=0;
 
 	[HideInInspector] public MainBuilding mainBuilding;
 	public int dayLength=2;
@@ -38,5 +39,6 @@ public class GameManager : MonoBehaviour
 	private void InvokeNewDay()
 	{
 		OnNewDay();
+		dayIndex++;
 	}
 }

@@ -18,6 +18,7 @@ public abstract class BaseAi
 	{
 		return resourceManager.GetAmount(res);
 	}
+
 	protected void Log(string msg)
 	{
 		if (GameManager.instance.showAiLog)

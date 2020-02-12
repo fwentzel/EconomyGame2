@@ -7,7 +7,6 @@ public class Ship : MonoBehaviour
 	public Curve heightCurve;
 	public Team forTeam;
 	[SerializeField] float speed = 1;
-	[SerializeField] float wiggledampening = 3;
 	[SerializeField] float turnSpeed;
 
 	Animator animator;
@@ -18,7 +17,6 @@ public class Ship : MonoBehaviour
 	private float distance = 0;
 
 	state currentState = state.driving;
-	int currentWaypoint = 0;
 
 
 	void Awake()

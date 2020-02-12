@@ -23,8 +23,8 @@ public class MainBuilding : Building
 	{
 		PopulateBuildungs();
 
-		if (team != GameManager.instance.team)
-		//if (team.teamID == 0)
+		//if (team != GameManager.instance.team)
+		if (team.teamID == 0)
 		{
 			//Add AI Elements
 			gameObject.AddComponent<StateMachine>();

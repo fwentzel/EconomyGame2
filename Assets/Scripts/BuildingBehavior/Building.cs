@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 
@@ -30,11 +31,21 @@ public class Building : MonoBehaviour
 	{
 		if (level == maxLevel)
 			return false;
+		if (level == maxLevel)
+			TriggerBonusLevel();
 		level++;
 		resourceManager.AddRessource(resource.money, -levelCost);
 		VFXManager.instance.PlayEffect(VFXManager.instance.levelUpEffect, transform.position);
 		SetLevelMesh();
+		levelCost = (int)(levelCost* 1.5f);
+
+		
 		return true;
+	}
+
+	protected virtual void TriggerBonusLevel()
+	{
+		
 	}
 
 	public void SetLevelMesh()
@@ -54,6 +65,8 @@ public class Building : MonoBehaviour
 
 	public virtual void UpdateContextUi()
 	{
+		if (SelectionManager.instance.selectedObject != this.gameObject)
+			return;
 		UiManager.instance.UpdateUiElement(UiManager.instance.buildingContextUiText, GetStats());
 		UiManager.instance.UpdateUiElement(UiManager.instance.buildingContextUiLevelCostText, levelCost.ToString());
 		UiManager.instance.UpdateUiElement(UiManager.instance.buildingContextUiLevelUpButton,

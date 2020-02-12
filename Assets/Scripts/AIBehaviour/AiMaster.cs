@@ -15,7 +15,7 @@ public class AiMaster: MonoBehaviour
 	private void InitializeStateMachine()
 	{
 		var states = new Dictionary<Type, BaseAi>() {
-			{ typeof(LoyaltyAi),new LoyaltyAi(1,0,100,20,mainBuilding)},
+			{ typeof(LoyaltyAi),new LoyaltyAi(100,20,mainBuilding)},
 			{ typeof(BuildingAi),new BuildingAi(mainBuilding)},
 			{ typeof(TradeAi),new TradeAi(.1f,mainBuilding)}
 		};

@@ -9,7 +9,7 @@ public class StateMachine : MonoBehaviour
 	public event Action<BaseAi> OnStateChanged;
 	private void Awake()
 	{
-		InvokeRepeating("StateMachineUpdate", 0, .3f);
+		InvokeRepeating("StateMachineUpdate", 0, 1f);
 	}
 	private void StateMachineUpdate()
 	{

@@ -23,7 +23,11 @@
 
 		return stats;
 	}
-	
+	protected override void TriggerBonusLevel()
+	{
+		capacity *= 2;
+	}
+
 	public override bool LevelUp()
 	{
 		base.LevelUp();
