@@ -34,7 +34,7 @@ public class TradeManager : MonoBehaviour
 		generator = FindObjectOfType<MapGenerator>();
 		tradeElements = new Dictionary<Trade, TradeElement>();
 
-		StartCoroutine("AnnounceNewTrades", 10f);
+		StartCoroutine("AnnounceNewTrades",2f);
 
 	}
 

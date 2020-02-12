@@ -11,22 +11,22 @@ public class UiManager : MonoBehaviour
 	public RessourceStartvalue res;
 
 	public GameObject buildingContextUiCanvas;
-	public Text buildingContextUiText;
-	public Button buildingContextUiLevelUpButton;
-	public Text buildingContextUiLevelCostText;
+	public Text buildingContextUiText { get; private set; }
+	public Button buildingContextUiLevelUpButton { get; private set; }
+	public Text buildingContextUiLevelCostText { get; private set; }
 
 	public GameObject mainBuildingContextUiCanvas;
-	public Text mainBuildingContextUiText;
-	public Text mainBuildingContextUiTaxesText;
-	public Slider mainBuildingContextUiTaxesSlider;
+	public Text mainBuildingContextUiText { get; private set; }
+	public Text mainBuildingContextUiTaxesText { get; private set; }
+	public Slider mainBuildingContextUiTaxesSlider { get; private set; }
 
 	public GameObject menuPanel;
 	public GameObject settingsPanel;
 
 	public GameObject tradeUiCanvas;
-	public GameObject newTradesTimerParent;
-	public Text newTradesInText;
-	public Image newTradesInImage;
+	public GameObject newTradesTimerParent { get; private set; }
+	public Text newTradesInText { get; private set; }
+	public Image newTradesInImage { get; private set; }
 
 	private void Awake()
 	{
@@ -36,11 +36,28 @@ public class UiManager : MonoBehaviour
 		else
 			Destroy(this);
 
+		SetupUiElements();
 		foreach (Resource resource in res.startValues)
 		{
 			resource.SearchUiDisplay();
 		}
 	}
+
+	private void SetupUiElements()
+	{
+		buildingContextUiText = buildingContextUiCanvas.transform.GetChild(0).Find("ContextText").GetComponent<Text>();
+		buildingContextUiLevelUpButton = buildingContextUiCanvas.transform.GetChild(0).Find("LevelUpButton").GetComponent<Button>();
+		buildingContextUiLevelCostText = buildingContextUiLevelUpButton.GetComponentInChildren<Text>();
+
+		mainBuildingContextUiText = mainBuildingContextUiCanvas.transform.GetChild(0).Find("ContextText").GetComponent<Text>();
+		mainBuildingContextUiTaxesText = mainBuildingContextUiCanvas.transform.GetChild(0).Find("TaxesText").GetComponent<Text>(); ;
+		mainBuildingContextUiTaxesSlider = mainBuildingContextUiCanvas.transform.GetChild(0).GetComponentInChildren<Slider>();
+
+		newTradesTimerParent = tradeUiCanvas.transform.Find("Timer").gameObject;
+		newTradesInText = newTradesTimerParent.transform.Find("NewTradesTimerText").GetComponent<Text>();
+		newTradesInImage = newTradesTimerParent.transform.Find("NewTradeTimerForeground").GetComponent<Image>();
+	}
+
 	private void Start()
 	{
 		UpdateRessourceUI();
@@ -67,7 +84,7 @@ public class UiManager : MonoBehaviour
 		foreach (Resource res in res.startValues)
 		{
 			int amount = currentRessouceManagerToShow.GetAmount(res.resource);
-			if(res.uiDisplay!=null)
+			if (res.uiDisplay != null)
 				res.uiDisplay.text = amount.ToString();
 		}
 	}
@@ -96,18 +113,18 @@ public class UiManager : MonoBehaviour
 		menuPanel.SetActive(false);
 	}
 
-	public void OpenContext(GameObject canvasToOpen,Vector3 pos)
+	public void OpenContext(GameObject canvasToOpen, Vector3 pos)
 	{
 		CloseAll();
 		canvasToOpen.SetActive(true);
-		canvasToOpen.transform.position= new Vector3(pos.x,canvasToOpen.transform.position.y, pos.z);
+		canvasToOpen.transform.position = new Vector3(pos.x, canvasToOpen.transform.position.y, pos.z);
 	}
-	
+
 	public void OpenMenu(GameObject menuToOpen)
 	{
 		bool wasActive = menuToOpen.activeSelf;
 		CloseAll();
-		if(wasActive==false)
+		if (wasActive == false)
 			menuToOpen.SetActive(true);
 	}
 
