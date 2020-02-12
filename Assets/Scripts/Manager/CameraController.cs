@@ -86,7 +86,7 @@ public class CameraController : MonoBehaviour
     {
         Vector3 position = TheCamera.transform.position;
         Vector3 rotation = new Vector3(TheCamera.transform.eulerAngles.x, TheCamera.transform.eulerAngles.y, 0);
-
+		
         // W, A, S, D Movement
         if (Input.GetKey(KeyCode.W))
             position += new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);

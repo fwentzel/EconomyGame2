@@ -43,7 +43,10 @@ public class MapGenerator : MonoBehaviour
 		zSize = mapTexture.height - mapTexture.height % 2;
 	}
 
-
+	private void OnDisable()
+	{
+		waterMaterial.SetFloat("StartTime", -999);
+	}
 
 
 #if UNITY_EDITOR
