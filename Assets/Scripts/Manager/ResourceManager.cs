@@ -13,7 +13,7 @@ public class ResourceManager : MonoBehaviour
 	private void Awake()
 	{
 		PopulateRessourceAmounts();
-		GameManager.OnNewDay += CalculateNextDay;
+		GameManager.OnCalculateIntervall += CalculateNextDay;
 	}
 
 	private void PopulateRessourceAmounts()
@@ -27,14 +27,14 @@ public class ResourceManager : MonoBehaviour
 
 	private void CalculateNextDay()
 	{
-		CalculateTaxes();
+		CalculateMoney();
 		CalculateFood();
 		CalculateLoyalty();
 		TryUpdateUi();
 	}
 
 
-	private void CalculateTaxes()
+	private void CalculateMoney()
 	{
 		resourceAmount[resource.money] += mainBuilding.Taxes * resourceAmount[resource.citizens];
 	}

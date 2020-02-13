@@ -5,13 +5,13 @@
 
 	public void OnBuild()
 	{
-		GameManager.OnNewDay += UpdateContextUi;
+		GameManager.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.citizens, capacity);
 	}
 
 	public override void DestroyBuilding()
 	{
-		GameManager.OnNewDay -= UpdateContextUi;
+		GameManager.OnCalculateIntervall -= UpdateContextUi;
 		resourceManager.AddRessource(resource.citizens, -capacity);
 		base.DestroyBuilding();
 

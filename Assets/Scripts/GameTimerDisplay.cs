@@ -10,7 +10,7 @@ public class GameTimerDisplay : MonoBehaviour
 	private void Start()
 	{
 		timer = GetComponent<Image>();
-		dayLength = GameManager.instance.dayLength;
+		dayLength = GameManager.instance.calcResourceIntervall;
 	}
 	void Update()
 	{

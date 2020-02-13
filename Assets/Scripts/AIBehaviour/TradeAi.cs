@@ -18,7 +18,7 @@ public class TradeAi : BaseAi
 				continue;//Trade is no longer available, so move on to next one
 
 			//Berechnen wie viel Prozent der Ressourcen für diesen Trade abgeben werden. unter einem Threshold kann bedenkenlos getraded werden
-			float percentOfResource = (float)trade.givenAwayAmount / resourceManager.GetAmount(trade.givenAway.resource);
+			float percentOfResource = (float)trade.toTraderAmount / resourceManager.GetAmount(trade.toTrader.resource);
 			if (percentOfResource < safePercentOfResource)
 			{
 				Log("traded Safe");

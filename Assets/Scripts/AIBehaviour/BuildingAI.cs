@@ -34,7 +34,6 @@ public class BuildingAi : BaseAi
 	{
 		if (start < 1)
 			start = 1;
-		Log(start + " " + end);
 		oldEnd = end;
 		availableBuildSpots = new List<Vector2>();
 		Vector2 mainPos = new Vector2(mainBuilding.transform.position.x, mainBuilding.transform.position.z);

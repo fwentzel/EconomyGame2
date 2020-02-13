@@ -4,11 +4,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager instance { get; private set; }
-	public static event Action OnNewDay=delegate { };
+	public static event Action OnCalculateIntervall=delegate { };
 	public static int dayIndex=0;
 
 	[HideInInspector] public MainBuilding mainBuilding;
-	public int dayLength=2;
+	public int calcResourceIntervall=10;
 	public Team team;
 
 	//Debugging 
@@ -34,11 +34,11 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		UiManager.instance.currentRessouceManagerToShow= mainBuilding.resourceManager;
-		InvokeRepeating("InvokeNewDay", 0, GameManager.instance.dayLength);
+		InvokeRepeating("InvokeCalculateResource", 0, GameManager.instance.calcResourceIntervall);
 	}
-	private void InvokeNewDay()
+	private void InvokeCalculateResource()
 	{
-		OnNewDay();
+		OnCalculateIntervall();
 		dayIndex++;
 	}
 }
