@@ -48,7 +48,7 @@ public class TradeElement : MonoBehaviour
 		accepted = true;
 
 		var colors = acceptButton.colors;
-		colors.normalColor = Color.red;
+		colors.disabledColor = Color.red;
 		acceptButton.colors = colors;
 	}
 

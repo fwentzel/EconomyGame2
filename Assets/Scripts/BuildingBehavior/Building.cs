@@ -19,6 +19,7 @@ public class Building : MonoBehaviour
 	{
 		if (Input.GetMouseButtonDown(0) &&
 			GameManager.instance.team == team &&
+			PlacementController.instance.isPlacing==false&&//so no other Building gets triggered when trying to place on occupied spot
 			!EventSystem.current.IsPointerOverGameObject())//so no other Building behind floating UI gets triggered
 		{
 			SelectionManager.instance.selectedObject = this.gameObject;

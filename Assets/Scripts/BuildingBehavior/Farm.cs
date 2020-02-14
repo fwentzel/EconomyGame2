@@ -1,37 +1,37 @@
 ﻿public class Farm : Building
 {
-	public int unitsPerDay;
+	public int unitsPerIntervall;
 	
 
 	public void OnBuild()
 	{
 		GameManager.OnCalculateIntervall += UpdateContextUi;
-		resourceManager.AddRessource(resource.food, unitsPerDay);
+		resourceManager.AddRessource(resource.food, unitsPerIntervall);
 	}
 
 	public override void DestroyBuilding()
 	{
 		GameManager.OnCalculateIntervall -= UpdateContextUi;
-		resourceManager.AddRessource(resource.food, -unitsPerDay);
+		resourceManager.AddRessource(resource.food, -unitsPerIntervall);
 		base.DestroyBuilding();
 
 	}
 	public override bool LevelUp()
 	{
 		base.LevelUp();
-		unitsPerDay++;
+		unitsPerIntervall++;
 		resourceManager.AddRessource(resource.food, 1);
 		return true;
 
 	}
 	protected override void TriggerBonusLevel()
 	{
-		unitsPerDay *= 2;
+		unitsPerIntervall *= 2;
 	}
 	protected override string GetStats()
 	{
 		string stats = "Name: " + name + "\nTeam: " + team.teamID + "\nLevel: " + level;
-		 stats  +="\nCapacity: " + unitsPerDay;
+		 stats  +="\nCapacity: " + unitsPerIntervall;
 
 		return stats;
 	}

@@ -23,7 +23,7 @@ Material:
     m_Floats:
     - EmergeWaveSpeed: 2.65
     - FalloffDist: 3.42
-    - RippleDensity: 100.27
+    - RippleDensity: 284.39
     - RippleSlimness: 13.5
     - StartTime: -999
     - Vector1_168C3FA6: 0.91
@@ -46,7 +46,7 @@ Material:
     - isEditor: 0
     m_Colors:
     - Color_5868A3DB: {r: 0.2432538, g: 1.7298048, b: 0.8649024, a: 1}
-    - RippleColor: {r: 0.7058824, g: 1.254902, b: 1.3019608, a: 1}
+    - RippleColor: {r: 0.118774824, g: 0.12796147, b: 1.1334227, a: 1}
     - Vector2_2D24956B: {r: -0.02, g: 0.02, b: 0, a: 0}
     - Vector2_847799B5: {r: 0.05, g: -0.01, b: 0, a: 0}
-    - WaterColor: {r: 0.04111784, g: 0.44628805, b: 0.7924528, a: 1}
+    - WaterColor: {r: 0.033747394, g: 0.030437868, b: 0.33962262, a: 1}

@@ -37,7 +37,7 @@ MonoBehaviour:
   - {fileID: 4300000, guid: 47714fade9030154ab0473afb784568c, type: 3}
   buildCost: 200
   levelCost: 250
-  unitsPerDay: 4
+  unitsPerIntervall: 4
 --- !u!1001 &6669280694705909271
 PrefabInstance:
   m_ObjectHideFlags: 0

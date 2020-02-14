@@ -89,7 +89,7 @@ public class MainBuilding : Building
 
 	protected override void OnMouseOver()
 	{
-		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()&& PlacementController.instance.isPlacing == false )
 		{
 			if (GameManager.instance.team == team)
 			{

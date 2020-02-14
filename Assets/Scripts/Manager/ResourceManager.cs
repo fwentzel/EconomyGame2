@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
@@ -29,10 +30,10 @@ public class ResourceManager : MonoBehaviour
 	{
 		CalculateMoney();
 		CalculateFood();
+		CalculateStone();
 		CalculateLoyalty();
 		TryUpdateUi();
 	}
-
 
 	private void CalculateMoney()
 	{
@@ -66,10 +67,24 @@ public class ResourceManager : MonoBehaviour
 			Farm farm;
 			if (farm = building as Farm)
 			{
-				generatedAmount += farm.unitsPerDay;
+				generatedAmount += farm.unitsPerIntervall;
 			}
 		}
 		return generatedAmount;
+	}
+
+	private void CalculateStone()
+	{
+		int generatedAmount = 0;
+		foreach (Building building in mainBuilding.buildings)
+		{
+			Mine mine;
+			if (mine = building as Mine)
+			{
+				generatedAmount += mine.unitsPerIntervall;
+			}
+		}
+		resourceAmount[resource.stone]+= generatedAmount;
 	}
 
 	private void CalculateLoyalty()
