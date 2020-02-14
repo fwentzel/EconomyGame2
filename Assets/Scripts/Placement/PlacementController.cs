@@ -194,10 +194,10 @@ public class PlacementController : MonoBehaviour
 		gridMaterial.SetColor("Color_31DF09FF", gridColor);
 	}
 
-	public void SetCanBuild(bool _canBuild)
+	public void SetCanBuild(bool canBuild)
 	{
 		//Set canBuildvariable and set Gridcolor depending on value of _canBuild
-		canBuild = _canBuild;
+		this.canBuild = canBuild;
 		if (canBuild)
 			UpdateGridColor(Color.white);
 		else

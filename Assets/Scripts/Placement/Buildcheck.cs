@@ -2,20 +2,18 @@
 
 public class Buildcheck : MonoBehaviour
 {
+	Building building;
+	private void Awake()
+	{
+		building = GetComponent<Building>();
+	}
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.tag.Equals("Placeable"))
-		{
-			PlacementController.instance.SetCanBuild(false);
-		}
-			
+		building.CheckCanBuild(other, true);
+
 	}
 	private void OnTriggerExit(Collider other)
 	{
-		if (other.tag.Equals("Placeable"))
-		{
-			PlacementController.instance.SetCanBuild (true);
-		}
-
+		building.CheckCanBuild(other, false);
 	}
 }

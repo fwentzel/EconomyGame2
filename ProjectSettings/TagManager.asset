@@ -7,6 +7,7 @@ TagManager:
   - Placeable
   - Ground
   - Building
+  - RockResource
   layers:
   - Default
   - TransparentFX

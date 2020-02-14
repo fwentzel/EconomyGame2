@@ -359,7 +359,6 @@ GameObject:
   - component: {fileID: 4274579679366095240}
   - component: {fileID: 7988941716088369355}
   - component: {fileID: 8274409766056516274}
-  - component: {fileID: 4137174151996418041}
   m_Layer: 0
   m_Name: forest
   m_TagString: Untagged
@@ -414,18 +413,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4137174151996418041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5269855522899004666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79cb1bd165b9d304d819835309ab07b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6360138041250026970
 GameObject:
   m_ObjectHideFlags: 0
