@@ -1,9 +1,9 @@
-﻿public class House : Building, IActionOnBuild
+﻿public class House : Building
 {
 	public int capacity;
 
 
-	public void OnBuild()
+	public override void OnBuild()
 	{
 		GameManager.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.citizens, capacity);

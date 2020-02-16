@@ -60,11 +60,7 @@ public class MainBuilding : Building
 	{
 		buildings.Add(building);
 		building.resourceManager = resourceManager;
-		IActionOnBuild actionBuilding = building as IActionOnBuild;
-		if (actionBuilding != null)
-		{
-			actionBuilding.OnBuild();
-		}
+		building.OnBuild();
 	}
 
 	//Ai version

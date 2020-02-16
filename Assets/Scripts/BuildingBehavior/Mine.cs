@@ -9,7 +9,7 @@ public class Mine : Building
 	{
 		PlacementController.instance.SetCanBuild(false);
 	}
-	public void OnBuild()
+	public override void OnBuild()
 	{
 		GameManager.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.stone, unitsPerIntervall);

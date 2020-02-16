@@ -59,6 +59,11 @@ public class Building : MonoBehaviour
 		}
 	}
 
+	public virtual void OnBuild()
+	{
+		
+	}
+
 	public virtual void DestroyBuilding()
 	{
 		resourceManager.mainBuilding.buildings.Remove(this);

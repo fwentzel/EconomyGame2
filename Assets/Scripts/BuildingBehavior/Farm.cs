@@ -1,9 +1,9 @@
 ﻿public class Farm : Building
 {
 	public int unitsPerIntervall;
-	
 
-	public void OnBuild()
+
+	public override void OnBuild()
 	{
 		GameManager.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.food, unitsPerIntervall);
