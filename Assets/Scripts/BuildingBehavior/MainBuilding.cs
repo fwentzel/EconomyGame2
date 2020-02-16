@@ -12,6 +12,7 @@ public class MainBuilding : Building
 	public List<Building> buildings { get; private set; }
 	public Dictionary<Type, GameObject> possibleBuildings;
 	public int Taxes { get => taxes; set => taxes = Mathf.Clamp(value, 0, 10); }
+	public bool gameOver=false;
 
 	private void Awake()
 	{
@@ -23,8 +24,8 @@ public class MainBuilding : Building
 	{
 		PopulateBuildungs();
 
-		//if (team != GameManager.instance.team)
-		if (team.teamID == 0)
+		if (team != GameManager.instance.team)
+		//if (team.teamID == 0)
 		{
 			//Add AI Elements
 			gameObject.AddComponent<StateMachine>();

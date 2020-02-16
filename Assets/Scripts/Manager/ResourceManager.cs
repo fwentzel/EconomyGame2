@@ -29,14 +29,18 @@ public class ResourceManager : MonoBehaviour
 
 	private void CalculateNextDay()
 	{
+		if (mainBuilding.gameOver)//TODO HACKY. methode überlegen sie aus dem spiel zu nehmen
+			return;
+	
+
 		CalculateMoney();
 		CalculateFood();
 		CalculateStone();
 		CalculateLoyalty();
 		TryUpdateUi();
-
-		CheckGameOver();
 		CompareToMeanCityResources();
+		CheckGameOver();
+
 	}
 
 	private void CheckGameOver()
@@ -44,6 +48,7 @@ public class ResourceManager : MonoBehaviour
 		if (resourceAmount[resource.citizens] <= 0)
 		{
 			print("GAME OVER FOR TEAM " + mainBuilding.team.teamID);
+			mainBuilding.gameOver = true;
 		}
 	}
 
@@ -53,7 +58,9 @@ public class ResourceManager : MonoBehaviour
 		if(diff>0)
 		{
 			//can pickup any free ciziens
-			if (Random.Range(0, 100) <= diff)
+			int random = Random.Range(0, 100);
+			
+			if (random <= diff)
 			{
 				CityResourceLookup.instance.TakeCitizen(this);
 			}
@@ -61,7 +68,8 @@ public class ResourceManager : MonoBehaviour
 		else
 		{
 			//possibility that Citizens wander off
-			if (Random.Range (-100,0) <= diff )
+			int random = Random.Range(-100, 0);
+			if (random <= diff )
 			{
 				CityResourceLookup.instance.LooseCitizen(this);
 			}

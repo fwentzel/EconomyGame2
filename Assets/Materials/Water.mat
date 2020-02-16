@@ -42,7 +42,7 @@ Material:
     - Vector1_C9015BF8: 6.58
     - WaveHeight: 0.06
     - Wavespeed: 1.69
-    - YOffset: -0.4
+    - YOffset: -0.16
     - isEditor: 0
     m_Colors:
     - Color_5868A3DB: {r: 0.73794055, g: 0.7694079, b: 0.9716981, a: 1}
