@@ -17,8 +17,8 @@ public class MainBuilding : Building
 	{
 		resourceManager = GetComponent<ResourceManager>();
 		resourceManager.mainBuilding = this;
-		
 	}
+
 	private void Start()
 	{
 		PopulateBuildungs();
@@ -37,7 +37,7 @@ public class MainBuilding : Building
 		buildings = new List<Building>();
 		foreach (Building building in FindObjectsOfType<Building>())
 		{
-			if (building.team == team&&building!=this)
+			if (building.team == team && building != this)
 			{
 				AddBuilding(building);
 			}
@@ -49,7 +49,7 @@ public class MainBuilding : Building
 			Building building;
 			if ((building = cto.placeable.GetComponent<Building>()) != null)
 			{
-				
+
 				possibleBuildings[building.GetType()] = cto.placeable;
 			}
 		}
@@ -71,7 +71,7 @@ public class MainBuilding : Building
 	public Building AddBuilding(Type buildingType, Vector3 pos)
 	{
 		if (pos == Vector3.zero)
-			pos = transform.position + new Vector3(2,0,2);
+			pos = transform.position + new Vector3(2, 0, 2);
 		//TODO SAME CODE AS IN MAPGENERATOR		
 		Building building = Instantiate(possibleBuildings[buildingType], pos, Quaternion.identity).GetComponent<Building>();
 		building.transform.rotation = MapGenerator.GetRotationFromNormalSurface(building.gameObject);
@@ -84,12 +84,12 @@ public class MainBuilding : Building
 	}
 
 
-		
+
 	//Building overrides
 
 	protected override void OnMouseOver()
 	{
-		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()&& PlacementController.instance.isPlacing == false )
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && PlacementController.instance.isPlacing == false)
 		{
 			if (GameManager.instance.team == team)
 			{

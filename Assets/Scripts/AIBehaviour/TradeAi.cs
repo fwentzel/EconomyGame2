@@ -23,7 +23,7 @@ public class TradeAi : BaseAi
 			{
 				Log("traded Safe");
 				TradeManager.instance.AcceptTrade(trade, resourceManager);
-				return typeof(LoyaltyAi);
+				return typeof(TaxesAi);
 			}
 		}
 		Log("nothing to Trade ");

@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
-public class LoyaltyAi : BaseAi
+public class TaxesAi : BaseAi
 {
 	int moneyRaiseTaxesThreshold = 200;
 	int loyaltyRiskyThreshold = 20;
 	int lastTaxchangeDay =-1;
-	public LoyaltyAi( int moneyRaiseTaxesThreshold, int loyaltyRiskyThreshold, MainBuilding mainBuilding) :base(mainBuilding)
+	public TaxesAi( int moneyRaiseTaxesThreshold, int loyaltyRiskyThreshold, MainBuilding mainBuilding) :base(mainBuilding)
 	{
 		this.moneyRaiseTaxesThreshold = moneyRaiseTaxesThreshold;
 		this.loyaltyRiskyThreshold = loyaltyRiskyThreshold;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -33,6 +34,38 @@ public class ResourceManager : MonoBehaviour
 		CalculateStone();
 		CalculateLoyalty();
 		TryUpdateUi();
+
+		CheckGameOver();
+		CompareToMeanCityResources();
+	}
+
+	private void CheckGameOver()
+	{
+		if (resourceAmount[resource.citizens] <= 0)
+		{
+			print("GAME OVER FOR TEAM " + mainBuilding.team.teamID);
+		}
+	}
+
+	private void CompareToMeanCityResources()
+	{
+		float diff = resourceAmount[resource.loyalty] - CityResourceLookup.instance.meanLoyalty;
+		if(diff>0)
+		{
+			//can pickup any free ciziens
+			if (Random.Range(0, 100) <= diff)
+			{
+				CityResourceLookup.instance.TakeCitizen(this);
+			}
+		}
+		else
+		{
+			//possibility that Citizens wander off
+			if (Random.Range (-100,0) <= diff )
+			{
+				CityResourceLookup.instance.LooseCitizen(this);
+			}
+		}
 	}
 
 	private void CalculateMoney()
@@ -104,16 +137,12 @@ public class ResourceManager : MonoBehaviour
 		if (newLoyalty <= 0)
 		{
 			newLoyalty = 0;
-			print("leader of " + mainBuilding.team.name + " failed his citizens. They riot and wander off to other citys...");
-			//game Over
 		}
 		resourceAmount[resource.loyalty] = (int)newLoyalty;
 	}
 
 	public void AddRessource(resource res,int amount)
 	{
-		if (resourceAmount == null)
-			print(name);
 		resourceAmount[res] += amount;
 		TryUpdateUi();
 	}

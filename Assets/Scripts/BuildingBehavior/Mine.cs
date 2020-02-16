@@ -52,7 +52,6 @@ public class Mine : Building
 				for (int i = 0; i < numFound; i++)
 				{
 					if (overlapResults[i].gameObject == this.gameObject) continue;
-					print(overlapResults[i].tag+"  name: "+ overlapResults[i].name);
 					if (overlapResults[i].tag.Equals("Placeable"))
 					{
 						PlacementController.instance.SetCanBuild(false);
