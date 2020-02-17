@@ -1,23 +1,23 @@
 ﻿using BansheeGz.BGSpline.Components;
 using BansheeGz.BGSpline.Curve;
+using System.Collections;
 using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
 	public Curve heightCurve;
-	public Team forTeam;
 	[SerializeField] float speed = 1;
 	[SerializeField] float turnSpeed;
 
 	Animator animator;
 	float startTime;
+	bool reached=false;
 
 	public BGCurve curve;
 	public BGCcMath math;
 	private float distance = 0;
-
-	state currentState = state.driving;
-
+	internal Trade trade;
+	internal ResourceManager rm;
 
 	void Awake()
 	{
@@ -39,17 +39,10 @@ public class Ship : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void Update()
+	void FixedUpdate()
 	{
-		if (currentState == state.driving)
-		{
+		if(reached==false)
 			Move();
-		}
-		else if (currentState == state.reachedDestionation)
-		{
-			print("reached");
-		}
-
 	}
 
 	private void Move()
@@ -68,19 +61,19 @@ public class Ship : MonoBehaviour
 		transform.rotation = Quaternion.LookRotation(tangent);
 
 		if (distance >= math.GetDistance())
-			currentState = state.reachedDestionation;
+		{
+			StartCoroutine("Unload");
+			reached = true;
+		}
 	}
 
-	private void IdleSineHeight()
+	private IEnumerator Unload()
 	{
-
-
+		yield return new WaitForSeconds(3);
+		rm.AddRessource(trade.fromTrader.resource, trade.fromTraderAmount);
+		//TODO Pooling
+		Destroy(this.gameObject);
 	}
 
-	enum state
-	{
-		waiting,
-		driving,
-		reachedDestionation
-	}
+
 }

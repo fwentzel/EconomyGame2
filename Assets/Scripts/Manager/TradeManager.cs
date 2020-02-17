@@ -83,27 +83,28 @@ public class TradeManager : MonoBehaviour
 
 	public void AcceptTrade(Trade trade, ResourceManager rm)
 	{
-		rm.AddRessource(trade.fromTrader.resource, trade.fromTraderAmount);
 		rm.AddRessource(trade.toTrader.resource, -trade.toTraderAmount);
-
 		if (trade.type == tradeType.ship)
 		{
-			Ship ship = Instantiate(shipPrefab, new Vector3(generator.xSize / 2, 0, generator.zSize / 2), Quaternion.identity).GetComponent<Ship>();
-
-			Transform curveTransform = null;
-			if (wayPointsParent.transform.childCount >= rm.mainBuilding.team.teamID)
-				curveTransform = wayPointsParent.transform.GetChild(rm.mainBuilding.team.teamID);
-			else
-				curveTransform = wayPointsParent.transform.GetChild(0);
-
-			ship.curve = curveTransform.GetComponent<BGCurve>();
-			ship.math = curveTransform.GetComponent<BGCcMath>();
+			SpawnShip(trade,rm);
 		}
+
 		acceptedTrades++;
 		if (acceptedTrades ==4)
 		{
 			StartCoroutine("AnnounceNewTrades", 10f);
 		}
+	}
+
+	private void SpawnShip(Trade trade,ResourceManager rm)
+	{
+		Ship ship = Instantiate(shipPrefab, new Vector3(generator.xSize / 2, 0, generator.zSize / 2), Quaternion.identity).GetComponent<Ship>();
+		ship.trade = trade;
+		ship.rm = rm;
+		//Get Waypointcurve At child index from team. Has to be setupup correct in scene
+		Transform curveTransform = wayPointsParent.transform.GetChild(rm.mainBuilding.team.teamID);
+		ship.curve = curveTransform.GetComponent<BGCurve>();
+		ship.math = curveTransform.GetComponent<BGCcMath>();
 	}
 
 	IEnumerator AnnounceNewTrades(float duration)
