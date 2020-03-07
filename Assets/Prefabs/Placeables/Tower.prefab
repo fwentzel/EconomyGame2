@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3d23144ce0eb94f939322f1b4475e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resourceManager: {fileID: 0}
+  team: {fileID: 0}
   meshlevels:
   - {fileID: 4300000, guid: d9cc2664702761e4e84869872ec27d9c, type: 3}
   - {fileID: 4300000, guid: 262a6ed0126b60642bb6bc7ddddbf99c, type: 3}
@@ -20,8 +22,8 @@ MonoBehaviour:
   - {fileID: 4300000, guid: 5a3e1d94da6fcf848932536d2a424cd7, type: 3}
   - {fileID: 4300000, guid: b8765a5fac1298844ad6c75168ca605e, type: 3}
   - {fileID: 4300000, guid: 238f3d8957882a74a86241dac4a450ea, type: 3}
-  team: {fileID: 0}
-  cityManager: {fileID: 0}
+  buildCost: 50
+  levelCost: 100
 --- !u!1001 &4376967374584659857
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98,6 +100,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tower
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.y
+      value: 0.235
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.z
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.24
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f696213203f17a4ca48cee4726d5fc0, type: 3}

@@ -102,6 +102,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: House
       objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.z
+      value: 0.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.x
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.y
+      value: 0.215
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f696213203f17a4ca48cee4726d5fc0, type: 3}
 --- !u!1 &4595229145907955752 stripped

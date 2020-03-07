@@ -13,6 +13,7 @@ public class MainBuilding : Building
 	public Dictionary<Type, GameObject> possibleBuildings;
 	public int Taxes { get => taxes; set => taxes = Mathf.Clamp(value, 0, 10); }
 	public bool gameOver=false;
+	public int maxCitizens = 0;
 
 	private void Awake()
 	{

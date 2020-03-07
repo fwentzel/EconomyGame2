@@ -83,9 +83,9 @@ public class UiManager : MonoBehaviour
 	{
 		foreach (Resource res in res.startValues)
 		{
-			int amount = currentRessouceManagerToShow.GetAmount(res.resource);
 			if (res.uiDisplay != null)
-				res.uiDisplay.text = amount.ToString();
+				res.uiDisplay .text= currentRessouceManagerToShow.GetAmountUI(res.resource);
+			
 		}
 	}
 

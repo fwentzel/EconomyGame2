@@ -41,8 +41,10 @@ public class Ship : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate()
 	{
-		if(reached==false)
+		if (reached == false)
 			Move();
+		//else
+		//	Sink();
 	}
 
 	private void Move()

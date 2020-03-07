@@ -246,7 +246,7 @@ public class MapGenerator : MonoBehaviour
 
 		waterMesh.name = "Water";
 		//initialize vertices and uv Arrays with Texture dimensions
-		int tweenerVerts = 2;
+		int tweenerVerts = 0;
 		Vector3[] waterVerts = new Vector3[(xSize + 1) * (zSize + 1) * tweenerVerts * 2];
 		Vector2[] waterUvs = new Vector2[waterVerts.Length];
 

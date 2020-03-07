@@ -47,6 +47,8 @@ MonoBehaviour:
   buildCost: 50
   levelCost: 100
   foodUsePerDayPerCitizen: 2
+  gameOver: 0
+  maxCitizens: 0
 --- !u!1001 &3086798398129089301
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54,6 +56,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4508116571335453268, guid: 7eb37859ffb14ea4182db2bad81211e3,
+        type: 3}
+      propertyPath: m_Extents.x
+      value: 0.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 4508116571335453268, guid: 7eb37859ffb14ea4182db2bad81211e3,
+        type: 3}
+      propertyPath: m_Extents.z
+      value: 0.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 4508116571335453268, guid: 7eb37859ffb14ea4182db2bad81211e3,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 4508116571335453268, guid: 7eb37859ffb14ea4182db2bad81211e3,
+        type: 3}
+      propertyPath: m_Extents.y
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 5735851635572469302, guid: 7eb37859ffb14ea4182db2bad81211e3,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

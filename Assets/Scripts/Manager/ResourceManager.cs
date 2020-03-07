@@ -37,7 +37,7 @@ public class ResourceManager : MonoBehaviour
 		CalculateFood();
 		CalculateStone();
 		CalculateLoyalty();
-		TryUpdateUi();
+		UpdateUi();
 		CompareToMeanCityResources();
 		CheckGameOver();
 
@@ -60,7 +60,7 @@ public class ResourceManager : MonoBehaviour
 			//can pickup any free ciziens
 			int random = Random.Range(0, 100);
 			
-			if (random <= diff)
+			if (random <= diff&&resourceAmount[resource.citizens]<mainBuilding.maxCitizens)
 			{
 				CityResourceLookup.instance.TakeCitizen(this);
 			}
@@ -130,14 +130,17 @@ public class ResourceManager : MonoBehaviour
 
 	private void CalculateLoyalty()
 	{
-		foodLoyaltyChange = 0;
 		float newLoyalty = resourceAmount[resource.loyalty];
 		//Evaluate animation curve to determine loyalty Change based on foodunits per citizens
 		float t = (resourceAmount[resource.food] * mainBuilding.foodUsePerDayPerCitizen) / resourceAmount[resource.citizens];
 		foodLoyaltyChange = foodRatioToLoyaltyChange.curve.Evaluate(t);
 
+		if (mainBuilding.maxCitizens / resourceAmount[resource.citizens] < .5f)
+			newLoyalty -= 5;
+
 		//taxes in Range (0,10). taxes= 5 results in neutral loyaltychange
 		newLoyalty += 5 - mainBuilding.Taxes;
+
 		newLoyalty += foodLoyaltyChange;
 
 		if (newLoyalty > 100)
@@ -152,10 +155,10 @@ public class ResourceManager : MonoBehaviour
 	public void AddRessource(resource res,int amount)
 	{
 		resourceAmount[res] += amount;
-		TryUpdateUi();
+		UpdateUi();
 	}
 
-	public void TryUpdateUi()
+	public void UpdateUi()
 	{
 		if (UiManager.instance != null && UiManager.instance.currentRessouceManagerToShow == this)
 		{
@@ -164,9 +167,18 @@ public class ResourceManager : MonoBehaviour
 		//TODO vll Woanders hin
 			
 	}
+
 	internal int GetAmount(resource resource)
 	{
 		return resourceAmount[resource];
+	}
+
+	internal String GetAmountUI(resource resource)
+	{
+		if (resource == resource.citizens)
+			return GetAmount(resource) + "/" +mainBuilding.maxCitizens;
+
+		return resourceAmount[resource].ToString();
 	}
 }
 public enum resource

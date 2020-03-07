@@ -124,6 +124,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mine
       objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.x
+      value: 0.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.z
+      value: 0.32
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -5682945439405749430, guid: 6f696213203f17a4ca48cee4726d5fc0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6f696213203f17a4ca48cee4726d5fc0, type: 3}
