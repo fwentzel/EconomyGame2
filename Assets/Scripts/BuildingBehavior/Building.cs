@@ -40,7 +40,6 @@ public class Building : MonoBehaviour
 		SetLevelMesh();
 		levelCost = (int)(levelCost * 1.5f);
 
-
 		return true;
 	}
 

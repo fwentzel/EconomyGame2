@@ -21,6 +21,7 @@ public class Ship : MonoBehaviour
 
 	void Awake()
 	{
+		
 		animator = transform.GetChild(0).GetComponent<Animator>();
 		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
 	}

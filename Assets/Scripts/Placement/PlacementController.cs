@@ -125,13 +125,16 @@ public class PlacementController : MonoBehaviour
 			Destroy(placeableObject.GetComponent<Buildcheck>());
 			placeableObject.GetComponent<BoxCollider>().isTrigger = false;
 
+			//spawn Object on server so all clients can see
+			NetworkUtility.instance.SpawnObject(placeableObject);
+
 			//Set Team variable
 			Building building = placeableObject.GetComponent<Building>();
 			building.team = GameManager.instance.team;
 			building.enabled = true;
 
 			//Todo Hässlich
-			GameManager.instance.mainBuilding.AddBuilding(building);
+			GameManager.instance.localPlayer.mainBuilding.AddBuilding(building);
 
 			//toggle off placement grid and reset placeableObject
 			placeableObject = null;
@@ -156,7 +159,11 @@ public class PlacementController : MonoBehaviour
 
 		//Instantiate new object to place and add necessary components. Make sure Collider is Trigger for OnTriggerEnter()
 		//TODO take from pool?
-		placeableObject = GameObject.Instantiate(placeable);
+		if (placeableObject != null)
+		{
+			Destroy(placeableObject);
+		}
+		placeableObject = Instantiate(placeable);
 		placeableObject.GetComponent<Building>().enabled = false;
 		placeableObject.AddComponent<Buildcheck>();
 		placeableObject.GetComponent<BoxCollider>().isTrigger = true;

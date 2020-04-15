@@ -98,7 +98,9 @@ public class TradeManager : MonoBehaviour
 
 	private void SpawnShip(Trade trade,ResourceManager rm)
 	{
-		Ship ship = Instantiate(shipPrefab, new Vector3(generator.xSize / 2, 0, generator.zSize / 2), Quaternion.identity).GetComponent<Ship>();
+		GameObject obj= Instantiate(shipPrefab, new Vector3(generator.xSize / 2, 0, generator.zSize / 2), Quaternion.identity);
+		NetworkUtility.instance.SpawnObject(obj);
+		Ship ship = obj.GetComponent<Ship>();
 		ship.trade = trade;
 		ship.rm = rm;
 		//Get Waypointcurve At child index from team. Has to be setupup correct in scene

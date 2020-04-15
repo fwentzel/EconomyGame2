@@ -34,6 +34,12 @@ public class MapGenerator : MonoBehaviour
 		SetDimension();
 		//transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
 		waterMaterial.SetFloat("StartTime", -999);
+		GenerateMap();
+	}
+	private void Start()
+	{
+		GameManager.instance.teams = teams;
+		BuildObjectsOnMap();
 	}
 
 	void SetDimension()
@@ -48,19 +54,16 @@ public class MapGenerator : MonoBehaviour
 	}
 
 
-#if UNITY_EDITOR
 	public void GenerateMap()
 	{
 		DestroyChildren();
 		SetDimension();
-
-		if(transform.GetChild(0).name!="Water")
+		if (transform.GetChild(0).name!="Water")
 			BuildWaterMesh();
 
 		SetupMeshfilter();
 		BuildMapMesh();
 		ChangeMapVertexHeights();
-		BuildObjectsOnMap();
 		UpdateMesh();
 		UpdateCollider();
 		
@@ -199,12 +202,10 @@ public class MapGenerator : MonoBehaviour
 										 vertices[xSize + i].y;
 							newY /= 4;
 							//instantiate given prefab and set Position at coordinsates + gridspacing/2 offset and vertexheigth
-
-							GameObject obj = PrefabUtility.InstantiatePrefab(objectMapping.placeable, transform) as GameObject;
-
-
+							GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
+							NetworkUtility.instance.SpawnObject(obj);
 							obj.transform.position = new Vector3(x + gridSpacing / 2.0f, newY, z + gridSpacing / 2.0f);
-							obj.transform.rotation = GetRotationFromNormalSurface(obj);
+							//obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
 							int teamColorValue = mapTextureColor.b;
 							if (teamColorValue < teams.Length)//everything bigger is an object without a team like forests or rocks
@@ -293,7 +294,7 @@ public class MapGenerator : MonoBehaviour
 		waterMesh.RecalculateNormals();
 		waterMesh.RecalculateBounds();
 	}
-#endif
+
 	public static Quaternion GetRotationFromNormalSurface(GameObject obj)
 	{
 		RaycastHit hit;

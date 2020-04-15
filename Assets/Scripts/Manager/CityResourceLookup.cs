@@ -5,7 +5,7 @@ using System;
 public class CityResourceLookup : MonoBehaviour
 {
 	public static CityResourceLookup instance { get; private set; }
-
+	public GameObject citizenPrefab;
 	public float meanLoyalty { get; private set; } = 50;
 	public float freeCitizens { get; private set; } =0;
 
@@ -18,8 +18,9 @@ public class CityResourceLookup : MonoBehaviour
 			instance = this;
 		else
 			Destroy(this);
-		GameManager.OnCalculateIntervall += UpdateCityResourceMean;
 		resourceManagers = FindObjectsOfType<ResourceManager>();
+		GameManager.OnCalculateIntervall += UpdateCityResourceMean;
+		
 	}
 
 	private void UpdateCityResourceMean()
@@ -46,5 +47,6 @@ public class CityResourceLookup : MonoBehaviour
 		print(string.Format("Team {0} hat einen Bürger verloren!", resourceManager.mainBuilding.team.teamID));
 		freeCitizens++;
 		resourceManager.AddRessource(resource.citizens, -1);
+		Instantiate(citizenPrefab, resourceManager.transform.position, Quaternion.identity);
 	}
 }
