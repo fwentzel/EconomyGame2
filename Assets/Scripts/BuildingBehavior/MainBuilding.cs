@@ -21,19 +21,17 @@ public class MainBuilding : Building
 		resourceManager.mainBuilding = this;
 	}
 
-	private void Start()
+	public void SetupMainBuilding()
 	{
 		PopulateBuildungs();
-
-		if (team != GameManager.instance.team)
-		//if (team.teamID == 0)
+		if (GameManager.instance.players[team.teamID].isAi)
 		{
 			//Add AI Elements
 			gameObject.AddComponent<StateMachine>();
 			AiMaster bAi = gameObject.AddComponent<AiMaster>();
 		}
-
 	}
+
 	private void PopulateBuildungs()
 	{
 		buildings = new List<Building>();
@@ -63,6 +61,8 @@ public class MainBuilding : Building
 		buildings.Add(building);
 		building.resourceManager = resourceManager;
 		building.OnBuild();
+		building.team = team;
+		building.enabled = true;
 	}
 
 	//Ai version
@@ -80,16 +80,13 @@ public class MainBuilding : Building
 		AddBuilding(building);
 		return building;
 	}
-
-
-
 	//Building overrides
 
 	protected override void OnMouseOver()
 	{
 		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && PlacementController.instance.isPlacing == false)
 		{
-			if (GameManager.instance.team == team)
+			if (GameManager.instance.players[team.teamID].MainBuilding == this)
 			{
 				SelectionManager.instance.selectedObject = this.gameObject;
 				UiManager.instance.OpenContext(UiManager.instance.mainBuildingContextUiCanvas, transform.position);
@@ -100,12 +97,14 @@ public class MainBuilding : Building
 		}
 
 	}
+
 	public override void UpdateContextUi()
 	{
 		UiManager.instance.UpdateUiElement(UiManager.instance.mainBuildingContextUiTaxesText, "Taxes: " + Taxes + " /10 per citizen");
 		UiManager.instance.UpdateUiElement(UiManager.instance.mainBuildingContextUiText, GetStats());
 		UiManager.instance.UpdateUiElement(UiManager.instance.mainBuildingContextUiTaxesSlider, Taxes);
 	}
+
 	protected override string GetStats()
 	{
 		string stats = "Name: " + name + " \nTeam: " + team.teamID;

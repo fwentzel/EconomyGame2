@@ -23,19 +23,16 @@ public class PlacementController : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
-		SetupGridParameter();
-		MapGenerator mapGen = FindObjectOfType<MapGenerator>();
-		xSize = mapGen.xSize;
-		zSize=mapGen.zSize;
-		groundMesh = mapGen.GetComponent<MeshFilter>().mesh;
 	}
 
-	private void SetupGridParameter()
+	public void SetupGridParameter()
 	{
-		GameObject groundObj = GameObject.FindGameObjectWithTag("Ground");
-
-		gridMaterial = groundObj.GetComponent<MeshRenderer>().material;
-		gridSpacing = groundObj.GetComponent<MapGenerator>().gridSpacing;
+		MapGenerator mapGen = FindObjectOfType<MapGenerator>();
+		xSize = mapGen.xSize;
+		zSize = mapGen.zSize;
+		groundMesh = mapGen.GetComponent<MeshFilter>().mesh;
+		gridMaterial = mapGen.GetComponent<MeshRenderer>().material;
+		gridSpacing = mapGen.GetComponent<MapGenerator>().gridSpacing;
 		gridPlacementOffset = (float)gridSpacing / 2;
 	}
 
@@ -130,11 +127,8 @@ public class PlacementController : MonoBehaviour
 
 			//Set Team variable
 			Building building = placeableObject.GetComponent<Building>();
-			building.team = GameManager.instance.team;
-			building.enabled = true;
-
-			//Todo Hässlich
-			GameManager.instance.localPlayer.mainBuilding.AddBuilding(building);
+			//TODO PLAYER 0
+			GameManager.instance.players[0].MainBuilding.AddBuilding(building);
 
 			//toggle off placement grid and reset placeableObject
 			placeableObject = null;

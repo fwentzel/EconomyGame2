@@ -43,6 +43,11 @@ public class UiManager : MonoBehaviour
 		}
 	}
 
+	private void Start()
+	{
+		UpdateRessourceUI();
+	}
+
 	private void SetupUiElements()
 	{
 		buildingContextUiText = buildingContextUiCanvas.transform.GetChild(0).Find("ContextText").GetComponent<Text>();
@@ -56,11 +61,6 @@ public class UiManager : MonoBehaviour
 		newTradesTimerParent = tradeUiCanvas.transform.Find("Timer").gameObject;
 		newTradesInText = newTradesTimerParent.transform.Find("NewTradesTimerText").GetComponent<Text>();
 		newTradesInImage = newTradesTimerParent.transform.Find("NewTradeTimerForeground").GetComponent<Image>();
-	}
-
-	private void Start()
-	{
-		UpdateRessourceUI();
 	}
 
 	private void Update()
@@ -81,6 +81,8 @@ public class UiManager : MonoBehaviour
 
 	public void UpdateRessourceUI()
 	{
+		if (currentRessouceManagerToShow == null)
+			return;
 		foreach (Resource res in res.startValues)
 		{
 			if (res.uiDisplay != null)

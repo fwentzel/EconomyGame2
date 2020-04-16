@@ -17,8 +17,9 @@ public class Building : MonoBehaviour
 
 	protected virtual void OnMouseOver()
 	{
+		
 		if (Input.GetMouseButtonDown(0) &&
-			GameManager.instance.team == team &&
+			GameManager.instance.players[team.teamID].team == team &&
 			PlacementController.instance.isPlacing == false &&//so no other Building gets triggered when trying to place on occupied spot
 			!EventSystem.current.IsPointerOverGameObject())//so no other Building behind floating UI gets triggered
 		{

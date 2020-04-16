@@ -16,7 +16,7 @@ public class TaxesAi : BaseAi
 	public override Type Tick()
 	{
 		//second check so taxes dont skyrocket in 1 day, so wait for new moneycalculation
-		if (resAmount(resource.money) < moneyRaiseTaxesThreshold&&GameManager.dayIndex!= lastTaxchangeDay)
+		if (resAmount(resource.money) < moneyRaiseTaxesThreshold&&GameManager.instance.dayIndex!= lastTaxchangeDay)
 		{
 			Log("NEED MONEY");
 			mainBuilding.Taxes += 1;

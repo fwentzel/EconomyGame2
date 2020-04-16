@@ -11,13 +11,13 @@ public class Mine : Building
 	}
 	public override void OnBuild()
 	{
-		GameManager.OnCalculateIntervall += UpdateContextUi;
+		GameManager.instance.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.stone, unitsPerIntervall);
 	}
 
 	public override void DestroyBuilding()
 	{
-		GameManager.OnCalculateIntervall -= UpdateContextUi;
+		GameManager.instance.OnCalculateIntervall -= UpdateContextUi;
 		resourceManager.AddRessource(resource.stone, -unitsPerIntervall);
 		base.DestroyBuilding();
 

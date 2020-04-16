@@ -1,55 +1,96 @@
 ﻿using Mirror;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
-	public static GameManager instance { get; private set; }
-	public static event Action OnCalculateIntervall=delegate { };
-	public static int dayIndex=0;
+	public static GameManager instance;
+	public event Action OnCalculateIntervall=delegate { };
 
-	[HideInInspector] public MainBuilding []mainBuildings;
-	public int calcResourceIntervall=10;
-	public Team[] teams;
-	public Team team;
-	public Player localPlayer;
+	public int dayIndex =0;
+	public bool isStarted = false;
+
+	public int calcResourceIntervall =10;
+	
+	public SyncListUInt playerIDs = new SyncListUInt();
+	public Player[] players;
 
 	//Debugging 
 	public bool showAiLog = false;
 
-
 	private void Awake()
 	{
-		//singleton Check
 		if (instance == null)
 			instance = this;
 		else
 			Destroy(this);
+		players = new Player[NetworkManager.singleton.maxConnections];
 	}
 
-	internal MainBuilding GetMainbuildingByTeamID(int connectedPlayers)
+	[ClientRpc]
+	public void RpcFillPlayerClient()
 	{
-		MainBuilding mainBuilding = null;
-		foreach (MainBuilding building in GameManager.instance.mainBuildings)
+		int i = 0;
+		foreach (var id in playerIDs)
 		{
-			if (building.team.teamID == connectedPlayers)
+			players[i]= NetworkIdentity.spawned[id].GetComponent<Player>();
+			i++;
+		}
+		
+	}
+
+	[ClientRpc]
+	public void RpcFillMainBuildingArray()
+	{
+		MainBuilding[] mainBuildings = FindObjectsOfType<MainBuilding>();
+
+		for (int i =0; i< playerIDs.Count;i++ )
+		{
+			foreach (MainBuilding mainBuilding in mainBuildings)
 			{
-				mainBuilding = building;
+				if (mainBuilding.team.teamID == i)
+				{
+					players[i].MainBuilding = mainBuilding;
+				}
 			}
 		}
-		return mainBuilding;
+
+		foreach (MainBuilding mainBuilding in mainBuildings)
+		{
+			mainBuilding.SetupMainBuilding();
+		}
+
 	}
 
-	private void Start()
-	{
-		mainBuildings = FindObjectsOfType<MainBuilding>();
-		InvokeRepeating("InvokeCalculateResource", calcResourceIntervall, calcResourceIntervall);
-	}
 
 
+	[Server]
 	private void InvokeCalculateResource()
 	{
 		OnCalculateIntervall();
 		dayIndex++;
+	}
+
+	[Server]
+	public void AddPlayer(Player player)
+	{
+		playerIDs.Add(player.GetComponent<NetworkIdentity>().netId);
+	}
+
+	[Server]
+	public void StartGame()
+	{
+		print("STARTING GAME!");
+		FindObjectOfType<MapGenerator>().SetupMap();
+		RpcFillPlayerClient();
+		RpcFillMainBuildingArray();
+		FindObjectOfType<GameTimer>().StartTimer(calcResourceIntervall);
+		CityResourceLookup.instance.PopulateResourceManagers();
+		PlacementController.instance.SetupGridParameter();
+
+		
+		InvokeRepeating("InvokeCalculateResource", calcResourceIntervall, calcResourceIntervall);
+		isStarted = true;
 	}
 }

@@ -11,6 +11,7 @@ public class StateMachine : MonoBehaviour
 	{
 		InvokeRepeating("StateMachineUpdate", 0, 1f);
 	}
+
 	private void StateMachineUpdate()
 	{
 		if (currentState == null)

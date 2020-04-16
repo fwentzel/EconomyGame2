@@ -1,27 +1,56 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Mirror;
+using System.Collections.Generic;
+using System;
 
 public class MyNetworkManager : NetworkManager
 {
-	public Team[] teams;
 	public int connectedPlayers = 0;
+	[Range(1, 4)] public int maxPlayers =2;
+
+
+	public override void Awake()
+	{
+		base.Awake();
+	}
 
 
 	public override void OnServerAddPlayer(NetworkConnection conn)
 	{
 		print("NEW CONNECTED PLAYER");
-		MainBuilding mainBuilding = GameManager.instance.GetMainbuildingByTeamID(connectedPlayers);
-		GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+		GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
 		Player playerComponent = player.GetComponent<Player>();
-		playerComponent.mainBuilding = mainBuilding;
 		NetworkServer.AddPlayerForConnection(conn, player);
-		if (player.GetComponent<NetworkIdentity>().isLocalPlayer)
-		{
-			print("NEW LOCAL PLAYER");
-			GameManager.instance.localPlayer = playerComponent;
-			//UiManager.instance.currentRessouceManagerToShow = mainBuilding.resourceManager;
-		}
+		GameManager.instance.AddPlayer(playerComponent);
 		connectedPlayers++;
+		if(connectedPlayers== maxPlayers)
+		{
+			FillPlayersWithAi();
+		}
 	}
+
+	public void FillPlayersWithAi()
+	{
+		for (int i = connectedPlayers; i < maxConnections; i++)
+		{
+			print("Adding Ai Player");
+			GameObject aiPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+			
+			Player aiPlayerComponent = aiPlayer.GetComponent<Player>();
+			aiPlayerComponent.isAi = true;
+
+			NetworkUtility.instance.SpawnObject(aiPlayer);
+			GameManager.instance.AddPlayer(aiPlayerComponent);
+		}
+		print("All Players Connected. Game starts.");
+		GameManager.instance.StartGame();
+	}
+
+	public override void OnServerDisconnect(NetworkConnection conn)
+	{
+		print("Player disconnected, replacing with AI");
+		base.OnServerDisconnect(conn);
+	}
+
 }

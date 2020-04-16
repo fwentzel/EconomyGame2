@@ -5,13 +5,13 @@
 
 	public override void OnBuild()
 	{
-		GameManager.OnCalculateIntervall += UpdateContextUi;
+		GameManager.instance.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.food, unitsPerIntervall);
 	}
 
 	public override void DestroyBuilding()
 	{
-		GameManager.OnCalculateIntervall -= UpdateContextUi;
+		GameManager.instance.OnCalculateIntervall -= UpdateContextUi;
 		resourceManager.AddRessource(resource.food, -unitsPerIntervall);
 		base.DestroyBuilding();
 

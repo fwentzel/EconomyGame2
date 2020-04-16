@@ -28,17 +28,12 @@ public class MapGenerator : MonoBehaviour
 	int[] triangles;
 	Vector2[] uv;
 
-
-	private void Awake()
+	public void SetupMap()
 	{
 		SetDimension();
 		//transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
 		waterMaterial.SetFloat("StartTime", -999);
 		GenerateMap();
-	}
-	private void Start()
-	{
-		GameManager.instance.teams = teams;
 		BuildObjectsOnMap();
 	}
 
@@ -203,8 +198,9 @@ public class MapGenerator : MonoBehaviour
 							newY /= 4;
 							//instantiate given prefab and set Position at coordinsates + gridspacing/2 offset and vertexheigth
 							GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
-							NetworkUtility.instance.SpawnObject(obj);
 							obj.transform.position = new Vector3(x + gridSpacing / 2.0f, newY, z + gridSpacing / 2.0f);
+							NetworkUtility.instance.SpawnObject(obj);
+							
 							//obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
 							int teamColorValue = mapTextureColor.b;

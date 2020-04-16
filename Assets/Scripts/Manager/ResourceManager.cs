@@ -15,7 +15,12 @@ public class ResourceManager : MonoBehaviour
 	private void Awake()
 	{
 		PopulateRessourceAmounts();
-		GameManager.OnCalculateIntervall += CalculateNextDay;
+		
+	}
+
+	private void Start()
+	{
+		GameManager.instance.OnCalculateIntervall += CalculateNextDay;
 	}
 
 	private void PopulateRessourceAmounts()

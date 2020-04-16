@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Mirror;
 
-public class Player : MonoBehaviour
+public class Player :MonoBehaviour
 {
-	public MainBuilding mainBuilding;
-	// Use this for initialization
-	void Start()
+	
+	private MainBuilding mainBuilding;
+	public Team team { get; private set; }
+	public bool isAi=false;
+	public MainBuilding MainBuilding{get { return mainBuilding; } set{ SetMainBuilding(value); }}
+
+	void SetMainBuilding(MainBuilding mainBuilding)
 	{
-
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-
+		this.mainBuilding = mainBuilding;
+		team = mainBuilding.team;
+		UiManager.instance.currentRessouceManagerToShow = mainBuilding.resourceManager;
 	}
 }

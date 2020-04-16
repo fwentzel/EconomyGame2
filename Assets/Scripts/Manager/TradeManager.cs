@@ -4,8 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Mirror;
 
-public class TradeManager : MonoBehaviour
+public class TradeManager : NetworkBehaviour
 {
 	public static TradeManager instance { get; private set; }
 

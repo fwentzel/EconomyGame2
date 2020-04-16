@@ -333,7 +333,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 671104078}
-        m_MethodName: StartHost
+        m_MethodName: StartServer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -573,11 +573,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 671104077}
+  - component: {fileID: 671104078}
   - component: {fileID: 671104075}
   - component: {fileID: 671104074}
   - component: {fileID: 671104073}
   - component: {fileID: 671104072}
-  - component: {fileID: 671104078}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -715,12 +715,10 @@ MonoBehaviour:
   - {fileID: 3872429354527944290, guid: 857d1c34d9b6b7f4bb22a4f239115d9e, type: 3}
   - {fileID: 5304397253622353194, guid: 0c3679cfa6b28434fa2e22e79adfd21e, type: 3}
   - {fileID: 4595229145907955752, guid: f6b27aee87d74ed42943019371c2ead7, type: 3}
-  teams:
-  - {fileID: 11400000, guid: 642ecf27aa229b1418f3cda5e680ed8e, type: 2}
-  - {fileID: 11400000, guid: b5b35b0bea551c44fbe86ddbc54139ee, type: 2}
-  - {fileID: 11400000, guid: 68bb35727d1d53049b9954f111b32415, type: 2}
-  - {fileID: 11400000, guid: c0af2c4a2e4fa994882321df2b896587, type: 2}
+  - {fileID: 2321040318454111042, guid: b7124683c6494c14f86741df886c17f2, type: 3}
+  - {fileID: 5269855522899004666, guid: 3496802a0748d914485151785447d212, type: 3}
   connectedPlayers: 0
+  maxPlayers: 1
 --- !u!1 &680303844
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,7 +1563,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: START
+  m_Text: Start Server
 --- !u!222 &1266872095
 CanvasRenderer:
   m_ObjectHideFlags: 0

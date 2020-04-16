@@ -8,6 +8,7 @@ public class BuildingAi : BaseAi
 	Dictionary<Type, List<Building>> buildingList;
 	List<Vector2> availableBuildSpots;
 	int oldEnd;
+
 	public BuildingAi(MainBuilding mainBuilding) : base(mainBuilding)
 	{
 		GetSpecificsFromBuilding();

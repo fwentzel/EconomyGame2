@@ -5,14 +5,14 @@
 
 	public override void OnBuild()
 	{
-		GameManager.OnCalculateIntervall += UpdateContextUi;
+		GameManager.instance.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.citizens, capacity/2);
 		resourceManager.mainBuilding.maxCitizens += capacity;
 	}
 
 	public override void DestroyBuilding()
 	{
-		GameManager.OnCalculateIntervall -= UpdateContextUi;
+		GameManager.instance.OnCalculateIntervall -= UpdateContextUi;
 		resourceManager.AddRessource(resource.citizens, -capacity/2);
 		resourceManager.mainBuilding.maxCitizens -= capacity;
 		base.DestroyBuilding();

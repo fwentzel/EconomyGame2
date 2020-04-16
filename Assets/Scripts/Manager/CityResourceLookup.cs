@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using Mirror;
 
-public class CityResourceLookup : MonoBehaviour
+public class CityResourceLookup : NetworkBehaviour
 {
 	public static CityResourceLookup instance { get; private set; }
 	public GameObject citizenPrefab;
@@ -18,9 +19,23 @@ public class CityResourceLookup : MonoBehaviour
 			instance = this;
 		else
 			Destroy(this);
-		resourceManagers = FindObjectsOfType<ResourceManager>();
-		GameManager.OnCalculateIntervall += UpdateCityResourceMean;
 		
+		
+	}
+
+	private void Start()
+	{
+		GameManager.instance.OnCalculateIntervall += UpdateCityResourceMean;
+	}
+
+	public void PopulateResourceManagers()
+	{
+		Player[] players = GameManager.instance.players;
+		resourceManagers = new ResourceManager[players.Length];
+		for (int i = 0; i < resourceManagers.Length; i++)
+		{
+			resourceManagers[i] = players[i].MainBuilding.resourceManager;
+		}
 	}
 
 	private void UpdateCityResourceMean()
