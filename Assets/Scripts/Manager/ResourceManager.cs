@@ -52,7 +52,7 @@ public class ResourceManager : MonoBehaviour
 	{
 		if (resourceAmount[resource.citizens] <= 0)
 		{
-			print("GAME OVER FOR TEAM " + mainBuilding.team.teamID);
+			print("GAME OVER FOR PLAYER " + mainBuilding.team);
 			mainBuilding.gameOver = true;
 		}
 	}

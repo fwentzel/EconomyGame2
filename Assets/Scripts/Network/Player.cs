@@ -1,19 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Mirror;
-
-public class Player :MonoBehaviour
+[System.Serializable]
+public class Player : NetworkBehaviour
 {
-	
-	private MainBuilding mainBuilding;
-	public Team team { get; private set; }
-	public bool isAi=false;
-	public MainBuilding MainBuilding{get { return mainBuilding; } set{ SetMainBuilding(value); }}
 
-	void SetMainBuilding(MainBuilding mainBuilding)
+	public MainBuilding mainBuilding;
+	public int team { get; private set; }
+	[SyncVar]
+	public bool isAi = false;
+
+	public void SetMainBuilding(uint mainBuildingNetId)
 	{
-		this.mainBuilding = mainBuilding;
+		mainBuilding = NetworkIdentity.spawned[mainBuildingNetId].GetComponent<MainBuilding>();
+		print("SET MAIN BUILDING " + mainBuilding.ToString());
 		team = mainBuilding.team;
 		UiManager.instance.currentRessouceManagerToShow = mainBuilding.resourceManager;
+	}
+
+	[ClientRpc]
+	public void RpcSetupPlayer()
+	{
+		print("Setting up Player!");
+		if (!isAi)
+			FindObjectOfType<MapGenerator>().SetupMap();
+		if (hasAuthority)
+		{
+			PlacementController.instance.SetupGridParameter();
+			CmdReady();
+		}
+	}
+
+	[Command]
+	public void CmdReady()
+	{
+		GameManager.instance.OnClientReady();
 	}
 }

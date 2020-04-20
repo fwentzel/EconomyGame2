@@ -2,9 +2,9 @@
 using UnityEditor;
 #endif
 using UnityEngine;
-
+using Mirror;
 [RequireComponent(typeof(MeshFilter))]
-public class MapGenerator : MonoBehaviour
+public class MapGenerator : NetworkBehaviour
 {
 	public int perlinScale = 30;
 	public float heightOffsetStrength;
@@ -16,22 +16,22 @@ public class MapGenerator : MonoBehaviour
 	[SerializeField] Team[] teams = default;
 	public ColorToObject[] colorObjectMappings;
 	[SerializeField] ColorToHeight[] colorHeightMappings = default;
-	
+
 	Mesh waterMesh;
 	public int gridSpacing { get; private set; } = 1;
 	public int xSize { get; private set; }
 	public int zSize { get; private set; }
 	public Material waterMaterial = default;
-	
+
 	Mesh mesh;
 	Vector3[] vertices;
 	int[] triangles;
 	Vector2[] uv;
 
+	[Client]
 	public void SetupMap()
 	{
 		SetDimension();
-		//transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
 		waterMaterial.SetFloat("StartTime", -999);
 		GenerateMap();
 		BuildObjectsOnMap();
@@ -53,15 +53,12 @@ public class MapGenerator : MonoBehaviour
 	{
 		DestroyChildren();
 		SetDimension();
-		if (transform.GetChild(0).name!="Water")
-			BuildWaterMesh();
-
+		BuildWaterMesh();
 		SetupMeshfilter();
 		BuildMapMesh();
 		ChangeMapVertexHeights();
 		UpdateMesh();
 		UpdateCollider();
-		
 
 		material.SetInt("Vector1_2D88299F", gridSpacing);
 		material.SetTexture("Texture2D_AD5527E4", mapTexture);
@@ -74,14 +71,14 @@ public class MapGenerator : MonoBehaviour
 		//Destroy old Placeables that were instantiated by previous mapgeneration
 		//TODO Pool?
 		if (Application.isEditor)
-			for (int i = transform.childCount; i > 1; --i)
+			for (int i = transform.childCount; i > 0; --i)
 			{
-				DestroyImmediate(this.transform.GetChild(1).gameObject);
+				DestroyImmediate(this.transform.GetChild(0).gameObject);
 			}
 		else
 		{
-			for (int i = this.transform.childCount; i > 1; --i)
-				Destroy(this.transform.GetChild(1).gameObject);
+			for (int i = this.transform.childCount; i > 0; --i)
+				Destroy(this.transform.GetChild(0).gameObject);
 		}
 	}
 
@@ -95,8 +92,10 @@ public class MapGenerator : MonoBehaviour
 	{
 		//clear out previous mesh and setup new parameters
 		mesh = new Mesh();
-		GetComponent<MeshFilter>().sharedMesh.Clear();
-		GetComponent<MeshFilter>().sharedMesh = mesh;
+		MeshFilter filter = GetComponent<MeshFilter>();
+		if (filter.sharedMesh != null)
+			filter.sharedMesh.Clear();
+		filter.sharedMesh = mesh;
 		GetComponent<MeshRenderer>().material = material;
 		mesh.name = "Map";
 	}
@@ -200,7 +199,7 @@ public class MapGenerator : MonoBehaviour
 							GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
 							obj.transform.position = new Vector3(x + gridSpacing / 2.0f, newY, z + gridSpacing / 2.0f);
 							NetworkUtility.instance.SpawnObject(obj);
-							
+
 							//obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
 							int teamColorValue = mapTextureColor.b;
@@ -209,11 +208,11 @@ public class MapGenerator : MonoBehaviour
 								//set building Team equal to team at index [blue Channel value (0,4)]
 								Team team = teams[teamColorValue];
 
+
 								//TODO SAME CODE AS IN MAINBUILDING
 								Building building = obj.GetComponent<Building>();
-								building.team = team;
+								building.team = team.teamID;
 								obj.GetComponent<Building>().SetLevelMesh();
-
 							}
 
 						}
@@ -234,53 +233,48 @@ public class MapGenerator : MonoBehaviour
 
 	private void BuildWaterMesh()
 	{
-		GameObject waterObj= new GameObject("Water", typeof(MeshFilter), typeof(MeshRenderer));
+		GameObject waterObj = new GameObject("Water", typeof(MeshFilter), typeof(MeshRenderer));
 		waterObj.transform.position = new Vector3(xSize / 2, 0, zSize / 2);
 		waterObj.transform.parent = transform;
 		waterMesh = new Mesh();
 		waterObj.GetComponent<MeshFilter>().sharedMesh = waterMesh;
+		waterObj.GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
 
 
 		waterMesh.name = "Water";
 		//initialize vertices and uv Arrays with Texture dimensions
-		int tweenerVerts = 0;
-		Vector3[] waterVerts = new Vector3[(xSize + 1) * (zSize + 1) * tweenerVerts * 2];
+		//Vector3[] waterVerts = new Vector3[(xSize + 1) * (zSize + 1) * (tweenerVerts +1)* 2];
+		Vector3[] waterVerts = new Vector3[(xSize + 1) * (zSize + 1)];
 		Vector2[] waterUvs = new Vector2[waterVerts.Length];
 
 		for (int i = 0, z = -zSize / 2; z <= zSize / 2; z++)
 		{
-			for (int zOff = 0; zOff < tweenerVerts; zOff++)
+			for (int x = -zSize / 2; x <= xSize / 2; x++)
 			{
-				for (int x = -zSize / 2; x <= xSize / 2; x++)
-				{
-					for (int xOff = 0; xOff < tweenerVerts; xOff++, i++)
-					{
-						//populate vertex array with default height vertices
-						waterVerts[i] = new Vector3(x + (float)xOff / tweenerVerts, 0, z + (float)zOff / tweenerVerts);
-						//set uv coordinates
-						waterUvs[i] = new Vector2(waterVerts[i].x / (xSize * tweenerVerts), waterVerts[i].z / (zSize * tweenerVerts));
-					}
-
-				}
+				//populate vertex array with default height vertices
+				waterVerts[i] = new Vector3(x, 0, z);
+				//set uv coordinates
+				waterUvs[i] = new Vector2(waterVerts[i].x / xSize, waterVerts[i].z / zSize);
+				i++;
 			}
 
 		}
 
 		//initialize triangles Array with Texture dimensions
-		int[] waterTris = new int[xSize * tweenerVerts * zSize * tweenerVerts * 6];
+		int[] waterTris = new int[xSize * zSize * 6];
 		int tris = 0;
 
-		int limit = waterVerts.Length - (xSize + 1) * tweenerVerts * (zSize + 1) * tweenerVerts;
+		int limit = waterVerts.Length - (xSize + 1) * (zSize + 1);
 
 		for (int vert = 0; vert < waterTris.Length / 6; vert++)
 		{
 
 			waterTris[tris + 0] = vert + 0;
-			waterTris[tris + 1] = vert + xSize * tweenerVerts + tweenerVerts;
+			waterTris[tris + 1] = vert + xSize + 1;
 			waterTris[tris + 2] = vert + 1;
 			waterTris[tris + 3] = vert + 1;
-			waterTris[tris + 4] = vert + xSize * tweenerVerts + tweenerVerts;
-			waterTris[tris + 5] = vert + xSize * tweenerVerts + tweenerVerts + 1;
+			waterTris[tris + 4] = vert + xSize + 1;
+			waterTris[tris + 5] = vert + xSize + 2;
 			tris += 6;
 		}
 

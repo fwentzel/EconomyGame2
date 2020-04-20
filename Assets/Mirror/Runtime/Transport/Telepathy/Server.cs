@@ -206,7 +206,7 @@ namespace Telepathy
             if (!Active)
                 return;
 
-            Logger.Log("Server: stopping...");
+            //Logger.Log("Server: stopping...");
 
             // stop listening to connections so that no one can connect while we
             // close the client connections

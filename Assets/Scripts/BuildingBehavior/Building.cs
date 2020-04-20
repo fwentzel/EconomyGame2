@@ -1,12 +1,13 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Mirror;
 
-
-public class Building : MonoBehaviour
+public class Building : NetworkBehaviour
 {
 	public ResourceManager resourceManager;
-	public Team team;
+	[SyncVar]
+	public int team=-1;
 	public Mesh[] meshlevels;
 	public int buildCost = 50;
 	public int levelCost = 100;
@@ -19,8 +20,8 @@ public class Building : MonoBehaviour
 	{
 		
 		if (Input.GetMouseButtonDown(0) &&
-			GameManager.instance.players[team.teamID].team == team &&
 			PlacementController.instance.isPlacing == false &&//so no other Building gets triggered when trying to place on occupied spot
+			GameManager.instance.players[team].team == team &&
 			!EventSystem.current.IsPointerOverGameObject())//so no other Building behind floating UI gets triggered
 		{
 			SelectionManager.instance.selectedObject = this.gameObject;
@@ -59,10 +60,7 @@ public class Building : MonoBehaviour
 		}
 	}
 
-	public virtual void OnBuild()
-	{
-		
-	}
+	public virtual void OnBuild(){}
 
 	public virtual void DestroyBuilding()
 	{
@@ -83,7 +81,7 @@ public class Building : MonoBehaviour
 
 	protected virtual string GetStats()
 	{
-		string stats = "Name: " + name + "\nTeam: " + team.teamID + "\nLevel: " + level;
+		string stats = "Name: " + name + "\nTeam: " + team + "\nLevel: " + level;
 		return stats;
 	}
 

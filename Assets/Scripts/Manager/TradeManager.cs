@@ -105,7 +105,7 @@ public class TradeManager : NetworkBehaviour
 		ship.trade = trade;
 		ship.rm = rm;
 		//Get Waypointcurve At child index from team. Has to be setupup correct in scene
-		Transform curveTransform = wayPointsParent.transform.GetChild(rm.mainBuilding.team.teamID);
+		Transform curveTransform = wayPointsParent.transform.GetChild(rm.mainBuilding.team);
 		ship.curve = curveTransform.GetComponent<BGCurve>();
 		ship.math = curveTransform.GetComponent<BGCcMath>();
 	}

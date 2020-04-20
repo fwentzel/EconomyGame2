@@ -22,6 +22,6 @@ public abstract class BaseAi
 	protected void Log(string msg)
 	{
 		if (GameManager.instance.showAiLog)
-			Debug.Log(mainBuilding.team.teamID + msg);
+			Debug.Log(mainBuilding.team + msg);
 	}
 }

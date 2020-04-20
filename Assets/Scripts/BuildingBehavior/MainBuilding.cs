@@ -24,11 +24,11 @@ public class MainBuilding : Building
 	public void SetupMainBuilding()
 	{
 		PopulateBuildungs();
-		if (GameManager.instance.players[team.teamID].isAi)
+		if (GameManager.instance.players[team].isAi)
 		{
 			//Add AI Elements
 			gameObject.AddComponent<StateMachine>();
-			AiMaster bAi = gameObject.AddComponent<AiMaster>();
+			gameObject.AddComponent<AiMaster>();
 		}
 	}
 
@@ -39,7 +39,7 @@ public class MainBuilding : Building
 		{
 			if (building.team == team && building != this)
 			{
-				AddBuilding(building);
+				AddBuilding(building,triggerOnBuild:true);
 			}
 		}
 
@@ -49,20 +49,21 @@ public class MainBuilding : Building
 			Building building;
 			if ((building = cto.placeable.GetComponent<Building>()) != null)
 			{
-
 				possibleBuildings[building.GetType()] = cto.placeable;
 			}
 		}
 
 	}
 
-	public void AddBuilding(Building building)
+	public void AddBuilding(Building building,bool triggerOnBuild=true)
 	{
 		buildings.Add(building);
 		building.resourceManager = resourceManager;
-		building.OnBuild();
+		if (triggerOnBuild)
+			building.OnBuild();
 		building.team = team;
 		building.enabled = true;
+		
 	}
 
 	//Ai version
@@ -73,20 +74,20 @@ public class MainBuilding : Building
 		//TODO SAME CODE AS IN MAPGENERATOR		
 		Building building = Instantiate(possibleBuildings[buildingType], pos, Quaternion.identity).GetComponent<Building>();
 		building.transform.rotation = MapGenerator.GetRotationFromNormalSurface(building.gameObject);
-
-		building.team = team;
 		building.GetComponent<Building>().SetLevelMesh();
 
 		AddBuilding(building);
 		return building;
 	}
+
+
 	//Building overrides
 
 	protected override void OnMouseOver()
 	{
 		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && PlacementController.instance.isPlacing == false)
 		{
-			if (GameManager.instance.players[team.teamID].MainBuilding == this)
+			if (GameManager.instance.players[team].mainBuilding == this)
 			{
 				SelectionManager.instance.selectedObject = this.gameObject;
 				UiManager.instance.OpenContext(UiManager.instance.mainBuildingContextUiCanvas, transform.position);
@@ -107,7 +108,7 @@ public class MainBuilding : Building
 
 	protected override string GetStats()
 	{
-		string stats = "Name: " + name + " \nTeam: " + team.teamID;
+		string stats = "Name: " + name + " \nTeam: " + team;
 		return stats;
 	}
 

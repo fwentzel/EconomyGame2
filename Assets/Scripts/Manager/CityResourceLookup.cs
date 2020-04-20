@@ -19,8 +19,6 @@ public class CityResourceLookup : NetworkBehaviour
 			instance = this;
 		else
 			Destroy(this);
-		
-		
 	}
 
 	private void Start()
@@ -32,9 +30,10 @@ public class CityResourceLookup : NetworkBehaviour
 	{
 		Player[] players = GameManager.instance.players;
 		resourceManagers = new ResourceManager[players.Length];
+
 		for (int i = 0; i < resourceManagers.Length; i++)
 		{
-			resourceManagers[i] = players[i].MainBuilding.resourceManager;
+			resourceManagers[i] = players[i].mainBuilding.resourceManager;
 		}
 	}
 
@@ -52,14 +51,14 @@ public class CityResourceLookup : NetworkBehaviour
 	{
 		if (freeCitizens <= 0)
 			return;
-		print(string.Format("Team {0} hat einen Bürger aufgenommen!", resourceManager.mainBuilding.team.teamID));
+		print(string.Format("Team {0} hat einen Bürger aufgenommen!", resourceManager.mainBuilding.team));
 		freeCitizens--;
 		resourceManager.AddRessource(resource.citizens,1);
 	}
 
 	internal void LooseCitizen(ResourceManager resourceManager)
 	{
-		print(string.Format("Team {0} hat einen Bürger verloren!", resourceManager.mainBuilding.team.teamID));
+		print(string.Format("Team {0} hat einen Bürger verloren!", resourceManager.mainBuilding.team));
 		freeCitizens++;
 		resourceManager.AddRessource(resource.citizens, -1);
 		Instantiate(citizenPrefab, resourceManager.transform.position, Quaternion.identity);

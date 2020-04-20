@@ -128,7 +128,7 @@ public class PlacementController : MonoBehaviour
 			//Set Team variable
 			Building building = placeableObject.GetComponent<Building>();
 			//TODO PLAYER 0
-			GameManager.instance.players[0].MainBuilding.AddBuilding(building);
+			GameManager.instance.players[0].mainBuilding.AddBuilding(building);
 
 			//toggle off placement grid and reset placeableObject
 			placeableObject = null;

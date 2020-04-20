@@ -43,11 +43,6 @@ public class UiManager : MonoBehaviour
 		}
 	}
 
-	private void Start()
-	{
-		UpdateRessourceUI();
-	}
-
 	private void SetupUiElements()
 	{
 		buildingContextUiText = buildingContextUiCanvas.transform.GetChild(0).Find("ContextText").GetComponent<Text>();
@@ -65,6 +60,7 @@ public class UiManager : MonoBehaviour
 
 	private void Update()
 	{
+		UpdateRessourceUI();
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
 			OpenMenu(tradeUiCanvas);

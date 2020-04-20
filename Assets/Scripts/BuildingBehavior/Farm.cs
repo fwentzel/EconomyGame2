@@ -30,7 +30,7 @@
 	}
 	protected override string GetStats()
 	{
-		string stats = "Name: " + name + "\nTeam: " + team.teamID + "\nLevel: " + level;
+		string stats = "Name: " + name + "\nTeam: " + team + "\nLevel: " + level;
 		 stats  +="\nCapacity: " + unitsPerIntervall;
 
 		return stats;
