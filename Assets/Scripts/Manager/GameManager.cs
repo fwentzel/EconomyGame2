@@ -13,6 +13,7 @@ public class GameManager : NetworkBehaviour
 
 	public SyncListUInt playerIDs = new SyncListUInt();
 	public Player[] players;
+	public Player localPlayer;
 	int readyClients = 0;
 
 	//Debugging 
@@ -34,6 +35,8 @@ public class GameManager : NetworkBehaviour
 		foreach (var id in playerIDs)
 		{
 			players[i] = NetworkIdentity.spawned[id].GetComponent<Player>();
+			if (players[i].isLocalPlayer)
+				localPlayer = players[i];
 			i++;
 		}
 
@@ -62,7 +65,7 @@ public class GameManager : NetworkBehaviour
 	[ClientRpc]
 	void RpcStartInvokeCalcIntervall()
 	{
-		InvokeRepeating("InvokeCalculateResource", calcResourceIntervall, calcResourceIntervall);
+		InvokeRepeating("InvokeCalculateResource", 0, calcResourceIntervall);
 	}
 
 	private void InvokeCalculateResource()
@@ -88,7 +91,6 @@ public class GameManager : NetworkBehaviour
 		print("waiting 5 sec");
 		yield return new WaitForSeconds(5);
 		CityResourceLookup.instance.PopulateResourceManagers();
-		UiManager.instance.UpdateRessourceUI();
 		RpcStartInvokeCalcIntervall();
 
 	}

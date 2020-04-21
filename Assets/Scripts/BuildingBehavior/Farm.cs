@@ -3,9 +3,8 @@
 	public int unitsPerIntervall;
 
 
-	public override void OnBuild()
+	public override void OnBuild(bool subtractResource = true)
 	{
-		GameManager.instance.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.food, unitsPerIntervall);
 	}
 

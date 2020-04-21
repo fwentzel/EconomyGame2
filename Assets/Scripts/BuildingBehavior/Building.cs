@@ -60,10 +60,15 @@ public class Building : NetworkBehaviour
 		}
 	}
 
-	public virtual void OnBuild(){}
+	public virtual void OnBuild(bool subtractResource = true) {
+		GameManager.instance.OnCalculateIntervall -= UpdateContextUi;
+		if (subtractResource)
+			resourceManager.AddRessource(resource.money,-buildCost);
+	}
 
 	public virtual void DestroyBuilding()
 	{
+		resourceManager.AddRessource(resource.money, (int) (buildCost*.6f));
 		resourceManager.mainBuilding.buildings.Remove(this);
 		Destroy(this.gameObject);
 	}

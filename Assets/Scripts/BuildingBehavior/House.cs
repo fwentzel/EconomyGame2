@@ -3,16 +3,18 @@
 	public int capacity;
 
 
-	public override void OnBuild()
+	public override void OnBuild(bool subtractResource=true)
 	{
+		base.OnBuild(subtractResource);
 		GameManager.instance.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.citizens, capacity/2);
 		resourceManager.mainBuilding.maxCitizens += capacity;
+		
 	}
 
 	public override void DestroyBuilding()
 	{
-		GameManager.instance.OnCalculateIntervall -= UpdateContextUi;
+
 		resourceManager.AddRessource(resource.citizens, -capacity/2);
 		resourceManager.mainBuilding.maxCitizens -= capacity;
 		base.DestroyBuilding();

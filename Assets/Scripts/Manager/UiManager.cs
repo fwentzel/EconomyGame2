@@ -60,7 +60,6 @@ public class UiManager : MonoBehaviour
 
 	private void Update()
 	{
-		UpdateRessourceUI();
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
 			OpenMenu(tradeUiCanvas);
@@ -81,9 +80,7 @@ public class UiManager : MonoBehaviour
 			return;
 		foreach (Resource res in res.startValues)
 		{
-			if (res.uiDisplay != null)
-				res.uiDisplay .text= currentRessouceManagerToShow.GetAmountUI(res.resource);
-			
+			res.uiDisplay .text= currentRessouceManagerToShow.GetAmountUI(res.resource);
 		}
 	}
 

@@ -30,9 +30,9 @@ public class CameraController : NetworkBehaviour
     public float cameraBorder;
 
     // Minimun and maxium distance from the detected ground the Camera can be
-    [Range(.8f, 32f)]
+    [Range(.8f, 15f)]
     public float cameraMinHeight;
-    [Range(.8f, 32f)]
+    [Range(.8f, 50f)]
     public float cameraMaxHeight;
 
     // Map properties
@@ -75,7 +75,7 @@ public class CameraController : NetworkBehaviour
             cameraMaxHeight = 20f;
             mapXSize = float.MaxValue;
         }
-		desiredScrollposition = transform.position.y;
+		desiredScrollposition = TheCamera.transform.position.y;
 		_savedCameraSpeed = cameraSpeed;
 		MapGenerator gen = FindObjectOfType<MapGenerator>();
 		mapXSize = gen.xSize;
@@ -135,9 +135,8 @@ public class CameraController : NetworkBehaviour
 		desiredScrollposition = desiredScrollposition - scroll*scrollSensitivity ;
 
 		position.y=Mathf.Lerp(position.y, desiredScrollposition ,Time.deltaTime*scrollspeed);
-
-        // Shift Acelleration
-        if (Input.GetKey(KeyCode.LeftShift))
+		// Shift Acelleration
+		if (Input.GetKey(KeyCode.LeftShift))
             cameraSpeed = (_savedCameraSpeed * 2f);
         else
             cameraSpeed = _savedCameraSpeed;
@@ -161,4 +160,13 @@ public class CameraController : NetworkBehaviour
 		TheCamera.transform.position = Vector3.Slerp(TheCamera.transform.position, position, .8f);
         TheCamera.transform.eulerAngles = Vector3.Slerp(TheCamera.transform.eulerAngles, rotation, .2f);
     }
+
+	public void FocusOnMainBuilding(Vector3 mainbuildingPos)
+	{
+		float y = TheCamera.transform.position.y;
+		float rotation = TheCamera.transform.rotation.eulerAngles.x * Mathf.Deg2Rad ;
+		float offset = (y / Mathf.Tan(rotation));
+		float newZ = mainbuildingPos.z - offset;
+		TheCamera.transform.position = new Vector3(mainbuildingPos.x, y, newZ);
+	}
 }

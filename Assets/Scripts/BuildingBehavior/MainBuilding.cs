@@ -39,7 +39,7 @@ public class MainBuilding : Building
 		{
 			if (building.team == team && building != this)
 			{
-				AddBuilding(building,triggerOnBuild:true);
+				AddBuilding(building, subtractFromResource:false);
 			}
 		}
 
@@ -55,12 +55,11 @@ public class MainBuilding : Building
 
 	}
 
-	public void AddBuilding(Building building,bool triggerOnBuild=true)
+	public void AddBuilding(Building building,bool subtractFromResource=true)
 	{
 		buildings.Add(building);
 		building.resourceManager = resourceManager;
-		if (triggerOnBuild)
-			building.OnBuild();
+		building.OnBuild(subtractFromResource);
 		building.team = team;
 		building.enabled = true;
 		
@@ -93,8 +92,6 @@ public class MainBuilding : Building
 				UiManager.instance.OpenContext(UiManager.instance.mainBuildingContextUiCanvas, transform.position);
 				UpdateContextUi();
 			}
-			UiManager.instance.currentRessouceManagerToShow = resourceManager;
-			UiManager.instance.UpdateRessourceUI();
 		}
 
 	}
