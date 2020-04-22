@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using Mirror;
 
-public class CameraController : NetworkBehaviour
+
+public class CameraController : MonoBehaviour
 {
     //--//--// > BEFORE USING THE SCRIPT PLEASE READ THE MESSAGE BELOW < \\--\\--\\
 

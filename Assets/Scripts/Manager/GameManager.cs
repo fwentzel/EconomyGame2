@@ -1,20 +1,18 @@
-﻿using Mirror;
+﻿
 using System;
 using System.Collections;
 using UnityEngine;
 
-public class GameManager : NetworkBehaviour
+public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
 	public event Action OnCalculateIntervall = delegate { };
 
 	public int dayIndex = 0;
 	public int calcResourceIntervall = 10;
-
-	public SyncListUInt playerIDs = new SyncListUInt();
+	
 	public Player[] players;
 	public Player localPlayer;
-	int readyClients = 0;
 
 	//Debugging 
 	public bool showAiLog = false;
@@ -25,24 +23,10 @@ public class GameManager : NetworkBehaviour
 			instance = this;
 		else
 			Destroy(this);
-		players = new Player[NetworkManager.singleton.maxConnections];
+		players = new Player[MyNetworkManager.maxConnections];
+		
 	}
 
-	[ClientRpc]
-	public void RpcFillPlayers()
-	{
-		int i = 0;
-		foreach (var id in playerIDs)
-		{
-			players[i] = NetworkIdentity.spawned[id].GetComponent<Player>();
-			if (players[i].isLocalPlayer)
-				localPlayer = players[i];
-			i++;
-		}
-
-	}
-
-	[ClientRpc]
 	public void RpcSetupMainBuildingPlayer()
 	{
 		MainBuilding[] mainBuildings = FindObjectsOfType<MainBuilding>();
@@ -53,19 +37,18 @@ public class GameManager : NetworkBehaviour
 				if (mainBuilding.team == i)
 				{
 					mainBuilding.SetupMainBuilding();
-					players[i].SetMainBuilding(mainBuilding.GetComponent<NetworkIdentity>().netId);
-					
+					players[i].SetMainBuilding(mainBuilding);
 				}
 				
 			}
 		}
-
+		CityResourceLookup.instance.PopulateResourceManagers();
 	}
-
-	[ClientRpc]
+	
 	void RpcStartInvokeCalcIntervall()
 	{
 		InvokeRepeating("InvokeCalculateResource", 0, calcResourceIntervall);
+		FindObjectOfType<GameTimer>().StartTimer(calcResourceIntervall);
 	}
 
 	private void InvokeCalculateResource()
@@ -74,34 +57,15 @@ public class GameManager : NetworkBehaviour
 		OnCalculateIntervall();
 		dayIndex++;
 	}
-
-	[Server]
-	public void AddPlayer(Player player)
-	{
-		playerIDs.Add(player.GetComponent<NetworkIdentity>().netId);
-	}
-
-	[Server]
-	IEnumerator StartGame()
+	
+	public void StartGame()
 	{
 		print("SERVER STARTING GAME!");
-		RpcFillPlayers();
 		RpcSetupMainBuildingPlayer();
-		FindObjectOfType<GameTimer>().StartTimer(calcResourceIntervall);
-		print("waiting 5 sec");
-		yield return new WaitForSeconds(5);
-		CityResourceLookup.instance.PopulateResourceManagers();
+		PlacementController.instance.SetupGridParameter();
+		TradeManager.instance.RpcStartTradeOffer();
 		RpcStartInvokeCalcIntervall();
-
 	}
-
-	[Server]
-	public void OnClientReady()
-	{
-		readyClients += 1;
-		if (readyClients == MyNetworkManager.maxHumanPlayers)
-		{
-			StartCoroutine(StartGame());
-		}
-	}
+	
+	
 }

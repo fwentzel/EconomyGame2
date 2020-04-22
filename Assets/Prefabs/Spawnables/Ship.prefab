@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4003468575060279394}
   - component: {fileID: 4003468575060279393}
-  - component: {fileID: -2716010991821085612}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -50,21 +49,6 @@ MonoBehaviour:
   turnSpeed: 0.94
   curve: {fileID: 0}
   math: {fileID: 0}
---- !u!114 &-2716010991821085612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4003468575060279391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  serverOnly: 0
-  m_AssetId: 
 --- !u!1 &4146193551083833696
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,6 +97,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -137,6 +122,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &8723535833126781021
 MeshFilter:
   m_ObjectHideFlags: 0

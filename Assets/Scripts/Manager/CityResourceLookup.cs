@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using Mirror;
 
-public class CityResourceLookup : NetworkBehaviour
+
+public class CityResourceLookup : MonoBehaviour
 {
 	public static CityResourceLookup instance { get; private set; }
 	public GameObject citizenPrefab;

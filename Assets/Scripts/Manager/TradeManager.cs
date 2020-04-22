@@ -3,10 +3,11 @@ using BansheeGz.BGSpline.Curve;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using Random = UnityEngine.Random;
-using Mirror;
 
-public class TradeManager : NetworkBehaviour
+
+public class TradeManager : MonoBehaviour
 {
 	public static TradeManager instance { get; private set; }
 
@@ -19,11 +20,12 @@ public class TradeManager : NetworkBehaviour
 
 	public GameObject shipPrefab;
 
-
 	public MapGenerator generator { get; private set; }
 
 	int acceptedTrades = 0;
-
+	int maxTrades = 6;
+	int synchronizedValues = 4;//Workaround to know how big the stepsize for listtransformation is
+	int[,] randomTradeValues;
 
 	private void Awake()
 	{
@@ -34,8 +36,8 @@ public class TradeManager : NetworkBehaviour
 			Destroy(this);
 		generator = FindObjectOfType<MapGenerator>();
 		tradeElements = new Dictionary<Trade, TradeElement>();
-
-		StartCoroutine("AnnounceNewTrades",2f);
+		randomTradeValues = new int[maxTrades, synchronizedValues];
+		
 
 	}
 
@@ -56,30 +58,62 @@ public class TradeManager : NetworkBehaviour
 			}
 
 		}
-
+		NewTradeRandomNumbers();
 		for (int i = 0; i < amount; i++)
 		{
 			TradeElement newTradeElement = Instantiate(tradeElementPrefab, tradeUiPanel.transform).GetComponent<TradeElement>();
-			Trade newTrade = GenerateTrade();
+			Trade newTrade = GenerateTrade(i);
 
 			tradeElements[newTrade] = newTradeElement;
 			newTradeElement.Init(newTrade);
 		}
 		acceptedTrades = 0;
 	}
-
-	private Trade GenerateTrade()
+	private Trade GenerateTrade(int i)
 	{
+		// [0,4] , [50,100] , [0,4] 
 		Trade newTrade = new Trade();
+		
+		newTrade.toTrader = tradingResources[randomTradeValues[i, 0]];
+		newTrade.toTraderAmount = randomTradeValues[i, 1];
 
-		newTrade.toTrader = tradingResources[Random.Range(0, tradingResources.Length)];
-		newTrade.toTraderAmount = Random.Range(50, 100);
-		newTrade.fromTrader = tradingResources[Random.Range(0, tradingResources.Length)];
-		newTrade.fromTraderAmount = Random.Range(80, 130);
-		newTrade.type = tradeType.ship;
-		if (Random.Range(0, 1f) < .5f)
-			newTrade.type = tradeType.foot;
+		newTrade.fromTrader = tradingResources[randomTradeValues[i, 2]];
+		newTrade.fromTraderAmount = randomTradeValues[i, 1] - 30;
+
+		newTrade.type =(tradeType) Enum.GetValues(typeof(tradeType)).GetValue(randomTradeValues[i,3]); ;
+		
 		return newTrade;
+	}
+
+	private List<int> GenerateNewRandomNumbers()
+	{
+		List<int> tradeRandoms = new List<int>();
+		for (int i = 0; i < maxTrades; i++)
+		{
+			int toTrader = Random.Range(0, tradingResources.Length); 
+			int toTraderAmount = Random.Range(50, 100);
+			int fromTrader = Random.Range(0, tradingResources.Length); ;
+			int type = Random.Range(0, 2); ;
+
+			tradeRandoms.Add(toTrader);
+			tradeRandoms.Add(toTraderAmount);
+			tradeRandoms.Add(fromTrader);
+			tradeRandoms.Add(type);
+		}
+		return tradeRandoms;
+	}
+
+	private void NewTradeRandomNumbers()
+	{
+		List<int> tradeRandoms = GenerateNewRandomNumbers();
+		for (int i = 0; i < maxTrades; i++)
+		{
+			for (int j = 0; j < synchronizedValues; j++)
+			{
+				randomTradeValues[i, j] = tradeRandoms[i* synchronizedValues+ j];
+			}
+			
+		}
 	}
 
 	public void AcceptTrade(Trade trade, ResourceManager rm)
@@ -100,7 +134,6 @@ public class TradeManager : NetworkBehaviour
 	private void SpawnShip(Trade trade,ResourceManager rm)
 	{
 		GameObject obj= Instantiate(shipPrefab, new Vector3(generator.xSize / 2, 0, generator.zSize / 2), Quaternion.identity);
-		NetworkUtility.instance.SpawnObject(obj);
 		Ship ship = obj.GetComponent<Ship>();
 		ship.trade = trade;
 		ship.rm = rm;
@@ -109,11 +142,17 @@ public class TradeManager : NetworkBehaviour
 		ship.curve = curveTransform.GetComponent<BGCurve>();
 		ship.math = curveTransform.GetComponent<BGCcMath>();
 	}
+	
+	public void RpcStartTradeOffer()
+	{
+		StartCoroutine("AnnounceNewTrades", 2f);
+	}
 
-	IEnumerator AnnounceNewTrades(float duration)
+	private IEnumerator AnnounceNewTrades(float duration)
 	{
 		float normalizedTime = duration;
 		UiManager.instance.newTradesTimerParent.SetActive(true);
+		
 		while (normalizedTime >= 0)
 		{
 			UiManager.instance.newTradesInText.text = Mathf.CeilToInt(normalizedTime) + " seconds!";
@@ -122,7 +161,7 @@ public class TradeManager : NetworkBehaviour
 			yield return null;
 		}
 		UiManager.instance.newTradesTimerParent.SetActive(false);
-		GenerateNewTrades(6);
+		GenerateNewTrades(maxTrades);
 	}
 }
 public enum tradeType

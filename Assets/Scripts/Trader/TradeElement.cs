@@ -18,8 +18,6 @@ public class TradeElement : MonoBehaviour
 	private bool accepted=false;
 	Trade trade;
 
-
-
 	internal void Init(Trade trade)
 	{
 		toTraderImage.sprite = trade.toTrader.sprite;
@@ -36,6 +34,7 @@ public class TradeElement : MonoBehaviour
 
 		acceptButton.onClick.AddListener(delegate () { TradeAccepted(); });
 	}
+
 	private void Update()
 	{
 		bool interactable = (UiManager.instance.currentRessouceManagerToShow.GetAmount(trade.toTrader.resource) > trade.toTraderAmount &&accepted==false);
@@ -44,7 +43,7 @@ public class TradeElement : MonoBehaviour
 
 	public void TradeAccepted()
 	{
-		TradeManager.instance.AcceptTrade(trade,UiManager.instance.currentRessouceManagerToShow);
+		TradeManager.instance.AcceptTrade(trade,GameManager.instance.localPlayer.mainBuilding.resourceManager);
 		accepted = true;
 
 		var colors = acceptButton.colors;

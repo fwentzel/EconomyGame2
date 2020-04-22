@@ -5,20 +5,16 @@
 
 	public override void OnBuild(bool subtractResource=true)
 	{
-		base.OnBuild(subtractResource);
-		GameManager.instance.OnCalculateIntervall += UpdateContextUi;
 		resourceManager.AddRessource(resource.citizens, capacity/2);
 		resourceManager.mainBuilding.maxCitizens += capacity;
-		
+		base.OnBuild(subtractResource);
 	}
 
 	public override void DestroyBuilding()
 	{
-
 		resourceManager.AddRessource(resource.citizens, -capacity/2);
 		resourceManager.mainBuilding.maxCitizens -= capacity;
 		base.DestroyBuilding();
-
 	}
 	protected override string GetStats()
 	{
@@ -32,13 +28,12 @@
 		capacity *= 2;
 	}
 
-	public override bool LevelUp()
+	protected override void OnLevelUp()
 	{
-		base.LevelUp();
+		base.OnLevelUp();
 		capacity++;
 		resourceManager.mainBuilding.maxCitizens += 1;
 		resourceManager.AddRessource(resource.citizens, 1);
-		return true;
 	}
 
 }

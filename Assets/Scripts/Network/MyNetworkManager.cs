@@ -1,21 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Mirror;
+
 using System.Collections.Generic;
 using System;
+using UnityEngine.SceneManagement;
 
-public class MyNetworkManager : NetworkManager
+public class MyNetworkManager : MonoBehaviour
 {
 	public static int connectedPlayers = 0;
-	public static int maxHumanPlayers =1;
+	public static int maxHumanPlayers = 1;
+	[SerializeField] private GameObject playerPrefab;
 
-	public override void Awake()
+	public static int maxConnections = 4;
+	List<Player> players = new List<Player>();
+	private void Start()
 	{
-		base.Awake();
+		OnServerAddPlayer();
 	}
+	//public void StartServer(bool addHost)
+	//{
+	//	//SceneManager.LoadScene("Level");
+	//	if (addHost)
 
+	//}
 
-	public override void OnServerAddPlayer(NetworkConnection conn)
+	public void OnServerAddPlayer()
 	{
 		connectedPlayers++;
 		//First Assign Ai Players so Ready Command doesnt get sent before all Players are generated
@@ -23,40 +32,47 @@ public class MyNetworkManager : NetworkManager
 		{
 			FillPlayersWithAi();
 		}
-		SpawnPlayer(conn);
+		SpawnPlayer(true);
+
 	}
 
-	private void SpawnPlayer(NetworkConnection conn)
+	private void SpawnPlayer(bool isHuman)
 	{
 		GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
 		Player playerComponent = player.GetComponent<Player>();
-		if (conn!=null)
+		if (isHuman == true)
 		{
-			NetworkServer.AddPlayerForConnection(conn, player);
+			print("added hiuman");
+			GameManager.instance.localPlayer = playerComponent;
+			//NetworkServer.AddPlayerForConnection(conn, player);
 		}
 		else
 		{
+			print("added ai");
 			playerComponent.isAi = true;
-			NetworkUtility.instance.SpawnObject(player);
 		}
-		
-		GameManager.instance.AddPlayer(playerComponent);
-		playerComponent.RpcSetupPlayer();
+
+
+		players.Add(playerComponent);
+		if (players.Count == maxConnections)
+		{
+			GameManager.instance.players = players.ToArray();
+			GameManager.instance.StartGame();
+		}
 	}
 
 	public void FillPlayersWithAi()
 	{
 		for (int i = connectedPlayers; i < maxConnections; i++)
 		{
-			SpawnPlayer(null);
+			SpawnPlayer(false);
 		}
 		print("ALL PLAYERS ASSIGNED");
 	}
 
-	public override void OnServerDisconnect(NetworkConnection conn)
-	{
-		print("Player disconnected, replacing with AI");
-		base.OnServerDisconnect(conn);
-	}
 
+	public void PlayerDisconnet()
+	{
+
+	}
 }

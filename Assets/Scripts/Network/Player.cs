@@ -1,22 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Mirror;
+
 [System.Serializable]
-public class Player : NetworkBehaviour
+public class Player : MonoBehaviour
 {
 
 	public MainBuilding mainBuilding;
 	public int team { get; private set; }
-	[SyncVar]
 	public bool isAi = false;
 
-	public void SetMainBuilding(uint mainBuildingNetId)
+	public void SetMainBuilding(MainBuilding mainBuilding)
 	{
-		print(mainBuildingNetId);
-		mainBuilding = NetworkIdentity.spawned[mainBuildingNetId].GetComponent<MainBuilding>();
-		print("SET MAIN BUILDING " + mainBuilding.ToString());
+		this.mainBuilding = mainBuilding;
 		team = mainBuilding.team;
-		if (isLocalPlayer)
+
+		if (GameManager.instance.localPlayer == this)
 		{
 			UiManager.instance.currentRessouceManagerToShow = mainBuilding.resourceManager;
 			UiManager.instance.UpdateRessourceUI();
@@ -27,23 +25,6 @@ public class Player : NetworkBehaviour
 			camControl.FocusOnMainBuilding(mainbuildingPos);
 		}
 	}
-
-	[ClientRpc]
-	public void RpcSetupPlayer()
-	{
-		print("Setting up Player!");
-		if (!isAi)
-			FindObjectOfType<MapGenerator>().SetupMap();
-		if (hasAuthority)
-		{
-			PlacementController.instance.SetupGridParameter();
-			CmdReady();
-		}
-	}
-
-	[Command]
-	public void CmdReady()
-	{
-		GameManager.instance.OnClientReady();
-	}
+	
+	
 }

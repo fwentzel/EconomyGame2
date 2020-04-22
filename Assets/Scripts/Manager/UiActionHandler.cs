@@ -48,6 +48,11 @@ public class UiActionHandler : MonoBehaviour
 		Application.Quit();
 	}
 
+	public void Disconnect()
+	{
+		print("Disconnected!");
+	}
+
 	public void BackToMain()
 	{
 		UiManager.instance.OpenMenu(UiManager.instance.menuPanel);

@@ -1,32 +1,33 @@
 ﻿public class Farm : Building
-{
+{	
 	public int unitsPerIntervall;
 
 
 	public override void OnBuild(bool subtractResource = true)
 	{
 		resourceManager.AddRessource(resource.food, unitsPerIntervall);
+		base.OnBuild(subtractResource);
 	}
 
 	public override void DestroyBuilding()
 	{
-		GameManager.instance.OnCalculateIntervall -= UpdateContextUi;
 		resourceManager.AddRessource(resource.food, -unitsPerIntervall);
 		base.DestroyBuilding();
-
 	}
-	public override bool LevelUp()
+
+	protected override void OnLevelUp()
 	{
-		base.LevelUp();
+		base.OnLevelUp();
 		unitsPerIntervall++;
 		resourceManager.AddRessource(resource.food, 1);
-		return true;
 
 	}
+
 	protected override void TriggerBonusLevel()
 	{
 		unitsPerIntervall *= 2;
 	}
+
 	protected override string GetStats()
 	{
 		string stats = "Name: " + name + "\nTeam: " + team + "\nLevel: " + level;

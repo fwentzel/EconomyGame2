@@ -2,9 +2,9 @@
 using UnityEditor;
 #endif
 using UnityEngine;
-using Mirror;
+
 [RequireComponent(typeof(MeshFilter))]
-public class MapGenerator : NetworkBehaviour
+public class MapGenerator : MonoBehaviour
 {
 	public int perlinScale = 30;
 	public float heightOffsetStrength;
@@ -28,13 +28,18 @@ public class MapGenerator : NetworkBehaviour
 	int[] triangles;
 	Vector2[] uv;
 
-	[Client]
-	public void SetupMap()
+	private void Awake()
 	{
 		SetDimension();
+		SetupMap();
+	}
+
+	public void SetupMap()
+	{
+		
 		waterMaterial.SetFloat("StartTime", -999);
 		GenerateMap();
-		BuildObjectsOnMap();
+		
 	}
 
 	void SetDimension()
@@ -59,7 +64,7 @@ public class MapGenerator : NetworkBehaviour
 		ChangeMapVertexHeights();
 		UpdateMesh();
 		UpdateCollider();
-
+		BuildObjectsOnMap();
 		material.SetInt("Vector1_2D88299F", gridSpacing);
 		material.SetTexture("Texture2D_AD5527E4", mapTexture);
 	}
@@ -190,15 +195,15 @@ public class MapGenerator : NetworkBehaviour
 						if (objectMapping.placeable != null)
 						{
 							//ALSO USED IN PLACEMENTCONTROLLER
-							float newY = vertices[i].y +
-										 vertices[i + 1].y +
-										 vertices[xSize + i + 1].y +
-										 vertices[xSize + i].y;
-							newY /= 4;
+							//float newY = vertices[i].y +
+							//			 vertices[i + 1].y +
+							//			 vertices[xSize + i + 1].y +
+							//			 vertices[xSize + i].y;
+							//newY /= 4;
+							float newY = vertices[i].y;
 							//instantiate given prefab and set Position at coordinsates + gridspacing/2 offset and vertexheigth
 							GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
 							obj.transform.position = new Vector3(x + gridSpacing / 2.0f, newY, z + gridSpacing / 2.0f);
-							NetworkUtility.instance.SpawnObject(obj);
 
 							//obj.transform.rotation = GetRotationFromNormalSurface(obj);
 

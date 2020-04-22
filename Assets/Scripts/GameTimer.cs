@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
-public class GameTimer : NetworkBehaviour
+
+public class GameTimer : MonoBehaviour
 {
 	Image timerImage;
 	
 	public float fillAmount = 0;
-	[SyncVar]
 	public float dayLength = 2.0f;
-	[SyncVar]
 	public bool isRunning = false;
 	Vector3 pos;
 	private void Awake()
@@ -16,8 +14,7 @@ public class GameTimer : NetworkBehaviour
 		pos = transform.position;
 		timerImage = GetComponent<Image>();
 	}
-
-	[Server]
+	
 	public void StartTimer(float dayLength)
 	{
 		this.dayLength = dayLength;

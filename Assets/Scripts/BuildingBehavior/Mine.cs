@@ -12,22 +12,19 @@ public class Mine : Building
 	public override void OnBuild(bool subtractResource = true)
 	{
 		resourceManager.AddRessource(resource.stone, unitsPerIntervall);
+		base.OnBuild(subtractResource);
 	}
 
 	public override void DestroyBuilding()
 	{
-		GameManager.instance.OnCalculateIntervall -= UpdateContextUi;
 		resourceManager.AddRessource(resource.stone, -unitsPerIntervall);
 		base.DestroyBuilding();
-
 	}
-	public override bool LevelUp()
+	protected override void OnLevelUp()
 	{
-		base.LevelUp();
+		base.OnLevelUp();
 		unitsPerIntervall++;
 		resourceManager.AddRessource(resource.stone, 1);
-		return true;
-
 	}
 	protected override void TriggerBonusLevel()
 	{

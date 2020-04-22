@@ -122,9 +122,6 @@ public class PlacementController : MonoBehaviour
 			Destroy(placeableObject.GetComponent<Buildcheck>());
 			placeableObject.GetComponent<BoxCollider>().isTrigger = false;
 
-			//spawn Object on server so all clients can see
-			NetworkUtility.instance.SpawnObject(placeableObject);
-
 			//Set Team variable
 			Building building = placeableObject.GetComponent<Building>();
 			//TODO PLAYER 0
@@ -148,6 +145,11 @@ public class PlacementController : MonoBehaviour
 
 	public void NewPlaceableObject(GameObject placeable)
 	{
+		if(placeable.GetComponent<Building>().buildCost>GameManager.instance.localPlayer.mainBuilding.resourceManager.GetAmount(resource.money))
+		{
+			print("Not enough Money to build this!");
+			return;
+		}
 		//Turn on placement Grid and set Color to White
 		ConfigureGrid(true);
 

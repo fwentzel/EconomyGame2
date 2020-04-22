@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -86,7 +87,7 @@ public class MainBuilding : Building
 	{
 		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && PlacementController.instance.isPlacing == false)
 		{
-			if (GameManager.instance.players[team].mainBuilding == this)
+			if (GameManager.instance.localPlayer.mainBuilding == this)
 			{
 				SelectionManager.instance.selectedObject = this.gameObject;
 				UiManager.instance.OpenContext(UiManager.instance.mainBuildingContextUiCanvas, transform.position);
