@@ -6,7 +6,7 @@ public class TaxesAi : BaseAi
 	int moneyRaiseTaxesThreshold = 200;
 	int loyaltyRiskyThreshold = 20;
 	int lastTaxchangeDay =-1;
-	public TaxesAi( int moneyRaiseTaxesThreshold, int loyaltyRiskyThreshold, MainBuilding mainBuilding) :base(mainBuilding)
+	public TaxesAi( int moneyRaiseTaxesThreshold, int loyaltyRiskyThreshold, Mainbuilding mainbuilding) :base(mainbuilding)
 	{
 		this.moneyRaiseTaxesThreshold = moneyRaiseTaxesThreshold;
 		this.loyaltyRiskyThreshold = loyaltyRiskyThreshold;
@@ -19,11 +19,11 @@ public class TaxesAi : BaseAi
 		if (resAmount(resource.money) < moneyRaiseTaxesThreshold&&GameManager.instance.dayIndex!= lastTaxchangeDay)
 		{
 			Log("NEED MONEY");
-			mainBuilding.Taxes += 1;
+			mainbuilding.Taxes += 1;
 			return typeof(BuildingAi);
 		}
 
-		mainBuilding.Taxes = resAmount(resource.loyalty)/10;
+		mainbuilding.Taxes = resAmount(resource.loyalty)/10;
 		return typeof(BuildingAi);
 		
 	}

@@ -2,43 +2,36 @@
 
 public class UiActionHandler : MonoBehaviour
 {
-
 	public void DestroySelected()
 	{
-		if (SelectionManager.instance.selectedObject == null)
-			return;
-
-		Building buildingToDestroy = SelectionManager.instance.selectedObject.GetComponent<Building>();
+		Building buildingToDestroy = SelectionManager.instance.SelectedObject.GetComponent<Building>();
 		if (buildingToDestroy != null)
 		{
 			buildingToDestroy.DestroyBuilding();
-			SelectionManager.instance.selectedObject = null;
+			SelectionManager.instance.SelectedObject = null;
 			UiManager.instance.CloseAll();
 		}
-
 	}
+
 	public void LevelUpSelected()
 	{
-		if (SelectionManager.instance.selectedObject == null)
-			return;
-
-		Building buildingToLevelUp = SelectionManager.instance.selectedObject.GetComponent<Building>();
+		Building buildingToLevelUp = SelectionManager.instance.SelectedObject.GetComponent<Building>();
 		if (buildingToLevelUp != null)
 		{
 			buildingToLevelUp.LevelUp();
-			buildingToLevelUp.UpdateContextUi();
+			UiManager.instance.UpdateContextUi(buildingToLevelUp);
 		}
 	}
 
 	public void ChangeTaxes(float value)
 	{
-		if (SelectionManager.instance.selectedObject == null)
+		if (SelectionManager.instance.SelectedObject == null)
 			return;
-		MainBuilding mainBuilding = SelectionManager.instance.selectedObject.GetComponent<MainBuilding>();
-		if (mainBuilding != null)
+		Mainbuilding mainbuilding = SelectionManager.instance.SelectedObject.GetComponent<Mainbuilding>();
+		if (mainbuilding != null)
 		{
-			mainBuilding.Taxes = (int)value;
-			UiManager.instance.mainBuildingContextUiTaxesText.text = "Taxes: " + value + " /10 per citizen";
+			mainbuilding.Taxes = (int)value;
+			UiManager.instance.UpdateContextUi(mainbuilding);
 		}
 	}
 
@@ -55,6 +48,6 @@ public class UiActionHandler : MonoBehaviour
 
 	public void BackToMain()
 	{
-		UiManager.instance.OpenMenu(UiManager.instance.menuPanel);
+		UiManager.instance.OpenMenu(null);
 	}
 }

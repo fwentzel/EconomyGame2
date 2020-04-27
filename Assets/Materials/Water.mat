@@ -49,5 +49,5 @@ Material:
     - RippleColor: {r: 0, g: 0, b: 0, a: 1}
     - Vector2_2D24956B: {r: -0.02, g: 0.02, b: 0, a: 0}
     - Vector2_847799B5: {r: 0.05, g: -0.01, b: 0, a: 0}
-    - WaterColor: {r: 0.08938788, g: 0.080322154, b: 0.8962264, a: 1}
+    - WaterColor: {r: 0.08938784, g: 0.08032214, b: 0.8962264, a: 1}
   m_BuildTextureStacks: []

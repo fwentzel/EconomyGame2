@@ -5,7 +5,7 @@ public class TradeAi : BaseAi
 {
 	float safePercentOfResource = .1f;
 
-	public TradeAi(float safePercentOfResource,MainBuilding mainBuilding):base(mainBuilding)
+	public TradeAi(float safePercentOfResource,Mainbuilding mainbuilding):base(mainbuilding)
 	{
 		this.safePercentOfResource = safePercentOfResource;
 	}

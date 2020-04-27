@@ -113,25 +113,25 @@ public class PlacementController : MonoBehaviour
 	private void FinishBuildProcess()
 	{
 		if (!canBuild)
-		{
 			return;
-		}
-		else
-		{
-			//remove unnecessary components and set Trigger false so other Placings detect it with OnTriggerEnter()
-			Destroy(placeableObject.GetComponent<Buildcheck>());
-			placeableObject.GetComponent<BoxCollider>().isTrigger = false;
+		
+		//remove unnecessary components and set Trigger false so other Placings detect it with OnTriggerEnter()
+		Destroy(placeableObject.GetComponent<Buildcheck>());
+		placeableObject.GetComponent<BoxCollider>().isTrigger = false;
 
-			//Set Team variable
-			Building building = placeableObject.GetComponent<Building>();
-			//TODO PLAYER 0
-			GameManager.instance.localPlayer.mainBuilding.AddBuilding(building);
+		//Set Team variable
+		Building building = placeableObject.GetComponent<Building>();
+		//TODO PLAYER 0
+		GameManager.instance.localPlayer.mainbuilding.AddBuilding(building);
 
-			//toggle off placement grid and reset placeableObject
-			placeableObject = null;
-			isPlacing = false;
-			toggleGrid(0);
-		}
+		//toggle off placement grid and reset placeableObject
+		placeableObject = null;
+		isPlacing = false;
+		toggleGrid(0);
+
+		//Select Building 
+		SelectionManager.instance.SelectedObject = building.gameObject;
+		
 	}
 
 	private void CancelBuildProcess()
@@ -145,7 +145,7 @@ public class PlacementController : MonoBehaviour
 
 	public void NewPlaceableObject(GameObject placeable)
 	{
-		if(placeable.GetComponent<Building>().buildCost>GameManager.instance.localPlayer.mainBuilding.resourceManager.GetAmount(resource.money))
+		if(placeable.GetComponent<Building>().buildCost>GameManager.instance.localPlayer.mainbuilding.resourceManager.GetAmount(resource.money))
 		{
 			print("Not enough Money to build this!");
 			return;

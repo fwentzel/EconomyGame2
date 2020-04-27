@@ -3,13 +3,13 @@ using UnityEngine;
 
 public abstract class BaseAi 
 {
-	public MainBuilding mainBuilding;
+	public Mainbuilding mainbuilding;
 	public ResourceManager resourceManager;
 
-	public BaseAi(MainBuilding mainBuilding)
+	public BaseAi(Mainbuilding mainbuilding)
 	{
-		this.mainBuilding = mainBuilding;
-		resourceManager = mainBuilding.resourceManager;
+		this.mainbuilding = mainbuilding;
+		resourceManager = mainbuilding.resourceManager;
 	}
 	
 
@@ -22,6 +22,6 @@ public abstract class BaseAi
 	protected void Log(string msg)
 	{
 		if (GameManager.instance.showAiLog)
-			Debug.Log(mainBuilding.team + msg);
+			Debug.Log(mainbuilding.team + msg);
 	}
 }

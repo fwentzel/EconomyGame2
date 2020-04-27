@@ -17,10 +17,10 @@ public class TradeManager : MonoBehaviour
 	public GameObject newTradeTimerObject;
 	public GameObject tradeElementPrefab;
 	public GameObject wayPointsParent;
-
 	public GameObject shipPrefab;
-
 	public MapGenerator generator { get; private set; }
+
+	public event Action<int> OnGenerateNewTrades = delegate { };
 
 	int acceptedTrades = 0;
 	int maxTrades = 6;
@@ -37,8 +37,10 @@ public class TradeManager : MonoBehaviour
 		generator = FindObjectOfType<MapGenerator>();
 		tradeElements = new Dictionary<Trade, TradeElement>();
 		randomTradeValues = new int[maxTrades, synchronizedValues];
-		
-
+	}
+	private void Start()
+	{
+		StartTradeOffer();
 	}
 
 	private void GenerateNewTrades(int amount)
@@ -69,6 +71,7 @@ public class TradeManager : MonoBehaviour
 		}
 		acceptedTrades = 0;
 	}
+
 	private Trade GenerateTrade(int i)
 	{
 		// [0,4] , [50,100] , [0,4] 
@@ -118,7 +121,7 @@ public class TradeManager : MonoBehaviour
 
 	public void AcceptTrade(Trade trade, ResourceManager rm)
 	{
-		rm.AddRessource(trade.toTrader.resource, -trade.toTraderAmount);
+		rm.ChangeRessourceAmount(trade.toTrader.resource, -trade.toTraderAmount);
 		if (trade.type == tradeType.ship)
 		{
 			SpawnShip(trade,rm);
@@ -127,7 +130,7 @@ public class TradeManager : MonoBehaviour
 		acceptedTrades++;
 		if (acceptedTrades ==4)
 		{
-			StartCoroutine("AnnounceNewTrades", 10f);
+			StartCoroutine("AnnounceNewTrades", 10);
 		}
 	}
 
@@ -138,29 +141,21 @@ public class TradeManager : MonoBehaviour
 		ship.trade = trade;
 		ship.rm = rm;
 		//Get Waypointcurve At child index from team. Has to be setupup correct in scene
-		Transform curveTransform = wayPointsParent.transform.GetChild(rm.mainBuilding.team);
+		Transform curveTransform = wayPointsParent.transform.GetChild(rm.mainbuilding.team);
 		ship.curve = curveTransform.GetComponent<BGCurve>();
 		ship.math = curveTransform.GetComponent<BGCcMath>();
 	}
 	
-	public void RpcStartTradeOffer()
+	public void StartTradeOffer()
 	{
-		StartCoroutine("AnnounceNewTrades", 2f);
+		StartCoroutine("AnnounceNewTrades", 3);
 	}
 
-	private IEnumerator AnnounceNewTrades(float duration)
+	private IEnumerator AnnounceNewTrades(int duration)
 	{
-		float normalizedTime = duration;
-		UiManager.instance.newTradesTimerParent.SetActive(true);
-		
-		while (normalizedTime >= 0)
-		{
-			UiManager.instance.newTradesInText.text = Mathf.CeilToInt(normalizedTime) + " seconds!";
-			UiManager.instance.newTradesInImage.fillAmount = normalizedTime / duration;
-			normalizedTime -= Time.deltaTime;
-			yield return null;
-		}
-		UiManager.instance.newTradesTimerParent.SetActive(false);
+		OnGenerateNewTrades(duration);
+		yield return new WaitForSeconds(duration);
+
 		GenerateNewTrades(maxTrades);
 	}
 }

@@ -7,22 +7,29 @@ using UnityEngine.SceneManagement;
 
 public class MyNetworkManager : MonoBehaviour
 {
-	public static int connectedPlayers = 0;
+	public static MyNetworkManager instance { get; private set; }
 	public static int maxHumanPlayers = 1;
-	[SerializeField] private GameObject playerPrefab;
+
+	public int connectedPlayers = 0;
+	[SerializeField] private GameObject playerPrefab=default;
 
 	public static int maxConnections = 4;
 	List<Player> players = new List<Player>();
+
+	private void Awake()
+	{
+		if (instance == null)
+			instance = this;
+		else
+			Destroy(this);
+
+		
+	}
+
 	private void Start()
 	{
 		OnServerAddPlayer();
 	}
-	//public void StartServer(bool addHost)
-	//{
-	//	//SceneManager.LoadScene("Level");
-	//	if (addHost)
-
-	//}
 
 	public void OnServerAddPlayer()
 	{
@@ -43,7 +50,8 @@ public class MyNetworkManager : MonoBehaviour
 		if (isHuman == true)
 		{
 			print("added hiuman");
-			GameManager.instance.localPlayer = playerComponent;
+			if(GameManager.instance.localPlayer==null)
+				GameManager.instance.localPlayer = playerComponent;
 			//NetworkServer.AddPlayerForConnection(conn, player);
 		}
 		else

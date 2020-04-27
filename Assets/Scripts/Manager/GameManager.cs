@@ -29,15 +29,15 @@ public class GameManager : MonoBehaviour
 
 	public void RpcSetupMainBuildingPlayer()
 	{
-		MainBuilding[] mainBuildings = FindObjectsOfType<MainBuilding>();
+		Mainbuilding[] mainbuildings = FindObjectsOfType<Mainbuilding>();
 		for (int i = 0; i < players.Length; i++)
 		{
-			foreach (MainBuilding mainBuilding in mainBuildings)
+			foreach (Mainbuilding mainbuilding in mainbuildings)
 			{
-				if (mainBuilding.team == i)
+				if (mainbuilding.team == i)
 				{
-					mainBuilding.SetupMainBuilding();
-					players[i].SetMainBuilding(mainBuilding);
+					mainbuilding.SetupMainBuilding();
+					players[i].SetMainBuilding(mainbuilding);
 				}
 				
 			}
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 		print("SERVER STARTING GAME!");
 		RpcSetupMainBuildingPlayer();
 		PlacementController.instance.SetupGridParameter();
-		TradeManager.instance.RpcStartTradeOffer();
+		TradeManager.instance.StartTradeOffer();
 		RpcStartInvokeCalcIntervall();
 	}
 	

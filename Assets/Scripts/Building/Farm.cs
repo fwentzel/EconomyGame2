@@ -5,13 +5,13 @@
 
 	public override void OnBuild(bool subtractResource = true)
 	{
-		resourceManager.AddRessource(resource.food, unitsPerIntervall);
+		resourceManager.ChangeRessourceAmount(resource.food, unitsPerIntervall);
 		base.OnBuild(subtractResource);
 	}
 
 	public override void DestroyBuilding()
 	{
-		resourceManager.AddRessource(resource.food, -unitsPerIntervall);
+		resourceManager.ChangeRessourceAmount(resource.food, -unitsPerIntervall);
 		base.DestroyBuilding();
 	}
 
@@ -19,7 +19,7 @@
 	{
 		base.OnLevelUp();
 		unitsPerIntervall++;
-		resourceManager.AddRessource(resource.food, 1);
+		resourceManager.ChangeRessourceAmount(resource.food, 1);
 
 	}
 
@@ -28,10 +28,10 @@
 		unitsPerIntervall *= 2;
 	}
 
-	protected override string GetStats()
+	public override string GetStats()
 	{
-		string stats = "Name: " + name + "\nTeam: " + team + "\nLevel: " + level;
-		 stats  +="\nCapacity: " + unitsPerIntervall;
+		string stats = "Type: Farm" + "\nTeam: " + team + "\nLevel: " + level;
+		 stats  +="\nFood/Intervall: " + unitsPerIntervall;
 
 		return stats;
 	}

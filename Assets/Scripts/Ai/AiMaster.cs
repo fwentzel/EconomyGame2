@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AiMaster: MonoBehaviour
 {
-	public MainBuilding mainBuilding => GetComponent<MainBuilding>();
+	public Mainbuilding mainbuilding => GetComponent<Mainbuilding>();
 	public StateMachine StateMachine => GetComponent<StateMachine>();
 
 	private void Awake()
@@ -15,9 +15,9 @@ public class AiMaster: MonoBehaviour
 	private void InitializeStateMachine()
 	{
 		var states = new Dictionary<Type, BaseAi>() {
-			{ typeof(TaxesAi),new TaxesAi(100,20,mainBuilding)},
-			{ typeof(BuildingAi),new BuildingAi(mainBuilding)},
-			{ typeof(TradeAi),new TradeAi(.1f,mainBuilding)}
+			{ typeof(TaxesAi),new TaxesAi(100,20,mainbuilding)},
+			{ typeof(BuildingAi),new BuildingAi(mainbuilding)},
+			{ typeof(TradeAi),new TradeAi(.1f,mainbuilding)}
 		};
 		GetComponent<StateMachine>().availableStates = states;
 	}

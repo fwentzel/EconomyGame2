@@ -30,13 +30,12 @@ public class MapGenerator : MonoBehaviour
 
 	private void Awake()
 	{
-		SetDimension();
 		SetupMap();
 	}
 
 	public void SetupMap()
 	{
-		
+		SetDimension();
 		waterMaterial.SetFloat("StartTime", -999);
 		GenerateMap();
 		

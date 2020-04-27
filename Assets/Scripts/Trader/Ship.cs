@@ -73,7 +73,7 @@ public class Ship : MonoBehaviour
 	private IEnumerator Unload()
 	{
 		yield return new WaitForSeconds(3);
-		rm.AddRessource(trade.fromTrader.resource, trade.fromTraderAmount);
+		rm.ChangeRessourceAmount(trade.fromTrader.resource, trade.fromTraderAmount);
 		//TODO Pooling
 		Destroy(this.gameObject);
 	}

@@ -11,29 +11,29 @@ public class Mine : Building
 	}
 	public override void OnBuild(bool subtractResource = true)
 	{
-		resourceManager.AddRessource(resource.stone, unitsPerIntervall);
+		resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
 		base.OnBuild(subtractResource);
 	}
 
 	public override void DestroyBuilding()
 	{
-		resourceManager.AddRessource(resource.stone, -unitsPerIntervall);
+		resourceManager.ChangeRessourceAmount(resource.stone, -unitsPerIntervall);
 		base.DestroyBuilding();
 	}
 	protected override void OnLevelUp()
 	{
 		base.OnLevelUp();
 		unitsPerIntervall++;
-		resourceManager.AddRessource(resource.stone, 1);
+		resourceManager.ChangeRessourceAmount(resource.stone, 1);
 	}
 	protected override void TriggerBonusLevel()
 	{
 		unitsPerIntervall *= 2;
 	}
-	protected override string GetStats()
+	public override string GetStats()
 	{
-		string stats = "Name: " + name + "\nTeam: " + team + "\nLevel: " + level;
-		stats += "\nCapacity: " + unitsPerIntervall;
+		string stats = "Type: Mine" + "\nTeam: " + team + "\nLevel: " + level;
+		stats += "\nStone/Intervall: " + unitsPerIntervall;
 
 		return stats;
 	}

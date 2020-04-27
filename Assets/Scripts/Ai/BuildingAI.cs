@@ -9,7 +9,7 @@ public class BuildingAi : BaseAi
 	List<Vector2> availableBuildSpots;
 	int oldEnd;
 
-	public BuildingAi(MainBuilding mainBuilding) : base(mainBuilding)
+	public BuildingAi(Mainbuilding mainbuilding) : base(mainbuilding)
 	{
 		GetSpecificsFromBuilding();
 		GetAvailableBuildSpots(1,2);
@@ -37,7 +37,7 @@ public class BuildingAi : BaseAi
 			start = 1;
 		oldEnd = end;
 		availableBuildSpots = new List<Vector2>();
-		Vector2 mainPos = new Vector2(mainBuilding.transform.position.x, mainBuilding.transform.position.z);
+		Vector2 mainPos = new Vector2(mainbuilding.transform.position.x, mainbuilding.transform.position.z);
 		for (int i = start; i < end; i++)
 		{
 			for (int x = -i; x <= i; x++)
@@ -48,7 +48,7 @@ public class BuildingAi : BaseAi
 				}
 			}
 		}
-		foreach (Building building in mainBuilding.buildings)
+		foreach (Building building in mainbuilding.buildings)
 		{
 			Vector2 buildingPos = new Vector2(building.transform.position.x, building.transform.position.z);
 			if (availableBuildSpots.Contains(buildingPos))
@@ -64,7 +64,7 @@ public class BuildingAi : BaseAi
 			{typeof(Farm),new List<Building>() }
 		};
 
-		foreach (Building building in mainBuilding.buildings)
+		foreach (Building building in mainbuilding.buildings)
 		{
 			buildingList[building.GetType()].Add(building);
 		}
@@ -95,8 +95,8 @@ public class BuildingAi : BaseAi
 
 	private void PlaceBuilding(Type type, Vector3 pos)
 	{
-		resourceManager.AddRessource(resource.money, -buildingList[type][0].buildCost);
-		Building addedBuilding= mainBuilding.AddBuilding(type, pos);
+		resourceManager.ChangeRessourceAmount(resource.money, -buildingList[type][0].buildCost);
+		Building addedBuilding= mainbuilding.AddBuilding(type, pos);
 		buildingList[type].Add(addedBuilding);
 	}
 

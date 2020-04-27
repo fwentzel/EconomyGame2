@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MainBuilding : Building
+public class Mainbuilding : Building
 {
 	[Range(0, 10)]
 	private int taxes = 5;
@@ -19,7 +19,7 @@ public class MainBuilding : Building
 	private void Awake()
 	{
 		resourceManager = GetComponent<ResourceManager>();
-		resourceManager.mainBuilding = this;
+		resourceManager.mainbuilding = this;
 	}
 
 	public void SetupMainBuilding()
@@ -87,26 +87,20 @@ public class MainBuilding : Building
 	{
 		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && PlacementController.instance.isPlacing == false)
 		{
-			if (GameManager.instance.localPlayer.mainBuilding == this)
+			if (GameManager.instance.localPlayer.mainbuilding == this)
 			{
-				SelectionManager.instance.selectedObject = this.gameObject;
-				UiManager.instance.OpenContext(UiManager.instance.mainBuildingContextUiCanvas, transform.position);
-				UpdateContextUi();
+				SelectionManager.instance.SelectedObject = this.gameObject;
+				UiManager.instance.OpenContext( this);
 			}
 		}
 
 	}
 
-	public override void UpdateContextUi()
-	{
-		UiManager.instance.UpdateUiElement(UiManager.instance.mainBuildingContextUiTaxesText, "Taxes: " + Taxes + " /10 per citizen");
-		UiManager.instance.UpdateUiElement(UiManager.instance.mainBuildingContextUiText, GetStats());
-		UiManager.instance.UpdateUiElement(UiManager.instance.mainBuildingContextUiTaxesSlider, Taxes);
-	}
+	
 
-	protected override string GetStats()
+	public override string GetStats()
 	{
-		string stats = "Name: " + name + " \nTeam: " + team;
+		string stats = "Type: Mainbuilding" + " \nTeam: " + team;
 		return stats;
 	}
 

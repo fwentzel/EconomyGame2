@@ -37,13 +37,13 @@ public class TradeElement : MonoBehaviour
 
 	private void Update()
 	{
-		bool interactable = (UiManager.instance.currentRessouceManagerToShow.GetAmount(trade.toTrader.resource) > trade.toTraderAmount &&accepted==false);
+		bool interactable = (UiManager.instance.CurrentRessouceManagerToShow.GetAmount(trade.toTrader.resource) > trade.toTraderAmount &&accepted==false);
 		acceptButton.interactable = interactable;
 	}
 
 	public void TradeAccepted()
 	{
-		TradeManager.instance.AcceptTrade(trade,GameManager.instance.localPlayer.mainBuilding.resourceManager);
+		TradeManager.instance.AcceptTrade(trade,GameManager.instance.localPlayer.mainbuilding.resourceManager);
 		accepted = true;
 
 		var colors = acceptButton.colors;

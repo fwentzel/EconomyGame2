@@ -6,7 +6,7 @@ public class Citizen : MonoBehaviour
 {
 	NavMeshAgent agent;
 	int walkRadius=10;
-	public float speed=.4f;
+	[SerializeField] float speed=.4f;
 
 	private void Start()
 	{
