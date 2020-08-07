@@ -4,7 +4,8 @@ using UnityEngine.EventSystems;
 public class PlacementController : MonoBehaviour
 {
 	[HideInInspector] public static PlacementController instance { get; private set; }
-	public bool isPlacing = false;
+	public bool isPlacing { get; private set; } = false;
+
 	Material gridMaterial;
 	bool canBuild = true;
 	GameObject placeableObject;
@@ -14,6 +15,7 @@ public class PlacementController : MonoBehaviour
 	Mesh groundMesh;
 	int xSize;
 	int zSize;
+
 	private void Awake()
 	{
 		//Singleton Check
@@ -23,19 +25,16 @@ public class PlacementController : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
-		SetupGridParameter();
-		MapGenerator mapGen = FindObjectOfType<MapGenerator>();
-		xSize = mapGen.xSize;
-		zSize=mapGen.zSize;
-		groundMesh = mapGen.GetComponent<MeshFilter>().mesh;
 	}
 
-	private void SetupGridParameter()
+	public void SetupGridParameter()
 	{
-		GameObject groundObj = GameObject.FindGameObjectWithTag("Ground");
-
-		gridMaterial = groundObj.GetComponent<MeshRenderer>().material;
-		gridSpacing = groundObj.GetComponent<MapGenerator>().gridSpacing;
+		MapGenerator mapGen = FindObjectOfType<MapGenerator>();
+		xSize = mapGen.xSize;
+		zSize = mapGen.zSize;
+		groundMesh = mapGen.GetComponent<MeshFilter>().mesh;
+		gridMaterial = mapGen.GetComponent<MeshRenderer>().material;
+		gridSpacing = mapGen.GetComponent<MapGenerator>().gridSpacing;
 		gridPlacementOffset = (float)gridSpacing / 2;
 	}
 
@@ -116,28 +115,23 @@ public class PlacementController : MonoBehaviour
 	private void FinishBuildProcess()
 	{
 		if (!canBuild)
-		{
 			return;
-		}
-		else
-		{
-			//remove unnecessary components and set Trigger false so other Placings detect it with OnTriggerEnter()
-			Destroy(placeableObject.GetComponent<Buildcheck>());
-			placeableObject.GetComponent<BoxCollider>().isTrigger = false;
+		
+		//remove unnecessary components and set Trigger false so other Placings detect it with OnTriggerEnter()
+		Destroy(placeableObject.GetComponent<Buildcheck>());
+		placeableObject.GetComponent<BoxCollider>().isTrigger = false;
 
-			//Set Team variable
-			Building building = placeableObject.GetComponent<Building>();
-			building.team = GameManager.instance.team;
-			building.enabled = true;
+		//Set Team variable
+		Building building = placeableObject.GetComponent<Building>();
+		//TODO PLAYER 0
+		GameManager.instance.localPlayer.mainbuilding.AddBuilding(building);
 
-			//Todo Hässlich
-			GameManager.instance.mainBuilding.AddBuilding(building);
+		//toggle off placement grid and reset placeableObject
+		placeableObject = null;
+		isPlacing = false;
+		toggleGrid(0);
 
-			//toggle off placement grid and reset placeableObject
-			placeableObject = null;
-			isPlacing = false;
-			toggleGrid(0);
-		}
+		
 	}
 
 	private void CancelBuildProcess()
@@ -151,12 +145,21 @@ public class PlacementController : MonoBehaviour
 
 	public void NewPlaceableObject(GameObject placeable)
 	{
+		if(placeable.GetComponent<Building>().buildCost >GameManager.instance.localPlayer.mainbuilding.resourceManager.GetAmount(resource.money))
+		{
+			print("Not enough Money to build this!");
+			return;
+		}
 		//Turn on placement Grid and set Color to White
 		ConfigureGrid(true);
 
 		//Instantiate new object to place and add necessary components. Make sure Collider is Trigger for OnTriggerEnter()
 		//TODO take from pool?
-		placeableObject = GameObject.Instantiate(placeable);
+		if (placeableObject != null)
+		{
+			Destroy(placeableObject);
+		}
+		placeableObject = Instantiate(placeable);
 		placeableObject.GetComponent<Building>().enabled = false;
 		placeableObject.AddComponent<Buildcheck>();
 		placeableObject.GetComponent<BoxCollider>().isTrigger = true;

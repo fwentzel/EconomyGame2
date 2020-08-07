@@ -2,10 +2,11 @@
 using System.Collections;
 using System;
 
+
 public class CityResourceLookup : MonoBehaviour
 {
 	public static CityResourceLookup instance { get; private set; }
-
+	public GameObject citizenPrefab;
 	public float meanLoyalty { get; private set; } = 50;
 	public float freeCitizens { get; private set; } =0;
 
@@ -18,8 +19,22 @@ public class CityResourceLookup : MonoBehaviour
 			instance = this;
 		else
 			Destroy(this);
-		GameManager.OnCalculateIntervall += UpdateCityResourceMean;
-		resourceManagers = FindObjectsOfType<ResourceManager>();
+	}
+
+	private void Start()
+	{
+		GameManager.instance.OnCalculateIntervall += UpdateCityResourceMean;
+	}
+
+	public void PopulateResourceManagers()
+	{
+		Player[] players = GameManager.instance.players;
+		resourceManagers = new ResourceManager[players.Length];
+
+		for (int i = 0; i < resourceManagers.Length; i++)
+		{
+			resourceManagers[i] = players[i].mainbuilding.resourceManager;
+		}
 	}
 
 	private void UpdateCityResourceMean()
@@ -36,15 +51,16 @@ public class CityResourceLookup : MonoBehaviour
 	{
 		if (freeCitizens <= 0)
 			return;
-		print(string.Format("Team {0} hat einen Bürger aufgenommen!", resourceManager.mainBuilding.team.teamID));
+		print(string.Format("Team {0} hat einen Bürger aufgenommen!", resourceManager.mainbuilding.team));
 		freeCitizens--;
-		resourceManager.AddRessource(resource.citizens,1);
+		resourceManager.ChangeRessourceAmount(resource.citizens,1);
 	}
 
 	internal void LooseCitizen(ResourceManager resourceManager)
 	{
-		print(string.Format("Team {0} hat einen Bürger verloren!", resourceManager.mainBuilding.team.teamID));
+		print(string.Format("Team {0} hat einen Bürger verloren!", resourceManager.mainbuilding.team));
 		freeCitizens++;
-		resourceManager.AddRessource(resource.citizens, -1);
+		resourceManager.ChangeRessourceAmount(resource.citizens, -1);
+		Instantiate(citizenPrefab, resourceManager.transform.position, Quaternion.identity);
 	}
 }

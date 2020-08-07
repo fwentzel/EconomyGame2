@@ -19,8 +19,11 @@ public class Ship : MonoBehaviour
 	internal Trade trade;
 	internal ResourceManager rm;
 
+	MapGenerator generator;
+
 	void Awake()
 	{
+		generator=FindObjectOfType<MapGenerator>();
 		animator = transform.GetChild(0).GetComponent<Animator>();
 		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
 	}
@@ -35,7 +38,7 @@ public class Ship : MonoBehaviour
 
 		//set animation Tri
 		animator.SetTrigger("Emerge");
-		TradeManager.instance.generator.waterMaterial.SetFloat("StartTime", startTime);
+		generator.waterMaterial.SetFloat("StartTime", startTime);
 	}
 
 	// Update is called once per frame
@@ -72,7 +75,7 @@ public class Ship : MonoBehaviour
 	private IEnumerator Unload()
 	{
 		yield return new WaitForSeconds(3);
-		rm.AddRessource(trade.fromTrader.resource, trade.fromTraderAmount);
+		rm.ChangeRessourceAmount(trade.fromTrader.resource, trade.fromTraderAmount);
 		//TODO Pooling
 		Destroy(this.gameObject);
 	}

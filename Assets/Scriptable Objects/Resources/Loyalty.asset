@@ -16,5 +16,3 @@ MonoBehaviour:
   defaultStartAmount: 50
   sprite: {fileID: 21300000, guid: eefd57e8b57cd814ebc86925f3a4a109, type: 3}
   uiDisplay: {fileID: 0}
-  value: 0
-  price: 0

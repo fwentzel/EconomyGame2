@@ -1,44 +1,71 @@
-﻿using System;
+﻿
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-	public static GameManager instance { get; private set; }
-	public static event Action OnCalculateIntervall=delegate { };
-	public static int dayIndex=0;
-
-	[HideInInspector] public MainBuilding mainBuilding;
-	public int calcResourceIntervall=10;
-	public Team team;
+	public static GameManager instance;
+	public event Action OnCalculateIntervall = delegate { };
+	
+	public int dayIndex = 0;
+	public int calcResourceIntervall = 10;
+	
+	public Player[] players;
+	public Player localPlayer;
 
 	//Debugging 
 	public bool showAiLog = false;
 
 	private void Awake()
 	{
-		//singleton Check
 		if (instance == null)
 			instance = this;
 		else
 			Destroy(this);
+		players = new Player[MyNetworkManager.maxConnections];
+		
+	}
 
-		foreach (MainBuilding mainBuilding in FindObjectsOfType<MainBuilding>())
+	public void RpcSetupMainBuildingPlayer()
+	{
+		Mainbuilding[] mainbuildings = FindObjectsOfType<Mainbuilding>();
+		for (int i = 0; i < players.Length; i++)
 		{
-			if (mainBuilding.team == team)
+			foreach (Mainbuilding mainbuilding in mainbuildings)
 			{
-				this.mainBuilding = mainBuilding;
-				break;
+				if (mainbuilding.team == i)
+				{
+					mainbuilding.SetupMainBuilding();
+					players[i].SetMainBuilding(mainbuilding);
+				}
+				
 			}
 		}
+		CityResourceLookup.instance.PopulateResourceManagers();
 	}
-	private void Start()
+	
+	void RpcStartInvokeCalcIntervall()
 	{
-		UiManager.instance.currentRessouceManagerToShow= mainBuilding.resourceManager;
-		InvokeRepeating("InvokeCalculateResource", 0, GameManager.instance.calcResourceIntervall);
+		InvokeRepeating("InvokeCalculateResource", 0, calcResourceIntervall);
+		FindObjectOfType<GameTimer>().StartTimer(calcResourceIntervall);
 	}
+
 	private void InvokeCalculateResource()
 	{
 		OnCalculateIntervall();
 		dayIndex++;
 	}
+	
+	public void StartGame()
+	{
+		print("SERVER STARTING GAME!");
+		RpcSetupMainBuildingPlayer();
+		PlacementController.instance.SetupGridParameter();
+		TradeManager.instance.StartTradeOffer();
+		BuildUi.instance.GenerateBuildMenu();
+		RpcStartInvokeCalcIntervall();
+	}
+	
+	
 }

@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public class Trade 
+public struct Trade 
 {
 	public tradeType type;
 	public Resource fromTrader;

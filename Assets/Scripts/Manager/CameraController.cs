@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+
 public class CameraController : MonoBehaviour
 {
     //--//--// > BEFORE USING THE SCRIPT PLEASE READ THE MESSAGE BELOW < \\--\\--\\
@@ -29,9 +30,9 @@ public class CameraController : MonoBehaviour
     public float cameraBorder;
 
     // Minimun and maxium distance from the detected ground the Camera can be
-    [Range(.8f, 32f)]
+    [Range(.8f, 15f)]
     public float cameraMinHeight;
-    [Range(.8f, 32f)]
+    [Range(.8f, 50f)]
     public float cameraMaxHeight;
 
     // Map properties
@@ -60,7 +61,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        Controller();
+		Controller();
     }
 
     void CheckSettings()
@@ -74,7 +75,7 @@ public class CameraController : MonoBehaviour
             cameraMaxHeight = 20f;
             mapXSize = float.MaxValue;
         }
-		desiredScrollposition = transform.position.y;
+		desiredScrollposition = TheCamera.transform.position.y;
 		_savedCameraSpeed = cameraSpeed;
 		MapGenerator gen = FindObjectOfType<MapGenerator>();
 		mapXSize = gen.xSize;
@@ -134,9 +135,8 @@ public class CameraController : MonoBehaviour
 		desiredScrollposition = desiredScrollposition - scroll*scrollSensitivity ;
 
 		position.y=Mathf.Lerp(position.y, desiredScrollposition ,Time.deltaTime*scrollspeed);
-
-        // Shift Acelleration
-        if (Input.GetKey(KeyCode.LeftShift))
+		// Shift Acelleration
+		if (Input.GetKey(KeyCode.LeftShift))
             cameraSpeed = (_savedCameraSpeed * 2f);
         else
             cameraSpeed = _savedCameraSpeed;
@@ -146,9 +146,9 @@ public class CameraController : MonoBehaviour
 		//Physics.Raycast(ray, out _rayHit, 32, GroundLayer);
 
 		//// Don't allow the camera to leave the ground area
-		position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
+		//position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
 		position.y = Mathf.Clamp(position.y, cameraMinHeight,cameraMaxHeight);
-		//position.z = Mathf.Clamp(position.z, cameraBorder, mapSize-cameraBorder);
+		//position.z = Mathf.Clamp(position.z, cameraBorder, mapZSize - cameraBorder);
 
 		//// Effects when camera hit the ground or the top surface
 		//if (position.y <= _rayHit.point.y + cameraMinHeight + 1)
@@ -160,4 +160,13 @@ public class CameraController : MonoBehaviour
 		TheCamera.transform.position = Vector3.Slerp(TheCamera.transform.position, position, .8f);
         TheCamera.transform.eulerAngles = Vector3.Slerp(TheCamera.transform.eulerAngles, rotation, .2f);
     }
+
+	public void FocusOnMainBuilding(Vector3 mainbuildingPos)
+	{
+		float y = TheCamera.transform.position.y;
+		float rotation = TheCamera.transform.rotation.eulerAngles.x * Mathf.Deg2Rad ;
+		float offset = (y / Mathf.Tan(rotation));
+		float newZ = mainbuildingPos.z - offset;
+		TheCamera.transform.position = new Vector3(mainbuildingPos.x, y, newZ);
+	}
 }
