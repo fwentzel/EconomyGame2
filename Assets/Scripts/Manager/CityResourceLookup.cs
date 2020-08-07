@@ -10,7 +10,7 @@ public class CityResourceLookup : MonoBehaviour
 	public float meanLoyalty { get; private set; } = 50;
 	public float freeCitizens { get; private set; } =0;
 
-	ResourceManager[] resourceManagers;
+	public ResourceManager[] resourceManagers { get; private set; }
 
 	private void Awake()
 	{

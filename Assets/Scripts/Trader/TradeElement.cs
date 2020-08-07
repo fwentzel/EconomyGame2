@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 public class TradeElement : MonoBehaviour
 {
-	[SerializeField] Image toTraderImage=null;
+	[SerializeField] Image toTraderImage = null;
 	[SerializeField] Text toTraderAmountText = null;
 
 	[SerializeField] Image fromTraderImage = null;
@@ -13,7 +13,7 @@ public class TradeElement : MonoBehaviour
 	[SerializeField] Text tradeTypeText = null;
 
 	[SerializeField] Button acceptButton = null;
-	
+
 	private int amount;
 	public bool accepted { get; private set; } = false;
 	Trade trade;
@@ -28,7 +28,7 @@ public class TradeElement : MonoBehaviour
 
 		titleText.text = "TRADE";
 
-		tradeTypeText.text=trade.type.ToString();
+		tradeTypeText.text = trade.type.ToString();
 
 		this.trade = trade;
 
@@ -37,9 +37,12 @@ public class TradeElement : MonoBehaviour
 
 	private void Update()
 	{
-		bool interactable = (ResourceUiManager.instance.activeResourceMan.GetAmount(trade.toTrader.resource) > trade.toTraderAmount &&accepted==false);
+		bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(trade.toTrader.resource) > trade.toTraderAmount
+							&& accepted == false
+							&& TradeManager.instance.tradeCooldowns[ResourceUiManager.instance.activeResourceMan] <= Time.time;
 		acceptButton.interactable = interactable;
 	}
+
 	public void DisableElement()
 	{
 		accepted = true;
@@ -50,7 +53,7 @@ public class TradeElement : MonoBehaviour
 
 	private void TradeAccepted()
 	{
-		TradeManager.instance.AcceptTrade(trade,GameManager.instance.localPlayer.mainbuilding.resourceManager);
+		TradeManager.instance.AcceptTrade(trade, GameManager.instance.localPlayer.mainbuilding.resourceManager);
 	}
 
 }

@@ -7,7 +7,7 @@ public class ResourceUiManager : MonoBehaviour
 	public ResourceManager activeResourceMan { get => currentRessouceManagerToShow; set => SetRM(value); }
 
 	private Color defaultTextColor;
-	[SerializeField] RessourceStartvalue res = null;
+	[SerializeField] ResourceStartvalue res = null;
 
 	ResourceManager currentRessouceManagerToShow;
 	// Use this for initialization
