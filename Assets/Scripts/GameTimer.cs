@@ -8,10 +8,8 @@ public class GameTimer : MonoBehaviour
 	public float fillAmount = 0;
 	public float dayLength = 2.0f;
 	public bool isRunning = false;
-	Vector3 pos;
 	private void Awake()
 	{
-		pos = transform.position;
 		timerImage = GetComponent<Image>();
 	}
 	
@@ -24,7 +22,6 @@ public class GameTimer : MonoBehaviour
 	void Update()
 	{
 		//TODO verhindern, dass Position überschrieben wird.
-		transform.position = pos;
 		if (isRunning)
 		{//Reduce fill amount 
 			fillAmount += 1.0f / dayLength * Time.deltaTime;

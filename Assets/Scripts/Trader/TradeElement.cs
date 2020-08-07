@@ -2,20 +2,20 @@
 using UnityEngine.UI;
 public class TradeElement : MonoBehaviour
 {
-	public Image toTraderImage;
-	public Text toTraderAmountText;
+	[SerializeField] Image toTraderImage=null;
+	[SerializeField] Text toTraderAmountText = null;
 
-	public Image fromTraderImage;
-	public Text fromTraderAmountText;
+	[SerializeField] Image fromTraderImage = null;
+	[SerializeField] Text fromTraderAmountText = null;
 
-	public Text titleText;
+	[SerializeField] Text titleText = null;
 
-	public Text tradeTypeText;
-	
-	public Button acceptButton;
+	[SerializeField] Text tradeTypeText = null;
+
+	[SerializeField] Button acceptButton = null;
 	
 	private int amount;
-	private bool accepted=false;
+	public bool accepted { get; private set; } = false;
 	Trade trade;
 
 	internal void Init(Trade trade)
@@ -37,18 +37,20 @@ public class TradeElement : MonoBehaviour
 
 	private void Update()
 	{
-		bool interactable = (UiManager.instance.CurrentRessouceManagerToShow.GetAmount(trade.toTrader.resource) > trade.toTraderAmount &&accepted==false);
+		bool interactable = (ResourceUiManager.instance.activeResourceMan.GetAmount(trade.toTrader.resource) > trade.toTraderAmount &&accepted==false);
 		acceptButton.interactable = interactable;
 	}
-
-	public void TradeAccepted()
+	public void DisableElement()
 	{
-		TradeManager.instance.AcceptTrade(trade,GameManager.instance.localPlayer.mainbuilding.resourceManager);
 		accepted = true;
-
 		var colors = acceptButton.colors;
 		colors.disabledColor = Color.red;
 		acceptButton.colors = colors;
+	}
+
+	private void TradeAccepted()
+	{
+		TradeManager.instance.AcceptTrade(trade,GameManager.instance.localPlayer.mainbuilding.resourceManager);
 	}
 
 }

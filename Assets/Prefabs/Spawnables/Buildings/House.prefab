@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceManager: {fileID: 0}
-  team: {fileID: 0}
+  team: -1
+  sprite: {fileID: 21300000, guid: b83751653d6e7184781b7e3d3fb9d44e, type: 3}
   meshlevels:
   - {fileID: 4300000, guid: ee8eb427bf60afa48aadc18c3e83dafe, type: 3}
   - {fileID: 4300000, guid: aa4bbc9f80f4e59468469077a836313b, type: 3}
@@ -22,8 +23,6 @@ MonoBehaviour:
   - {fileID: 4300000, guid: 7dbb85b420d23544682d44616881aed8, type: 3}
   - {fileID: 4300000, guid: 78f4b8e7c73a0104a8112763cb8f5aec, type: 3}
   - {fileID: 4300000, guid: f727ded922603934b962032566006696, type: 3}
-  buildCost: 100
-  levelCost: 150
   capacity: 2
 --- !u!1001 &780965403494922283
 PrefabInstance:

@@ -161,7 +161,7 @@ Material:
     - Vector1_DB835819: 0.08
     - Vector1_E4C67345: 2.5
     - Vector1_E521DF8C: 0
-    - Vector1_F56DEBF0: 1
+    - Vector1_F56DEBF0: 2
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -321,7 +321,6 @@ Material:
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 0, g: 0, b: 1, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
-  m_BuildTextureStacks: []
 --- !u!114 &379135115430734122
 MonoBehaviour:
   m_ObjectHideFlags: 11

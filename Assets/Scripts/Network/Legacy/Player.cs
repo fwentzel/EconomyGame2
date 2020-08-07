@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
 		if (GameManager.instance.localPlayer == this)
 		{
-			UiManager.instance.CurrentRessouceManagerToShow = mainbuilding.resourceManager;
+			ResourceUiManager.instance.activeResourceMan = mainbuilding.resourceManager;
 			CameraController camControl = FindObjectOfType<CameraController>();
 			camControl.FocusOnMainBuilding(mainbuilding.transform.position);
 		}

@@ -4,7 +4,8 @@ using UnityEngine.EventSystems;
 public class PlacementController : MonoBehaviour
 {
 	[HideInInspector] public static PlacementController instance { get; private set; }
-	public bool isPlacing = false;
+	public bool isPlacing { get; private set; } = false;
+
 	Material gridMaterial;
 	bool canBuild = true;
 	GameObject placeableObject;
@@ -14,6 +15,7 @@ public class PlacementController : MonoBehaviour
 	Mesh groundMesh;
 	int xSize;
 	int zSize;
+
 	private void Awake()
 	{
 		//Singleton Check
@@ -129,8 +131,6 @@ public class PlacementController : MonoBehaviour
 		isPlacing = false;
 		toggleGrid(0);
 
-		//Select Building 
-		SelectionManager.instance.SelectedObject = building.gameObject;
 		
 	}
 
@@ -145,7 +145,7 @@ public class PlacementController : MonoBehaviour
 
 	public void NewPlaceableObject(GameObject placeable)
 	{
-		if(placeable.GetComponent<Building>().buildCost>GameManager.instance.localPlayer.mainbuilding.resourceManager.GetAmount(resource.money))
+		if(placeable.GetComponent<Building>().buildCost >GameManager.instance.localPlayer.mainbuilding.resourceManager.GetAmount(resource.money))
 		{
 			print("Not enough Money to build this!");
 			return;

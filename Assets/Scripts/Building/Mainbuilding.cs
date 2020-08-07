@@ -81,23 +81,6 @@ public class Mainbuilding : Building
 	}
 
 
-	//Building overrides
-
-	protected override void OnMouseOver()
-	{
-		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && PlacementController.instance.isPlacing == false)
-		{
-			if (GameManager.instance.localPlayer.mainbuilding == this)
-			{
-				SelectionManager.instance.SelectedObject = this.gameObject;
-				UiManager.instance.OpenContext( this);
-			}
-		}
-
-	}
-
-	
-
 	public override string GetStats()
 	{
 		string stats = "Type: Mainbuilding" + " \nTeam: " + team;

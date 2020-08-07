@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
 	public event Action OnCalculateIntervall = delegate { };
-
+	
 	public int dayIndex = 0;
 	public int calcResourceIntervall = 10;
 	
@@ -53,7 +53,6 @@ public class GameManager : MonoBehaviour
 
 	private void InvokeCalculateResource()
 	{
-		print("NEW DAY");
 		OnCalculateIntervall();
 		dayIndex++;
 	}
@@ -64,6 +63,7 @@ public class GameManager : MonoBehaviour
 		RpcSetupMainBuildingPlayer();
 		PlacementController.instance.SetupGridParameter();
 		TradeManager.instance.StartTradeOffer();
+		BuildUi.instance.GenerateBuildMenu();
 		RpcStartInvokeCalcIntervall();
 	}
 	

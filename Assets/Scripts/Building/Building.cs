@@ -1,34 +1,36 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
+
 
 
 public class Building : MonoBehaviour
 {
+
 	public ResourceManager resourceManager;
 	public int team = -1;
-	public Mesh[] meshlevels;
-	public int buildCost = 50;
-	public int levelCost = 100;
+	public Sprite sprite;
+
+	[SerializeField] Mesh[] meshlevels=null;
+
+	public int buildCost { get; private set; } = 50;
+	public int levelCost { get; private set; } = 100;
 	public int level { get; private set; } = 1;
 	public bool canLevelUp { get; private set; } = false;
+
 	int triggerBonuslevelAt = 4;
 	int maxLevel = 7;
 
-	protected virtual void OnMouseOver()
+	protected virtual void OnMouseEnter()
 	{
-
-		if (Input.GetMouseButtonDown(0))
+		if (GameManager.instance.localPlayer.team == team )
 		{
-			if (PlacementController.instance.isPlacing == false &&//so no other Building gets triggered when trying to place on occupied spot
-			GameManager.instance.localPlayer.team == team &&
-			!EventSystem.current.IsPointerOverGameObject())//so no other Building behind floating UI gets triggered
-			{
-				CheckCanLevelUp();
-				SelectionManager.instance.SelectedObject = gameObject;
-			}
+			SelectionManager.instance.hoveredObject = gameObject;
 		}
 
+	}
+
+	protected virtual void OnMouseExit()
+	{
+		SelectionManager.instance.hoveredObject = null;
 	}
 
 	public bool LevelUp()
@@ -67,14 +69,12 @@ public class Building : MonoBehaviour
 
 	public virtual void OnBuild(bool subtractResource = true)
 	{
-		GameManager.instance.OnCalculateIntervall += CheckCanLevelUp;
 		if (subtractResource)
 			resourceManager.ChangeRessourceAmount(resource.money, -buildCost);
 	}
 
 	public virtual void DestroyBuilding()
 	{
-		GameManager.instance.OnCalculateIntervall -= CheckCanLevelUp;
 		resourceManager.ChangeRessourceAmount(resource.money, (int)(buildCost * .6f));
 		resourceManager.mainbuilding.buildings.Remove(this);
 		Destroy(this.gameObject);
@@ -100,9 +100,9 @@ public class Building : MonoBehaviour
 		}
 	}
 
-	public void CheckCanLevelUp()
+	public bool CheckCanLevelUp()
 	{
-		canLevelUp = resourceManager.GetAmount(resource.money) >= levelCost && level < maxLevel;
+		return resourceManager.GetAmount(resource.money) >= levelCost && level < maxLevel;
 	}
 
 }

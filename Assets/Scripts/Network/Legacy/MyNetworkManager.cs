@@ -11,7 +11,7 @@ public class MyNetworkManager : MonoBehaviour
 	public static int maxHumanPlayers = 1;
 
 	public int connectedPlayers = 0;
-	[SerializeField] private GameObject playerPrefab=default;
+	[SerializeField] private GameObject playerPrefab=null;
 
 	public static int maxConnections = 4;
 	List<Player> players = new List<Player>();

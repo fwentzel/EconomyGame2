@@ -10,18 +10,18 @@ public class MapGenerator : MonoBehaviour
 	public float heightOffsetStrength;
 	public int perlinOffsetRandomness;
 
-	[SerializeField] Texture2D mapTexture = default;
-	[SerializeField] Material material = default;
+	[SerializeField] Texture2D mapTexture = null;
+	[SerializeField] Material material = null;
 
-	[SerializeField] Team[] teams = default;
+	[SerializeField] Team[] teams = null;
 	public ColorToObject[] colorObjectMappings;
-	[SerializeField] ColorToHeight[] colorHeightMappings = default;
+	[SerializeField] ColorToHeight[] colorHeightMappings = null;
 
 	Mesh waterMesh;
 	public int gridSpacing { get; private set; } = 1;
 	public int xSize { get; private set; }
 	public int zSize { get; private set; }
-	public Material waterMaterial = default;
+	public Material waterMaterial = null;
 
 	Mesh mesh;
 	Vector3[] vertices;
@@ -255,7 +255,7 @@ public class MapGenerator : MonoBehaviour
 		{
 			for (int x = -zSize / 2; x <= xSize / 2; x++)
 			{
-				//populate vertex array with default height vertices
+				//populate vertex array with null height vertices
 				waterVerts[i] = new Vector3(x, 0, z);
 				//set uv coordinates
 				waterUvs[i] = new Vector2(waterVerts[i].x / xSize, waterVerts[i].z / zSize);

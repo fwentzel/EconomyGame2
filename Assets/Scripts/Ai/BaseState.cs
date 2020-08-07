@@ -11,7 +11,6 @@ public abstract class BaseAi
 		this.mainbuilding = mainbuilding;
 		resourceManager = mainbuilding.resourceManager;
 	}
-	
 
 	public abstract Type Tick();
 	protected int resAmount(resource res)

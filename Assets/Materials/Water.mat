@@ -30,11 +30,11 @@ Material:
     - Vector1_1A04170B: 0.84
     - Vector1_3B82857A: 0
     - Vector1_4B6860EC: 1.49
-    - Vector1_54C9BD44: 0.78
+    - Vector1_54C9BD44: 0.57
     - Vector1_62EFEF7D: 0.49
-    - Vector1_6F6CD7ED: -0.17
+    - Vector1_6F6CD7ED: 0.04
     - Vector1_7494CC42: 0.1
-    - Vector1_828E09F1: 0.12
+    - Vector1_828E09F1: 1.53
     - Vector1_A11DA64C: 0.5
     - Vector1_B0E83DD4: 1.3
     - Vector1_BEB5CD7E: 2.11
@@ -42,12 +42,11 @@ Material:
     - Vector1_C9015BF8: 6.58
     - WaveHeight: 0.06
     - Wavespeed: 1.69
-    - YOffset: -0.16
+    - YOffset: -0.36
     - isEditor: 0
     m_Colors:
     - Color_5868A3DB: {r: 0.9763621, g: 1.1031084, b: 1.9713216, a: 1}
-    - RippleColor: {r: 0, g: 0, b: 0, a: 1}
+    - RippleColor: {r: 0, g: 0, b: 0, a: 0.2784314}
     - Vector2_2D24956B: {r: -0.02, g: 0.02, b: 0, a: 0}
     - Vector2_847799B5: {r: 0.05, g: -0.01, b: 0, a: 0}
-    - WaterColor: {r: 0.08938784, g: 0.08032214, b: 0.8962264, a: 1}
-  m_BuildTextureStacks: []
+    - WaterColor: {r: 0.08938757, g: 0, b: 1, a: 0.5058824}

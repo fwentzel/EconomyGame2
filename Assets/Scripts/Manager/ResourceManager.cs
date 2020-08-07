@@ -13,6 +13,8 @@ public class ResourceManager : MonoBehaviour
 	public Curve foodRatioToLoyaltyChange;
 	public event Action OnResourceChange = delegate { };
 
+	public bool isLoyaltyDecreasing = false;
+
 	private void Awake()
 	{
 		PopulateRessourceAmounts();
@@ -135,6 +137,7 @@ public class ResourceManager : MonoBehaviour
 	private void CalculateLoyalty()
 	{
 		float newLoyalty = resourceAmount[resource.loyalty];
+		float oldLoyalty = newLoyalty;
 		int citizens = resourceAmount[resource.citizens];
 		if (citizens > 0)
 		{
@@ -160,6 +163,7 @@ public class ResourceManager : MonoBehaviour
 			newLoyalty = 0;
 		}
 		resourceAmount[resource.loyalty] = (int)newLoyalty;
+		isLoyaltyDecreasing = newLoyalty < oldLoyalty;
 	}
 
 	public void ChangeRessourceAmount(resource res, int amount)

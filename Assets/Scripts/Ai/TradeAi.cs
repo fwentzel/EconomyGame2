@@ -14,7 +14,7 @@ public class TradeAi : BaseAi
 	{
 		foreach (Trade trade in TradeManager.instance.tradeElements.Keys)
 		{
-			if (!TradeManager.instance.tradeElements[trade].acceptButton.interactable)
+			if (TradeManager.instance.tradeElements[trade].accepted)
 				continue;//Trade is no longer available, so move on to next one
 
 			//Berechnen wie viel Prozent der Ressourcen für diesen Trade abgeben werden. unter einem Threshold kann bedenkenlos getraded werden
