@@ -40,11 +40,16 @@ public class TradeManager : MonoBehaviour
         randomTradeValues = new int[maxTrades, synchronizedValues];
     }
     private void Start()
-    {
-        StartTradeOffer();
-    }
+	{
+		//StartTradeOffer();
+	}
 
-    private void GenerateNewTrades(int amount)
+	public void StartTradeOffer()
+	{
+		StartCoroutine("AnnounceNewTrades", 3);
+	}
+
+	private void GenerateNewTrades(int amount)
     {
         if (tradeElements.Count > 0)
         {
@@ -147,11 +152,6 @@ public class TradeManager : MonoBehaviour
         Transform curveTransform = wayPointsParent.transform.GetChild(rm.mainbuilding.team);
         ship.curve = curveTransform.GetComponent<BGCurve>();
         ship.math = curveTransform.GetComponent<BGCcMath>();
-    }
-
-    public void StartTradeOffer()
-    {
-        StartCoroutine("AnnounceNewTrades", 3);
     }
 
     private IEnumerator AnnounceNewTrades(int duration)

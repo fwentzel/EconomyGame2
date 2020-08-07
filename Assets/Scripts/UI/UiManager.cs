@@ -26,11 +26,11 @@ public class UiManager : MonoBehaviour
 		SetupUiElements();
 
 		CloseAll();
-    }
+		TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine("StartNewTradeTimer", arrivalIn);
+	}
 
     private void Start()
     {
-        TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine("StartNewTradeTimer", arrivalIn);
         
     }
 
