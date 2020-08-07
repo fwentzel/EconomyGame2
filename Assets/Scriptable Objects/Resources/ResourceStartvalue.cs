@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 [CreateAssetMenu]
-public class RessourceStartvalue : ScriptableObject
+public class ResourceStartvalue : ScriptableObject
 {
 	//serves as variable for curves used in eg loyaltychange calculation
 	public List<Resource> startValues;

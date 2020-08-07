@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class ResourceManager : MonoBehaviour
 {
-	public RessourceStartvalue resourceStartvalue;
+	public ResourceStartvalue resourceStartvalue;
 	Dictionary<resource, int> resourceAmount;
 	public float foodLoyaltyChange { get; private set; }
 	public Mainbuilding mainbuilding;

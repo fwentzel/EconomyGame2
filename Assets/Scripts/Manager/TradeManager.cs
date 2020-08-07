@@ -14,6 +14,7 @@ public class TradeManager : MonoBehaviour
 
 	public static TradeManager instance { get; private set; }
 	public Dictionary<Trade, TradeElement> tradeElements { get; private set; }
+	public Dictionary<ResourceManager, float> tradeCooldowns { get; private set; }
 
 	[SerializeField] Resource[] tradingResources = null;
 	[SerializeField] GameObject tradeUiPanel = null;
@@ -27,8 +28,10 @@ public class TradeManager : MonoBehaviour
     int maxTrades = 6;
     int synchronizedValues = 4;//Workaround to know how big the stepsize for listtransformation is
     int[,] randomTradeValues;
+	int tradeCooldown=20;
 
-    private void Awake()
+
+	private void Awake()
     {
         //singleton Check
         if (instance == null)
@@ -37,11 +40,16 @@ public class TradeManager : MonoBehaviour
             Destroy(this);
         generator = FindObjectOfType<MapGenerator>();
         tradeElements = new Dictionary<Trade, TradeElement>();
-        randomTradeValues = new int[maxTrades, synchronizedValues];
+		tradeCooldowns = new Dictionary<ResourceManager, float>();
+		randomTradeValues = new int[maxTrades, synchronizedValues];
     }
+
     private void Start()
 	{
-		//StartTradeOffer();
+		foreach (ResourceManager resourceManger in CityResourceLookup.instance.resourceManagers)
+		{
+			tradeCooldowns.Add(resourceManger, Time.time);
+		} 
 	}
 
 	public void StartTradeOffer()
@@ -80,16 +88,17 @@ public class TradeManager : MonoBehaviour
 
     private Trade GenerateTrade(int i)
     {
-        // [0,4] , [50,100] , [0,4] 
-        Trade newTrade = new Trade
-        {
-            toTrader = tradingResources[randomTradeValues[i, 0]],
-            toTraderAmount = randomTradeValues[i, 1],
+		// [0,4] , [50,100] , [0,4] 
+		Trade newTrade = new Trade
+		{
+			toTrader = tradingResources[randomTradeValues[i, 0]],
+			toTraderAmount = randomTradeValues[i, 1],
 
-            fromTrader = tradingResources[randomTradeValues[i, 2]],
-            fromTraderAmount = randomTradeValues[i, 1] - 30,
-            type = tradeType.ship
+			fromTrader = tradingResources[randomTradeValues[i, 2]],
+			fromTraderAmount = randomTradeValues[i, 1] - 30,
+			type = tradeType.ship
             // type = (tradeType)Enum.GetValues(typeof(tradeType)).GetValue(randomTradeValues[i, 3])
+			
         };
 
         return newTrade;
@@ -104,7 +113,7 @@ public class TradeManager : MonoBehaviour
             int toTraderAmount = Random.Range(50, 100);
             int fromTrader = Random.Range(0, tradingResources.Length); ;
             int type = Random.Range(0, 2); ;
-
+			
             tradeRandoms.Add(toTrader);
             tradeRandoms.Add(toTraderAmount);
             tradeRandoms.Add(fromTrader);
@@ -122,7 +131,6 @@ public class TradeManager : MonoBehaviour
             {
                 randomTradeValues[i, j] = tradeRandoms[i * synchronizedValues + j];
             }
-
         }
     }
 
@@ -135,7 +143,9 @@ public class TradeManager : MonoBehaviour
             SpawnShip(trade, rm);
         }
 
-        acceptedTrades++;
+		tradeCooldowns[rm] = Time.time + tradeCooldown;
+
+		acceptedTrades++;
         if (acceptedTrades == 4)
         {
             StartCoroutine("AnnounceNewTrades", 10);

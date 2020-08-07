@@ -6,6 +6,4 @@ public struct Trade
 	public Resource toTrader;
 	public int fromTraderAmount;
 	public int toTraderAmount;
-
-
 }
