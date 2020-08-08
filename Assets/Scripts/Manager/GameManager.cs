@@ -26,6 +26,17 @@ public class GameManager : MonoBehaviour
 		players = new Player[MyNetworkManager.maxConnections];
 		
 	}
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			Time.timeScale = 5;
+		}
+		if (Input.GetKeyUp(KeyCode.Space))
+		{
+			Time.timeScale = 1;
+		}
+	}
 
 	public void RpcSetupMainBuildingPlayer()
 	{

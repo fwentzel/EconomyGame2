@@ -12,9 +12,9 @@ public class TradeAi : BaseAi
 
 	public override Type Tick()
 	{
-		foreach (Trade trade in TradeManager.instance.tradeElements.Keys)
+		foreach (Trade trade in TradeManager.instance.tradeToElementMapping.Keys)
 		{
-			if (TradeManager.instance.tradeElements[trade].accepted)
+			if (TradeManager.instance.tradeToElementMapping[trade].accepted)
 				continue;//Trade is no longer available, so move on to next one
 			
 			if (TradeManager.instance.tradeCooldowns[resourceManager] > Time.time)

@@ -13,7 +13,7 @@ public class TradeManager : MonoBehaviour
 	public event Action<int> OnGenerateNewTrades = delegate { };
 
 	public static TradeManager instance { get; private set; }
-	public Dictionary<Trade, TradeElement> tradeElements { get; private set; }
+	public Dictionary<Trade, TradeElement> tradeToElementMapping { get; private set; }
 	public Dictionary<ResourceManager, float> tradeCooldowns { get; private set; }
 
 	[SerializeField] Resource[] tradingResources = null;
@@ -23,6 +23,7 @@ public class TradeManager : MonoBehaviour
 	[SerializeField] GameObject wayPointsParent = null;
 	[SerializeField] GameObject shipPrefab=null;
 
+	TradeElement[] tradeElements = new TradeElement[6];
 	MapGenerator generator;
 	int acceptedTrades = 0;
     int maxTrades = 6;
@@ -39,7 +40,7 @@ public class TradeManager : MonoBehaviour
         else
             Destroy(this);
         generator = FindObjectOfType<MapGenerator>();
-        tradeElements = new Dictionary<Trade, TradeElement>();
+        tradeToElementMapping = new Dictionary<Trade, TradeElement>();
 		tradeCooldowns = new Dictionary<ResourceManager, float>();
 		randomTradeValues = new int[maxTrades, synchronizedValues];
     }
@@ -49,7 +50,14 @@ public class TradeManager : MonoBehaviour
 		foreach (ResourceManager resourceManger in CityResourceLookup.instance.resourceManagers)
 		{
 			tradeCooldowns.Add(resourceManger, Time.time);
-		} 
+		}
+		int i = 0;
+		foreach (TradeElement tradeElement in tradeUiPanel.transform.GetComponentsInChildren<TradeElement>())
+		{
+			tradeElements[i] = tradeElement;
+			tradeElements[i].gameObject.SetActive(false);
+			i++;
+		}
 	}
 
 	public void StartTradeOffer()
@@ -59,30 +67,17 @@ public class TradeManager : MonoBehaviour
 
 	private void GenerateNewTrades(int amount)
     {
-        if (tradeElements.Count > 0)
-        {
-            List<Trade> acceptedTrades = new List<Trade>();
-            //Delete accepted Trades
-            foreach (var element in tradeElements)
-            {
-                Destroy(tradeElements[element.Key].gameObject);
-                acceptedTrades.Add(element.Key);
-            }
-            foreach (Trade trade in acceptedTrades)
-            {
-                tradeElements.Remove(trade);
-            }
-
-        }
-        NewTradeRandomNumbers();
+		tradeToElementMapping.Clear();
+		NewTradeRandomNumbers();
         for (int i = 0; i < amount; i++)
         {
-            TradeElement newTradeElement = Instantiate(tradeElementPrefab, tradeUiPanel.transform).GetComponent<TradeElement>();
-            Trade newTrade = GenerateTrade(i);
+			//TradeElement newTradeElement = Instantiate(tradeElementPrefab, tradeUiPanel.transform).GetComponent<TradeElement>();
+			Trade newTrade = GenerateTrade(i);
 
-            tradeElements[newTrade] = newTradeElement;
-            newTradeElement.Init(newTrade);
-        }
+            tradeToElementMapping[newTrade] = tradeElements[i];
+			tradeElements[i].Init(newTrade);
+			tradeElements[i].gameObject.SetActive(true);
+		}
         acceptedTrades = 0;
     }
 
@@ -136,7 +131,7 @@ public class TradeManager : MonoBehaviour
 
     public void AcceptTrade(Trade trade, ResourceManager rm)
     {
-        tradeElements[trade].DisableElement();
+        tradeToElementMapping[trade].DisableElement();
         rm.ChangeRessourceAmount(trade.toTrader.resource, -trade.toTraderAmount);
         if (trade.type == tradeType.ship)
         {
