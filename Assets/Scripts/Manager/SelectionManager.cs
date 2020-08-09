@@ -5,8 +5,7 @@ public class SelectionManager : MonoBehaviour
 {
     public static SelectionManager instance { get; private set; }
 
-    public GameObject selectedObject { get; private set; }
-	public GameObject hoveredObject;
+	public GameObject selectedObject;
 	Building building;
 
     private void Awake()
@@ -18,28 +17,10 @@ public class SelectionManager : MonoBehaviour
             Destroy(this);
     }
 
-	private void Update()
-	{
-		if (Input.GetMouseButtonDown(0) &&!EventSystem.current.IsPointerOverGameObject() )
-		{
-			if (hoveredObject != null)
-				SelectHoveredObject();
-			else
-				Deselect();
-		}
-	}
-
-	void SelectHoveredObject()
-    {
-        selectedObject = hoveredObject;
-        building= selectedObject.GetComponent<Building>();
-		BuildingContextUiManager.instance.OpenContext(building);
-	}
-
 	public void Deselect()
 	{
 		selectedObject = null;
-		BuildingContextUiManager.instance.CloseContextMenus();
+		ContextUiManager.instance.CloseContextMenus();
 	}
 
 }
