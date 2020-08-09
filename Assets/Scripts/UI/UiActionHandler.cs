@@ -2,6 +2,16 @@
 
 public class UiActionHandler : MonoBehaviour
 {
+	public void HoldUpSelected()
+	{
+		TradeVehicle tradeVehicle = SelectionManager.instance.selectedObject.GetComponent<TradeVehicle>();
+		if (tradeVehicle != null)
+		{
+			tradeVehicle.HoldUp();
+		}
+	}
+
+
 	public void DestroySelected()
 	{
 		Building buildingToDestroy = SelectionManager.instance.selectedObject.GetComponent<Building>();
@@ -19,7 +29,7 @@ public class UiActionHandler : MonoBehaviour
 		if (buildingToLevelUp != null)
 		{
 			buildingToLevelUp.LevelUp();
-			BuildingContextUiManager.instance.UpdateContextUi(buildingToLevelUp);
+			ContextUiManager.instance.UpdateContextUi(buildingToLevelUp);
 		}
 	}
 
@@ -29,7 +39,7 @@ public class UiActionHandler : MonoBehaviour
 		if (mainbuilding != null)
 		{
 			mainbuilding.Taxes = (int)value;
-			BuildingContextUiManager.instance.UpdateContextUi(mainbuilding);
+			ContextUiManager.instance.UpdateContextUi(mainbuilding);
 		}
 	}
 

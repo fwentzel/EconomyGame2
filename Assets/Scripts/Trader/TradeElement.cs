@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 public class TradeElement : MonoBehaviour
 {
@@ -14,10 +15,45 @@ public class TradeElement : MonoBehaviour
 
 	[SerializeField] Button acceptButton = null;
 
-	private int amount;
+
 	public bool accepted { get; private set; } = false;
+	public bool isOnCd { get; private set; } = false;
+
 	Trade trade;
 	bool hasTrade = false;
+	int amount;
+	float cd = 0;
+	ResourceManager localRM;
+
+	private void Awake()
+	{
+		acceptButton.onClick.AddListener(delegate () { TradeAccepted(); });
+	}
+
+	private void Start()
+	{
+		localRM = ResourceUiManager.instance.activeResourceMan;
+		localRM.OnResourceChange += checkInteractable;
+		
+		checkInteractable();
+	}
+
+	private void Update()
+	{
+		if (isOnCd)
+		{
+			float t0 =  cd - TradeManager.instance.tradeCooldown;
+			float amount = (Time.time - t0) / TradeManager.instance.tradeCooldown;
+			acceptButton.image.fillAmount = amount;
+
+			if (amount >= 1)
+			{
+				isOnCd = false;
+				acceptButton.image.fillAmount = 1;
+				checkInteractable();
+			}
+		}
+	}
 
 	internal void Init(Trade trade)
 	{
@@ -34,18 +70,16 @@ public class TradeElement : MonoBehaviour
 		this.trade = trade;
 
 		EnableElement();
-		acceptButton.onClick.AddListener(delegate () { TradeAccepted(); });
 	}
 
-	private void Update()
+	private void checkInteractable()
 	{
-		if (!hasTrade)
-			return;
-		bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(trade.toTrader.resource) > trade.toTraderAmount
+		bool interactable = localRM.GetAmount(trade.toTrader.resource) > trade.toTraderAmount
 							&& accepted == false
-							&& TradeManager.instance.tradeCooldowns[ResourceUiManager.instance.activeResourceMan] <= Time.time;
+							&& TradeManager.instance.tradeCooldowns[localRM] <= Time.time;
 		acceptButton.interactable = interactable;
 	}
+
 
 	public void DisableElement()
 	{
@@ -65,7 +99,13 @@ public class TradeElement : MonoBehaviour
 
 	private void TradeAccepted()
 	{
-		TradeManager.instance.AcceptTrade(trade, GameManager.instance.localPlayer.mainbuilding.resourceManager);
+		ResourceManager rm = GameManager.instance.localPlayer.mainbuilding.resourceManager;
+		TradeManager.instance.AcceptTrade(trade, rm);
+		foreach (TradeElement elem in TradeManager.instance.tradeElements)
+		{
+			elem.isOnCd=true;
+			elem.cd = TradeManager.instance.tradeCooldowns[rm];
+		}
 	}
 
 }

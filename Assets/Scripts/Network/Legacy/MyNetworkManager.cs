@@ -49,14 +49,13 @@ public class MyNetworkManager : MonoBehaviour
 		Player playerComponent = player.GetComponent<Player>();
 		if (isHuman == true)
 		{
-			print("added hiuman");
 			if(GameManager.instance.localPlayer==null)
 				GameManager.instance.localPlayer = playerComponent;
 			//NetworkServer.AddPlayerForConnection(conn, player);
 		}
 		else
 		{
-			print("added ai");
+
 			playerComponent.isAi = true;
 		}
 
@@ -75,7 +74,6 @@ public class MyNetworkManager : MonoBehaviour
 		{
 			SpawnPlayer(false);
 		}
-		print("ALL PLAYERS ASSIGNED");
 	}
 
 

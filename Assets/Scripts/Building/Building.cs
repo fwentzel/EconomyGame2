@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-
-
+using UnityEngine.EventSystems;
 
 public class Building : MonoBehaviour
 {
@@ -19,19 +18,15 @@ public class Building : MonoBehaviour
 	int triggerBonuslevelAt = 4;
 	int maxLevel = 7;
 
-	protected virtual void OnMouseEnter()
+	private void OnMouseUp()
 	{
-		if (GameManager.instance.localPlayer.team == team )
-		{
-			SelectionManager.instance.hoveredObject = gameObject;
-		}
-
+		if (EventSystem.current.IsPointerOverGameObject() || PlacementController.instance.isPlacing)
+			return;
+			SelectionManager.instance.selectedObject = gameObject;
+		ContextUiManager.instance.OpenContext(this);
 	}
 
-	protected virtual void OnMouseExit()
-	{
-		SelectionManager.instance.hoveredObject = null;
-	}
+
 
 	public bool LevelUp()
 	{

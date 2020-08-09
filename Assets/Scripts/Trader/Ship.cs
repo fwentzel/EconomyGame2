@@ -3,7 +3,7 @@ using BansheeGz.BGSpline.Curve;
 using System.Collections;
 using UnityEngine;
 
-public class Ship : MonoBehaviour
+public class Ship : TradeVehicle
 {
 	public Curve heightCurve;
 	[SerializeField] float speed = 1;
@@ -16,8 +16,6 @@ public class Ship : MonoBehaviour
 	public BGCurve curve;
 	public BGCcMath math;
 	private float distance = 0;
-	internal Trade trade;
-	internal ResourceManager rm;
 
 	MapGenerator generator;
 
@@ -44,7 +42,7 @@ public class Ship : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate()
 	{
-		if (reached == false)
+		if (!reached && !isStopped)
 			Move();
 		//else
 		//	Sink();
@@ -67,18 +65,20 @@ public class Ship : MonoBehaviour
 
 		if (distance >= math.GetDistance())
 		{
-			StartCoroutine("Unload");
+			StartCoroutine("Unload",3);
 			reached = true;
 		}
 	}
 
-	private IEnumerator Unload()
+	protected override IEnumerator Unload(float timeBeforeUnload)
 	{
-		yield return new WaitForSeconds(3);
-		rm.ChangeRessourceAmount(trade.fromTrader.resource, trade.fromTraderAmount);
+		StartCoroutine(base.Unload(timeBeforeUnload));
 		//TODO Pooling
-		Destroy(this.gameObject);
+		yield return null;
+		
 	}
 
+
+	
 
 }
