@@ -29,6 +29,7 @@ public class ContextUiManager : MonoBehaviour
 		else
 			Destroy(this);
 		SetupUiElements();
+		CloseContextMenus();
 	}
 
 	private void Start()

@@ -26,7 +26,7 @@ public class UiManager : MonoBehaviour
 		SetupUiElements();
 
 		CloseAll();
-		TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine("StartNewTradeTimer", arrivalIn);
+		TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine(StartNewTradeTimerCoroutine( arrivalIn));
 	}
 
     private void Start()
@@ -58,7 +58,7 @@ public class UiManager : MonoBehaviour
 		newTradesInImage = newTradesTimerParent.transform.Find("NewTradeTimerForeground").GetComponent<Image>();
 	}
 
-	private IEnumerator StartNewTradeTimer(int arrivalIn)
+	private IEnumerator StartNewTradeTimerCoroutine(int arrivalIn)
     {
         float normalizedTime = arrivalIn;
         newTradesTimerParent.SetActive(true);

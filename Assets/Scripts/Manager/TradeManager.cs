@@ -66,7 +66,7 @@ public class TradeManager : MonoBehaviour
 
 	public void StartTradeOffer()
 	{
-		StartCoroutine("AnnounceNewTrades", 3);
+		StartCoroutine(AnnounceNewTradesCoroutine( 3));
 	}
 
 	private void GenerateNewTrades(int amount)
@@ -151,7 +151,7 @@ public class TradeManager : MonoBehaviour
 		acceptedTrades++;
 		if (acceptedTrades == 4)
 		{
-			StartCoroutine("AnnounceNewTrades", 10);
+			StartCoroutine(AnnounceNewTradesCoroutine( 10));
 		}
 	}
 
@@ -176,7 +176,7 @@ public class TradeManager : MonoBehaviour
 		ship.math = curveTransform.GetComponent<BGCcMath>();
 	}
 
-	private IEnumerator AnnounceNewTrades(int duration)
+	private IEnumerator AnnounceNewTradesCoroutine(int duration)
 	{
 		OnGenerateNewTrades(duration);
 		yield return new WaitForSeconds(duration);

@@ -10,16 +10,15 @@ public class TradeVehicle : MonoBehaviour
 	internal bool isStopped=false;
 
 
-	protected virtual IEnumerator Unload(float timeBeforeUnload)
+	protected virtual IEnumerator UnloadCoroutine(float timeBeforeUnload)
 	{
 		yield return new WaitForSeconds(timeBeforeUnload);
 		rm.ChangeRessourceAmount(trade.fromTrader.resource, trade.fromTraderAmount);
 		Destroy(gameObject);
 	}
 
-	public virtual IEnumerator HoldUp( ResourceManager rm=null)
+	public virtual IEnumerator HoldUpCoroutine( ResourceManager rm=null)
 	{
-		print("***********");
 		if (rm == null)
 			//AI will pass its RM, so only player will have value 0
 			rm = ResourceUiManager.instance.activeResourceMan;

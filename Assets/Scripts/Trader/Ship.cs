@@ -65,14 +65,14 @@ public class Ship : TradeVehicle
 
 		if (distance >= math.GetDistance())
 		{
-			StartCoroutine("Unload",3);
+			StartCoroutine(UnloadCoroutine( 3));
 			reached = true;
 		}
 	}
 
-	protected override IEnumerator Unload(float timeBeforeUnload)
+	protected override IEnumerator UnloadCoroutine(float timeBeforeUnload)
 	{
-		StartCoroutine(base.Unload(timeBeforeUnload));
+		StartCoroutine(base.UnloadCoroutine(timeBeforeUnload));
 		//TODO Pooling
 		yield return null;
 		
