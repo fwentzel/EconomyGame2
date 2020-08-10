@@ -20,8 +20,6 @@ public class TradeManager : MonoBehaviour
 
 	[SerializeField] Resource[] tradingResources = null;
 	[SerializeField] GameObject tradeUiPanel = null;
-	[SerializeField] GameObject newTradeTimerObject = null;
-	[SerializeField] GameObject tradeElementPrefab = null;
 	[SerializeField] GameObject wayPointsParent = null;
 
 	[SerializeField] GameObject shipPrefab = null;

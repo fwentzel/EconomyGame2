@@ -20,7 +20,6 @@ public class TradeElement : MonoBehaviour
 	public bool isOnCd { get; private set; } = false;
 
 	Trade trade;
-	bool hasTrade = false;
 	int amount;
 	float cd = 0;
 	ResourceManager localRM;
@@ -66,7 +65,6 @@ public class TradeElement : MonoBehaviour
 		titleText.text = "TRADE";
 
 		tradeTypeText.text = trade.type.ToString();
-		hasTrade = true;
 		this.trade = trade;
 
 		EnableElement();

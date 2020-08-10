@@ -2,21 +2,22 @@
 using BansheeGz.BGSpline.Curve;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Ship : TradeVehicle
 {
 	public Curve heightCurve;
+	public BGCurve curve;
+	public BGCcMath math;
+	public Image tradeResourceImage;
+
 	[SerializeField] float speed = 1;
 	[SerializeField] float turnSpeed;
 
 	Animator animator;
 	float startTime;
 	bool reached=false;
-
-	public BGCurve curve;
-	public BGCcMath math;
-	private float distance = 0;
-
+	 float distance = 0;
 	MapGenerator generator;
 
 	void Awake()
@@ -24,7 +25,9 @@ public class Ship : TradeVehicle
 		generator=FindObjectOfType<MapGenerator>();
 		animator = transform.GetChild(0).GetComponent<Animator>();
 		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+		
 	}
+
 	private void Start()
 	{
 		curve.AddPoint(new BGCurvePoint(curve, transform.position, BGCurvePoint.ControlTypeEnum.BezierSymmetrical), 0);
@@ -37,6 +40,7 @@ public class Ship : TradeVehicle
 		//set animation Tri
 		animator.SetTrigger("Emerge");
 		generator.waterMaterial.SetFloat("StartTime", startTime);
+		tradeResourceImage.sprite = trade.toTrader.sprite;
 	}
 
 	// Update is called once per frame
@@ -44,8 +48,6 @@ public class Ship : TradeVehicle
 	{
 		if (!reached && !isStopped)
 			Move();
-		//else
-		//	Sink();
 	}
 
 	private void Move()
