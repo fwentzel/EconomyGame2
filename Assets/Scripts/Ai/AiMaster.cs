@@ -17,7 +17,7 @@ public class AiMaster: MonoBehaviour
 		var states = new Dictionary<Type, BaseAi>() {
 			{ typeof(TaxesAi),new TaxesAi(100,20,mainbuilding)},
 			{ typeof(BuildingAi),new BuildingAi(mainbuilding)},
-			{ typeof(TradeAi),new TradeAi(1f,mainbuilding)}
+			{ typeof(TradeAi),new TradeAi(0f,mainbuilding)}
 		};
 		GetComponent<StateMachine>().availableStates = states;
 	}

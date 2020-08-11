@@ -155,7 +155,7 @@ public class TradeManager : MonoBehaviour
 
 	private void SpawnFoot(Trade trade, ResourceManager rm)
 	{
-		GameObject obj = Instantiate(footpPrefab, rm.transform.position-new Vector3(2,0,2), Quaternion.identity);
+		GameObject obj = Instantiate(footpPrefab, new Vector3(0,40,0), Quaternion.identity);
 		Foot foot = obj.GetComponent<Foot>();
 		foot.trade = trade;
 		foot.rm = rm;

@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class SelectionManager : MonoBehaviour
 {
 	public static SelectionManager instance { get; private set; }
+	public event Action OnSelectionChange = delegate { };
 
 	public GameObject selectedObject
 	{
@@ -14,8 +15,7 @@ public class SelectionManager : MonoBehaviour
 
 
 	private GameObject SelectedObject;
-
-	public Transform selectionMarker;
+	
 	Building building;
 
 	private void Awake()
@@ -30,18 +30,14 @@ public class SelectionManager : MonoBehaviour
 	private void SetSelectedObject(GameObject value)
 	{
 		SelectedObject = value;
-		if (value.GetComponent<Building>() != null)
-		{
-			selectionMarker.position = new Vector3(SelectedObject.transform.position.x, .03f, SelectedObject.transform.position.z);
-			selectionMarker.gameObject.SetActive(true);
-		}
+		OnSelectionChange?.Invoke();	
 	}
 
 	public void Deselect()
 	{
 		SelectedObject = null;
-		selectionMarker.gameObject.SetActive(false);
 		ContextUiManager.instance.CloseContextMenus();
+		OnSelectionChange?.Invoke();
 	}
 
 }

@@ -14,6 +14,10 @@ public class TradeVehicle : MonoBehaviour
 	{
 		yield return new WaitForSeconds(timeBeforeUnload);
 		rm.ChangeRessourceAmount(trade.fromTrader.resource, trade.fromTraderAmount);
+		if (SelectionManager.instance.selectedObject = gameObject)
+		{
+			SelectionManager.instance.Deselect();
+		}
 		Destroy(gameObject);
 	}
 
@@ -23,7 +27,7 @@ public class TradeVehicle : MonoBehaviour
 			//AI will pass its RM, so only player will have value 0
 			rm = ResourceUiManager.instance.activeResourceMan;
 
-		rm.ChangeRessourceAmount(resource.money, holdUpCost);
+		rm.ChangeRessourceAmount(resource.money, -holdUpCost);
 		isStopped = true;
 		yield return new WaitForSeconds(holdUpDuration);
 		isStopped = false;
