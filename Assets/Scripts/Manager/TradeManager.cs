@@ -11,7 +11,7 @@ public class TradeManager : MonoBehaviour
 {
 
 	public event Action<int> OnGenerateNewTrades = delegate { };
-
+	
 	public static TradeManager instance { get; private set; }
 	public Dictionary<Trade, TradeElement> tradeToElementMapping { get; private set; }
 	public Dictionary<ResourceManager, float> tradeCooldowns { get; private set; }
@@ -73,7 +73,6 @@ public class TradeManager : MonoBehaviour
 		NewTradeRandomNumbers();
 		for (int i = 0; i < amount; i++)
 		{
-			//TradeElement newTradeElement = Instantiate(tradeElementPrefab, tradeUiPanel.transform).GetComponent<TradeElement>();
 			Trade newTrade = GenerateTrade(i);
 
 			tradeToElementMapping[newTrade] = tradeElements[i];
