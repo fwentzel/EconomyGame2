@@ -45,7 +45,7 @@ public class ResourceManager : MonoBehaviour
 		CalculateLoyalty();
 		CompareToMeanCityResources();
 		CheckGameOver();
-		OnResourceChange();
+		OnResourceChange?.Invoke();
 	}
 
 	private void CheckGameOver()

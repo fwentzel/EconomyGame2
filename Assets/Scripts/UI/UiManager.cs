@@ -10,7 +10,6 @@ public class UiManager : MonoBehaviour
 	Transform settingsPanel;
     Transform traderPanel;
     Transform menuPanel;
-
     GameObject newTradesTimerParent;
     Text newTradesInText;
     Image newTradesInImage;
@@ -51,8 +50,8 @@ public class UiManager : MonoBehaviour
 	{
 		menuPanel = transform.Find("MenuPanel");
 		settingsPanel = transform.Find("SettingsPanel");
-
 		traderPanel = transform.Find("TraderPanel");
+
 		newTradesTimerParent = traderPanel.transform.Find("Timer").gameObject;
 		newTradesInText = newTradesTimerParent.transform.Find("NewTradesTimerText").GetComponent<Text>();
 		newTradesInImage = newTradesTimerParent.transform.Find("NewTradeTimerForeground").GetComponent<Image>();
