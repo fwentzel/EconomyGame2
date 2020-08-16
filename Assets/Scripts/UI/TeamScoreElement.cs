@@ -25,15 +25,15 @@ public class TeamScoreElement : MonoBehaviour
         stoneText = transform.Find("StoneText").GetComponent<TMP_Text>();
     }
 
-    private void Start()
-    {
-        GameManager.instance.OnGameStart += setResourceManager;
-        GameManager.instance.OnCalculateIntervall += UpdateScore;
+    private void OnEnable() {
+        if(rem==null)
+        {
+            setResourceManager();
+        }
     }
-
     private void setResourceManager()
     {
-        print("set");
+        print("set");                            
         Transform parent = transform.parent;
         for (int i = 0; i < CityResourceLookup.instance.resourceManagers.Length; i++)
         {
@@ -55,13 +55,14 @@ public class TeamScoreElement : MonoBehaviour
             GameManager.instance.OnGameStart -= setResourceManager;
             GameManager.instance.OnCalculateIntervall -= UpdateScore;
             Destroy(gameObject);
+        }else{
+            GameManager.instance.OnCalculateIntervall += UpdateScore;
+             UpdateScore();
         }
     }
 
     public void UpdateScore()
     {
-        if(rem==null)
-            return;
         moneyText.text = rem.GetAmount(resource.money).ToString();
         loyaltyText.text = rem.GetAmount(resource.loyalty).ToString();
         citizensText.text = rem.GetAmount(resource.citizens).ToString();
