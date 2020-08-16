@@ -53,14 +53,14 @@ public class CityResourceLookup : MonoBehaviour
     {
         if (freeCitizens <= 0)
             return;
-        print(string.Format("Team {0} hat einen Bürger aufgenommen!", resourceManager.mainbuilding.team));
+        //print(string.Format("Team {0} hat einen Bürger aufgenommen!", resourceManager.mainbuilding.team));
         freeCitizens--;
         resourceManager.ChangeRessourceAmount(resource.citizens, 1);
     }
 
     internal void LooseCitizen(ResourceManager resourceManager)
     {
-        print(string.Format("Team {0} hat einen Bürger verloren!", resourceManager.mainbuilding.team));
+        //print(string.Format("Team {0} hat einen Bürger verloren!", resourceManager.mainbuilding.team));
         freeCitizens++;
         resourceManager.ChangeRessourceAmount(resource.citizens, -1);
         Instantiate(citizenPrefab, resourceManager.transform.position, Quaternion.identity);

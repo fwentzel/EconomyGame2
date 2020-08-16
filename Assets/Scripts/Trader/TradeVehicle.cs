@@ -9,8 +9,12 @@ public class TradeVehicle : MonoBehaviour
 	internal ResourceManager rm;
 	internal bool isStopped=false;
 
+  public virtual void SetUp(ResourceManager resourceManager,Trade trade){
+	  rm=resourceManager;
+	  this.trade=trade;
+  }
 
-	protected virtual IEnumerator UnloadCoroutine(float timeBeforeUnload)
+    protected virtual IEnumerator UnloadCoroutine(float timeBeforeUnload)
 	{
 		yield return new WaitForSeconds(timeBeforeUnload);
 		rm.ChangeRessourceAmount(trade.fromTrader.resource, trade.fromTraderAmount);
