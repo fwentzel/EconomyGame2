@@ -5,9 +5,11 @@ public class UiActionHandler : MonoBehaviour
 	public void HoldUpSelected()
 	{
 		TradeVehicle tradeVehicle = SelectionManager.instance.selectedObject.GetComponent<TradeVehicle>();
+		
 		if (tradeVehicle != null)
 		{
-			tradeVehicle.HoldUp();
+			StartCoroutine(tradeVehicle.HoldUpCoroutine());
+			
 		}
 	}
 

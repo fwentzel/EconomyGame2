@@ -7,10 +7,10 @@ public class UiManager : MonoBehaviour
 {
     public static UiManager instance { get; private set; }
 
-	Transform settingsPanel;
+    Transform settingsPanel;
     Transform traderPanel;
     Transform menuPanel;
-
+    Transform scoreboardPanel;
     GameObject newTradesTimerParent;
     Text newTradesInText;
     Image newTradesInImage;
@@ -23,56 +23,43 @@ public class UiManager : MonoBehaviour
         else
             Destroy(this);
 
-		SetupUiElements();
+        SetupUiElements();
 
-		CloseAll();
-		TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine("StartNewTradeTimer", arrivalIn);
-	}
-
-    private void Start()
-    {
         
+        TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine(StartNewTradeTimerCoroutine(arrivalIn));
     }
-
-	private void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.Tab))
-		{
-			OpenMenu(traderPanel.gameObject);
-		}
-
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			OpenMenu(menuPanel.gameObject);
-		}
-	}
-
-	private void SetupUiElements()
-	{
-		menuPanel = transform.Find("MenuPanel");
-		settingsPanel = transform.Find("SettingsPanel");
-
-		traderPanel = transform.Find("TraderPanel");
-		newTradesTimerParent = traderPanel.transform.Find("Timer").gameObject;
-		newTradesInText = newTradesTimerParent.transform.Find("NewTradesTimerText").GetComponent<Text>();
-		newTradesInImage = newTradesTimerParent.transform.Find("NewTradeTimerForeground").GetComponent<Image>();
-	}
-
-	private IEnumerator StartNewTradeTimer(int arrivalIn)
+    private void Start() {
+        CloseAll();
+    }
+    private void Update()
     {
-        float normalizedTime = arrivalIn;
-        newTradesTimerParent.SetActive(true);
-
-        while (normalizedTime >= 0)
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            newTradesInText.text = Mathf.CeilToInt(normalizedTime) + " seconds!";
-            newTradesInImage.fillAmount = normalizedTime / arrivalIn;
-            normalizedTime -= Time.deltaTime;
-            yield return null;
+            OpenMenu(scoreboardPanel.gameObject);
         }
-        newTradesTimerParent.SetActive(false);
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            OpenMenu(traderPanel.gameObject);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OpenMenu(menuPanel.gameObject);
+        }
     }
 
+    private void SetupUiElements()
+    {
+        menuPanel = transform.Find("MenuPanel");
+        settingsPanel = transform.Find("SettingsPanel");
+        scoreboardPanel=transform.Find("ScoreboardPanel");
+        traderPanel = transform.Find("TraderPanel");
+
+        newTradesTimerParent = traderPanel.transform.Find("Timer").gameObject;
+        newTradesInText = newTradesTimerParent.transform.Find("NewTradesTimerText").GetComponent<Text>();
+        newTradesInImage = newTradesTimerParent.transform.Find("NewTradeTimerForeground").GetComponent<Image>();
+    }
     public void OpenMenu(GameObject menuToOpen)
     {
         if (menuToOpen == null)
@@ -90,5 +77,22 @@ public class UiManager : MonoBehaviour
         traderPanel.gameObject.SetActive(false);
         settingsPanel.gameObject.SetActive(false);
         menuPanel.gameObject.SetActive(false);
+        scoreboardPanel.gameObject.SetActive(false);
     }
+
+    private IEnumerator StartNewTradeTimerCoroutine(int arrivalIn)
+    {
+        float normalizedTime = arrivalIn;
+        newTradesTimerParent.SetActive(true);
+
+        while (normalizedTime >= 0)
+        {
+            newTradesInText.text = Mathf.CeilToInt(normalizedTime) + " seconds!";
+            newTradesInImage.fillAmount = normalizedTime / arrivalIn;
+            normalizedTime -= Time.deltaTime;
+            yield return null;
+        }
+        newTradesTimerParent.SetActive(false);
+    }
+
 }

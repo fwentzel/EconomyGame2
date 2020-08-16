@@ -26,8 +26,6 @@ public class Building : MonoBehaviour
 		ContextUiManager.instance.OpenContext(this);
 	}
 
-
-
 	public bool LevelUp()
 	{
 		if (level == maxLevel)

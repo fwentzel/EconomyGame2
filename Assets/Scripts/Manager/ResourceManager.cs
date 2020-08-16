@@ -45,14 +45,14 @@ public class ResourceManager : MonoBehaviour
 		CalculateLoyalty();
 		CompareToMeanCityResources();
 		CheckGameOver();
-		OnResourceChange();
+		OnResourceChange?.Invoke();
 	}
 
 	private void CheckGameOver()
 	{
 		if (resourceAmount[resource.citizens] <= 0)
 		{
-			print("GAME OVER FOR PLAYER " + mainbuilding.team);
+			//print("GAME OVER FOR PLAYER " + mainbuilding.team);
 			mainbuilding.gameOver = true;
 		}
 	}

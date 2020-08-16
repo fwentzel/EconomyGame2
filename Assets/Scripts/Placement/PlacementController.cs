@@ -164,6 +164,7 @@ public class PlacementController : MonoBehaviour
 		placeableObject.AddComponent<Buildcheck>();
 		placeableObject.GetComponent<BoxCollider>().isTrigger = true;
 		isPlacing = true;
+		UiManager.instance.CloseAll();
 	}
 
 	private void ConfigureGrid(bool isStart)

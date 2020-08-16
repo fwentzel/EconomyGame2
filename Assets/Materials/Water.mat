@@ -50,3 +50,4 @@ Material:
     - Vector2_2D24956B: {r: -0.02, g: 0.02, b: 0, a: 0}
     - Vector2_847799B5: {r: 0.05, g: -0.01, b: 0, a: 0}
     - WaterColor: {r: 0.08938757, g: 0, b: 1, a: 0.5058824}
+  m_BuildTextureStacks: []
