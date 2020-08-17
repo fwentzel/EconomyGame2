@@ -164,6 +164,7 @@ public class TradeManager : MonoBehaviour
 
     private IEnumerator AnnounceNewTradesCoroutine(int duration)
     {
+        MessageSystem.instance.Message("The Trader is about to offer something else!");
         OnGenerateNewTrades(duration);
         yield return new WaitForSeconds(duration);
 

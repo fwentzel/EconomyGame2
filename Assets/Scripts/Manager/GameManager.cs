@@ -71,7 +71,6 @@ public class GameManager : MonoBehaviour
 	
 	public void StartGame()
 	{
-		print("SERVER STARTING GAME!");
 		RpcSetupMainBuildingPlayer();
 		PlacementController.instance.SetupGridParameter();
 		TradeManager.instance.StartTradeOffer();

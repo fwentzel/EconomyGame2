@@ -17,48 +17,56 @@ public class TeamScoreElement : MonoBehaviour
 
     private void Awake()
     {
-        teamText = transform.Find("TeamText").GetComponent<TMP_Text>();
-        moneyText = transform.Find("MoneyText").GetComponent<TMP_Text>();
-        loyaltyText = transform.Find("LoyaltyText").GetComponent<TMP_Text>();
-        citizensText = transform.Find("CitizenText").GetComponent<TMP_Text>();
-        foodText = transform.Find("FoodText").GetComponent<TMP_Text>();
-        stoneText = transform.Find("StoneText").GetComponent<TMP_Text>();
+        teamText = transform.Find("TeamText").GetComponentInChildren<TMP_Text>();
+        moneyText = transform.Find("MoneyText").GetComponentInChildren<TMP_Text>();
+        loyaltyText = transform.Find("LoyaltyText").GetComponentInChildren<TMP_Text>();
+        citizensText = transform.Find("CitizenText").GetComponentInChildren<TMP_Text>();
+        foodText = transform.Find("FoodText").GetComponentInChildren<TMP_Text>();
+        stoneText = transform.Find("StoneText").GetComponentInChildren<TMP_Text>();
     }
 
-    private void OnEnable() {
-        if(rem==null)
+    private void OnEnable()
+    {
+        if (rem == null)
         {
             setResourceManager();
         }
     }
     private void setResourceManager()
     {
-        print("set");                            
+        if (CityResourceLookup.instance == null)
+            return;
         Transform parent = transform.parent;
-        for (int i = 0; i < CityResourceLookup.instance.resourceManagers.Length; i++)
+        ResourceManager[] resourceManagers = CityResourceLookup.instance.resourceManagers;
+        if (resourceManagers.Length > parent.childCount - 1)
+        {//-1 to account for header
+            Instantiate(this, parent);
+        }
+        bool found = false;
+        for (int i = 0; i < resourceManagers.Length; i++)
         {
             //+1 to account for Header Child
             if (parent.GetChild(i + 1) == this.transform)
             {
-                rem = CityResourceLookup.instance.resourceManagers[i];
+                rem = resourceManagers[i];
+                float newVal = i % 2 == 0 ? 125 : 150;
+                //convert to colorspace 0-1
+                newVal /= 255;
+                Color color= new Color(newVal, newVal, newVal, 255);
+                foreach (Image image in GetComponentsInChildren<Image>())
+                {
+                    image.color=color;
+                }
                 if (GameManager.instance.localPlayer.mainbuilding == rem.mainbuilding)
                 {
                     //Found local player
-                    GetComponent<Image>().color=new Color(255,255,255,255);
+
                 }
+                break;
             }
         }
-
-        if (rem == null)
-        {
-            //not needed since Playernumber < #TeamscoreElemts
-            GameManager.instance.OnGameStart -= setResourceManager;
-            GameManager.instance.OnCalculateIntervall -= UpdateScore;
-            Destroy(gameObject);
-        }else{
-            GameManager.instance.OnCalculateIntervall += UpdateScore;
-             UpdateScore();
-        }
+        GameManager.instance.OnCalculateIntervall += UpdateScore;
+        UpdateScore();
     }
 
     public void UpdateScore()
