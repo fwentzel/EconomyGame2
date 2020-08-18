@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(MeshFilter))]
 public class MapGenerator : MonoBehaviour
@@ -28,6 +29,15 @@ public class MapGenerator : MonoBehaviour
 	int[] triangles;
 	Vector2[] uv;
 
+
+// TODO Fix / pput in other script
+private void OnMouseUp()
+	{
+		if (EventSystem.current.IsPointerOverGameObject())
+			return;
+		SelectionManager.instance.Deselect();
+		
+	}
 	private void Awake()
 	{
 		SetupMap();

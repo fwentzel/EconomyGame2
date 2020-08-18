@@ -24,7 +24,7 @@ public class BuildUiElement : MonoBehaviour
 
 	private void CheckInteractable()
 	{
-		bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.money) > buildCost;
+		bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) > buildCost;
 		button.interactable = interactable;
 	}
 

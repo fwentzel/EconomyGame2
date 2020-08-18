@@ -1410,7 +1410,7 @@ GameObject:
   - component: {fileID: 1813562378}
   - component: {fileID: 1813562380}
   m_Layer: 5
-  m_Name: MoneyText
+  m_Name: GoldText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

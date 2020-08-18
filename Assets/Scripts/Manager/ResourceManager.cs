@@ -39,7 +39,7 @@ public class ResourceManager : MonoBehaviour
 		if (mainbuilding.gameOver)//TODO HACKY. methode überlegen sie aus dem spiel zu nehmen
 			return;
 
-		CalculateMoney();
+		CalculateGold();
 		CalculateFood();
 		CalculateStone();
 		CalculateLoyalty();
@@ -52,6 +52,7 @@ public class ResourceManager : MonoBehaviour
 	{
 		if (resourceAmount[resource.citizens] <= 0)
 		{
+			MessageSystem.instance.Message( string.Format("TEAM {0} IS ABANDONDED BY ITS CITIZENS...",mainbuilding.team), Color.red);
 			//print("GAME OVER FOR PLAYER " + mainbuilding.team);
 			mainbuilding.gameOver = true;
 		}
@@ -63,7 +64,7 @@ public class ResourceManager : MonoBehaviour
 		if (diff > 0)
 		{
 			//can pickup any free ciziens
-			int random = Random.Range(20, 100);
+			int random = Random.Range(1, 100);
 
 			if (random <= diff && resourceAmount[resource.citizens] < mainbuilding.maxCitizens)
 			{
@@ -81,9 +82,9 @@ public class ResourceManager : MonoBehaviour
 		}
 	}
 
-	private void CalculateMoney()
+	private void CalculateGold()
 	{
-		resourceAmount[resource.money] += mainbuilding.Taxes * resourceAmount[resource.citizens];
+		resourceAmount[resource.gold] += mainbuilding.Taxes * resourceAmount[resource.citizens];
 	}
 
 	private void CalculateFood()
@@ -189,7 +190,7 @@ public enum resource
 {
 	food,
 	loyalty,
-	money,
+	gold,
 	citizens,
 	stone
 }

@@ -7,7 +7,7 @@ using TMPro;
 public class TeamScoreElement : MonoBehaviour
 {
     TMP_Text teamText;
-    TMP_Text moneyText;
+    TMP_Text goldText;
     TMP_Text loyaltyText;
     TMP_Text citizensText;
     TMP_Text foodText;
@@ -18,7 +18,7 @@ public class TeamScoreElement : MonoBehaviour
     private void Awake()
     {
         teamText = transform.Find("TeamText").GetComponentInChildren<TMP_Text>();
-        moneyText = transform.Find("MoneyText").GetComponentInChildren<TMP_Text>();
+        goldText = transform.Find("GoldText").GetComponentInChildren<TMP_Text>();
         loyaltyText = transform.Find("LoyaltyText").GetComponentInChildren<TMP_Text>();
         citizensText = transform.Find("CitizenText").GetComponentInChildren<TMP_Text>();
         foodText = transform.Find("FoodText").GetComponentInChildren<TMP_Text>();
@@ -71,7 +71,7 @@ public class TeamScoreElement : MonoBehaviour
 
     public void UpdateScore()
     {
-        moneyText.text = rem.GetAmount(resource.money).ToString();
+        goldText.text = rem.GetAmount(resource.gold).ToString();
         loyaltyText.text = rem.GetAmount(resource.loyalty).ToString();
         citizensText.text = rem.GetAmount(resource.citizens).ToString();
         foodText.text = rem.GetAmount(resource.food).ToString();

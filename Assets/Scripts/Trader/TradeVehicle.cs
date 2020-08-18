@@ -31,7 +31,7 @@ public class TradeVehicle : MonoBehaviour
 			//AI will pass its RM, so only player will have value 0
 			rm = ResourceUiManager.instance.activeResourceMan;
 
-		rm.ChangeRessourceAmount(resource.money, -holdUpCost);
+		rm.ChangeRessourceAmount(resource.gold, -holdUpCost);
 		isStopped = true;
 		yield return new WaitForSeconds(holdUpDuration);
 		isStopped = false;

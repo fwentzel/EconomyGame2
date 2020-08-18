@@ -8,6 +8,8 @@ public class Citizen : MonoBehaviour
 	int walkRadius=10;
 	[SerializeField] float speed=.4f;
 
+	public int team;
+
 	private void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();

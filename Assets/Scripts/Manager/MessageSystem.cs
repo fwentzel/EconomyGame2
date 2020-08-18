@@ -8,9 +8,7 @@ public class MessageSystem : MonoBehaviour
     [SerializeField] GameObject messagePanel = null;
     [SerializeField] Transform contentParent = null;
     [SerializeField] GameObject textPrefab = null;
-
-    float lastMessageSent = 0;
-    int i = 1;
+    WaitForSeconds cachedWait = new WaitForSeconds(5);
 
     private void Awake()
     {
@@ -32,19 +30,19 @@ public class MessageSystem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            showChat();
+            Message("HAU REEEIINNN!",Color.red);
         }
     }
 
     IEnumerator hideChat()
     {
-        yield return new WaitForSeconds(5);
+        yield return cachedWait;
         messagePanel.SetActive(false);
     }
 
     void showChat()
     {
-        StopCoroutine(hideChat());
+        StopAllCoroutines();
         messagePanel.SetActive(true);
         StartCoroutine(hideChat());
     }

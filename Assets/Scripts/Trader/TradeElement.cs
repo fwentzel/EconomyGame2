@@ -97,6 +97,7 @@ public class TradeElement : MonoBehaviour
 
 	private void TradeAccepted()
 	{
+		MessageSystem.instance.Message("you accepted following Trade: "+ trade.ToString());
 		ResourceManager rm = GameManager.instance.localPlayer.mainbuilding.resourceManager;
 		TradeManager.instance.AcceptTrade(trade, rm);
 		foreach (TradeElement elem in TradeManager.instance.tradeElements)
