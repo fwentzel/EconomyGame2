@@ -15,6 +15,7 @@ public class UiManager : MonoBehaviour
     Text newTradesInText;
     Image newTradesInImage;
 
+    Inputmaster input;
     private void Awake()
     {
         //singleton Check
@@ -24,29 +25,21 @@ public class UiManager : MonoBehaviour
             Destroy(this);
 
         SetupUiElements();
-
+        input = new Inputmaster();
         
         TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine(StartNewTradeTimerCoroutine(arrivalIn));
     }
+
+    private void OnEnable() {
+        input.Enable();
+    }
     private void Start() {
         CloseAll();
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            OpenMenu(scoreboardPanel.gameObject);
-        }
+        input.Menus.Trader.performed += _ => OpenMenu(traderPanel.gameObject);
+        input.Menus.Scoreboard.started += _ => OpenMenu(scoreboardPanel.gameObject);
+        input.Menus.Scoreboard.canceled += _ => CloseAll();
+        input.Menus.Menu.performed += _ => OpenMenu(menuPanel.gameObject);
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            OpenMenu(traderPanel.gameObject);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            OpenMenu(menuPanel.gameObject);
-        }
     }
 
     private void SetupUiElements()

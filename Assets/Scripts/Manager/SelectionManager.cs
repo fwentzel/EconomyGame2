@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class SelectionManager : MonoBehaviour
 	
 	Building building;
 
+	Inputmaster input;
+	Mouse mouse;
+
 	private void Awake()
 	{
 		//singleton Check
@@ -25,12 +29,27 @@ public class SelectionManager : MonoBehaviour
 			instance = this;
 		else
 			Destroy(this);
+		input=new Inputmaster();
+		input.Selection.Click.canceled += _ => GetObjectFromClick();
+		mouse=Mouse.current;
+	}
+	private void OnEnable() {
+		input.Enable();
 	}
 
+	private void GetObjectFromClick(){
+		if (EventSystem.current.IsPointerOverGameObject() || PlacementController.instance.isPlacing)
+			return;
+		GameObject obj =Utils.GetObjectAtMousePos(mouse.position.ReadValue());
+
+		selectedObject = obj;
+		OnSelectionChange?.Invoke();
+		ContextUiManager.instance.OpenContext(obj);
+	}
 	private void SetSelectedObject(GameObject value)
 	{
 		SelectedObject = value;
-		OnSelectionChange?.Invoke();	
+			
 	}
 
 	public void Deselect()

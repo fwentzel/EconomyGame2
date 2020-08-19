@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Building : MonoBehaviour
+using UnityEngine.InputSystem;
+public class Building : MonoBehaviour, ISelectable
 {
 
 	public ResourceManager resourceManager;
@@ -18,13 +19,7 @@ public class Building : MonoBehaviour
 	int triggerBonuslevelAt = 4;
 	int maxLevel = 7;
 
-	private void OnMouseUp()
-	{
-		if (EventSystem.current.IsPointerOverGameObject() || PlacementController.instance.isPlacing)
-			return;
-			SelectionManager.instance.selectedObject = gameObject;
-		ContextUiManager.instance.OpenContext(this);
-	}
+
 
 	public bool LevelUp()
 	{
@@ -40,7 +35,7 @@ public class Building : MonoBehaviour
 		if (level == triggerBonuslevelAt || level == maxLevel)
 			TriggerBonusLevel();
 
-		resourceManager.ChangeRessourceAmount(resource.money, -levelCost);
+		resourceManager.ChangeRessourceAmount(resource.gold, -levelCost);
 		VFXManager.instance.PlayEffect(VFXManager.instance.levelUpEffect, transform.position);
 		SetLevelMesh();
 		levelCost = (int)(levelCost * 1.5f);
@@ -63,12 +58,12 @@ public class Building : MonoBehaviour
 	public virtual void OnBuild(bool subtractResource = true)
 	{
 		if (subtractResource)
-			resourceManager.ChangeRessourceAmount(resource.money, -buildCost);
+			resourceManager.ChangeRessourceAmount(resource.gold, -buildCost);
 	}
 
 	public virtual void DestroyBuilding()
 	{
-		resourceManager.ChangeRessourceAmount(resource.money, (int)(buildCost * .6f));
+		resourceManager.ChangeRessourceAmount(resource.gold, (int)(buildCost * .6f));
 		resourceManager.mainbuilding.buildings.Remove(this);
 		Destroy(this.gameObject);
 	}
@@ -95,7 +90,7 @@ public class Building : MonoBehaviour
 
 	public bool CheckCanLevelUp()
 	{
-		return resourceManager.GetAmount(resource.money) >= levelCost && level < maxLevel;
+		return resourceManager.GetAmount(resource.gold) >= levelCost && level < maxLevel;
 	}
 
 }

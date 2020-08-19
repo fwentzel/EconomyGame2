@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,11 +29,11 @@ public class GameManager : MonoBehaviour
 	}
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (Keyboard.current.spaceKey.isPressed)
 		{
 			Time.timeScale = 5;
 		}
-		if (Input.GetKeyUp(KeyCode.Space))
+		else
 		{
 			Time.timeScale = 1;
 		}
@@ -71,7 +72,6 @@ public class GameManager : MonoBehaviour
 	
 	public void StartGame()
 	{
-		print("SERVER STARTING GAME!");
 		RpcSetupMainBuildingPlayer();
 		PlacementController.instance.SetupGridParameter();
 		TradeManager.instance.StartTradeOffer();

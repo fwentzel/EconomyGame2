@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BuildingAi : BaseAi
 {
-	int maxMoneyThreshold = 500;
+	int maxGoldThreshold = 500;
 	Dictionary<Type, List<Building>> buildingList;
 	List<Vector2> availableBuildSpots;
 	int oldEnd;
@@ -17,15 +17,15 @@ public class BuildingAi : BaseAi
 
 	public override Type Tick()
 	{
-		int money = resourceManager.GetAmount(resource.money);
+		int gold = resourceManager.GetAmount(resource.gold);
 		if (resourceManager.CalculateFoodChange() < 0)
 		{
-			return UpgradeOrBuild(money, typeof(Farm));
+			return UpgradeOrBuild(gold, typeof(Farm));
 		}
-		if (resourceManager.GetAmount(resource.money) > maxMoneyThreshold)
+		if (resourceManager.GetAmount(resource.gold) > maxGoldThreshold)
 		{
 			//Act and Build 
-			return UpgradeOrBuild(money, typeof(House));
+			return UpgradeOrBuild(gold, typeof(House));
 		}
 
 		return typeof(TradeAi);
@@ -72,19 +72,19 @@ public class BuildingAi : BaseAi
 
 	
 
-	private Type UpgradeOrBuild(int money, Type type)
+	private Type UpgradeOrBuild(int gold, Type type)
 	{
 		//Act and Build 
 		foreach (var building in buildingList[type])
 		{
-			if (money < building.levelCost)
+			if (gold < building.levelCost)
 				continue;
 
 			if (building.LevelUp())
 				break;
 		}
 
-		if (money < buildingList[type][0].buildCost)
+		if (gold < buildingList[type][0].buildCost)
 			return typeof(TradeAi);
 		//Didnt Level up Farm, so we need a new one
 		Log(" Added " + type.ToString());
@@ -95,7 +95,7 @@ public class BuildingAi : BaseAi
 
 	private void PlaceBuilding(Type type, Vector3 pos)
 	{
-		resourceManager.ChangeRessourceAmount(resource.money, -buildingList[type][0].buildCost);
+		resourceManager.ChangeRessourceAmount(resource.gold, -buildingList[type][0].buildCost);
 		Building addedBuilding= mainbuilding.AddBuilding(type, pos);
 		buildingList[type].Add(addedBuilding);
 	}

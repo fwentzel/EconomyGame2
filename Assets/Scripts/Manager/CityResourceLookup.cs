@@ -13,6 +13,8 @@ public class CityResourceLookup : MonoBehaviour
 
     public ResourceManager[] resourceManagers { get; private set; }
 
+    List<Citizen> citizens = new List<Citizen>();
+
     private void Awake()
     {
         //singleton Check
@@ -27,7 +29,7 @@ public class CityResourceLookup : MonoBehaviour
         GameManager.instance.OnCalculateIntervall += UpdateCityResourceMean;
     }
 
-   
+
     public void PopulateResourceManagers()
     {
         Player[] players = GameManager.instance.players;
@@ -53,16 +55,24 @@ public class CityResourceLookup : MonoBehaviour
     {
         if (freeCitizens <= 0)
             return;
-        //print(string.Format("Team {0} hat einen Bürger aufgenommen!", resourceManager.mainbuilding.team));
+        string message = string.Format("Team {0} took up a citizen from team {1}!", resourceManager.mainbuilding.team,citizens[0].team);
+        MessageSystem.instance.Message(message);
+        Destroy(citizens[0].gameObject);
         freeCitizens--;
         resourceManager.ChangeRessourceAmount(resource.citizens, 1);
     }
 
     internal void LooseCitizen(ResourceManager resourceManager)
     {
-        //print(string.Format("Team {0} hat einen Bürger verloren!", resourceManager.mainbuilding.team));
+        
+        string message = string.Format("Team {0} lost a citizen!", resourceManager.mainbuilding.team);
+        MessageSystem.instance.Message(message);
         freeCitizens++;
         resourceManager.ChangeRessourceAmount(resource.citizens, -1);
-        Instantiate(citizenPrefab, resourceManager.transform.position, Quaternion.identity);
+
+        GameObject citizen = Instantiate(citizenPrefab, resourceManager.transform.position, Quaternion.identity);
+        Citizen citizenComponent =citizen.GetComponent<Citizen>();
+        citizen.GetComponent<Citizen>().team=resourceManager.mainbuilding.team;
+        citizens.Add(citizenComponent);
     }
 }

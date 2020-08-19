@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 public class CameraController : MonoBehaviour
@@ -36,32 +38,59 @@ public class CameraController : MonoBehaviour
     public float cameraMaxHeight;
 
     // Map properties
-     float mapXSize;
-	float mapZSize;
+    float mapXSize;
+    float mapZSize;
 
-	// Properties that shold not change to make sure the camera will work
-	private float _savedCameraSpeed;
+    // Properties that shold not change to make sure the camera will work
+    private float _savedCameraSpeed;
 
-	//for smoother Scrolling
-	public float scrollspeed;
-	public float scrollSensitivity;
-	private float desiredScrollposition;
+    //for smoother Scrolling
+    public float scrollspeed;
+    public float scrollSensitivity;
+    private float desiredScrollposition;
 
-	private RaycastHit _rayHit;
+    private RaycastHit _rayHit;
     private Vector2 _leftMouseInitial;
     private Vector2 _leftMouseFinal;
     private Vector3 mouseInitial;
 
-	
-
-	void Start()
+    Inputmaster controls;
+    Keyboard keyboard;
+    Mouse mouse;
+    private void Awake()
+    {
+        controls = new Inputmaster();
+        keyboard = Keyboard.current;
+        mouse = Mouse.current;
+    }
+    void Start()
     {
         CheckSettings();
+        //controls.Camera.Move.performed+= ctx => Move(ctx.ReadValue<Vector2>());
+        controls.Camera.Height.performed += ctx => Height(ctx.ReadValue<float>());
     }
 
-    void Update()
+    private void Height(float v)
     {
-		Controller();
+        v/=120;        
+        desiredScrollposition =Mathf.Clamp(desiredScrollposition - v * scrollSensitivity, cameraMinHeight, cameraMaxHeight); ;
+
+
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
+    private void OnEnable()
+    {
+        controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Disable();
     }
 
     void CheckSettings()
@@ -75,98 +104,111 @@ public class CameraController : MonoBehaviour
             cameraMaxHeight = 20f;
             mapXSize = float.MaxValue;
         }
-		desiredScrollposition = TheCamera.transform.position.y;
-		_savedCameraSpeed = cameraSpeed;
-		MapGenerator gen = FindObjectOfType<MapGenerator>();
-		mapXSize = gen.xSize;
-		mapZSize = gen.zSize;
+        desiredScrollposition = TheCamera.transform.position.y;
+        _savedCameraSpeed = cameraSpeed;
+        MapGenerator gen = FindObjectOfType<MapGenerator>();
+        mapXSize = gen.xSize;
+        mapZSize = gen.zSize;
 
-	}
+    }
 
-    void Controller()
+    void Move()
     {
         Vector3 position = TheCamera.transform.position;
         Vector3 rotation = new Vector3(TheCamera.transform.eulerAngles.x, TheCamera.transform.eulerAngles.y, 0);
-		
-        // W, A, S, D Movement
-        if (Input.GetKey(KeyCode.W))
+
+        // // W, A, S, D Movement
+        if (keyboard.wKey.isPressed)
+        {
             position += new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        if (Input.GetKey(KeyCode.S))
+        }
+        if (keyboard.sKey.isPressed)
+        {
             position -= new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        if (Input.GetKey(KeyCode.A))
+        }
+        if (keyboard.aKey.isPressed)
+        {
             position -= new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
-        if (Input.GetKey(KeyCode.D))
+        }
+        if (keyboard.dKey.isPressed)
+        {
             position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
+        }
+
+
+
 
         // Q, E, Alt Rotation
-        if (Input.GetKey(KeyCode.Q))
+        if (keyboard.qKey.isPressed)
             rotation.y -= cameraSpeed * (Time.deltaTime * 32);
-        if (Input.GetKey(KeyCode.E))
+        if (keyboard.eKey.isPressed)
             rotation.y += cameraSpeed * (Time.deltaTime * 32);
-        if (Input.GetKey(KeyCode.LeftAlt))
+
+        if (keyboard.leftAltKey.isPressed)
         {
             rotation.y = 0;
             TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
         }
 
         // Border Touch Movement
-        //if (Input.mousePosition.y >= Screen.height - cameraBorder)
+        // if (Input.mousePosition.y >= Screen.height - cameraBorder)
         //    position += new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        //if (Input.mousePosition.y <= 0 + cameraBorder)
+        // if (Input.mousePosition.y <= 0 + cameraBorder)
         //    position -= new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        //if (Input.mousePosition.x >= Screen.width - cameraBorder)
+        // if (Input.mousePosition.x >= Screen.width - cameraBorder)
         //    position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
-        //if (Input.mousePosition.x <= 0 + cameraBorder)
+        // if (Input.mousePosition.x <= 0 + cameraBorder)
         //    position -= new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
 
+
         // Mouse Rotation
-        if (Input.GetKeyDown(KeyCode.Mouse2))
-            mouseInitial = Input.mousePosition;
-        if (Input.GetKey(KeyCode.Mouse2))
-        {
-            if (mouseInitial.x - Input.mousePosition.x > 100 || mouseInitial.x - Input.mousePosition.x < -100)
-                rotation.y -= (mouseInitial.x - Input.mousePosition.x) / 60;
-            if (mouseInitial.y - Input.mousePosition.y > 100 || mouseInitial.y - Input.mousePosition.y < -100)
-                position += transform.up * -(mouseInitial.y - Input.mousePosition.y) / 480;
-        }
+        // if (Input.GetKeyDown(KeyCode.Mouse2))
+        //     mouseInitial = Input.mousePosition;
+        // if (Input.GetKey(KeyCode.Mouse2))
+        // {
+        //     if (mouseInitial.x - Input.mousePosition.x > 100 || mouseInitial.x - Input.mousePosition.x < -100)
+        //         rotation.y -= (mouseInitial.x - Input.mousePosition.x) / 60;
+        //     if (mouseInitial.y - Input.mousePosition.y > 100 || mouseInitial.y - Input.mousePosition.y < -100)
+        //         position += transform.up * -(mouseInitial.y - Input.mousePosition.y) / 480;
+        // }
 
-        // Mouse Scroll Zoom
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-		desiredScrollposition = desiredScrollposition - scroll*scrollSensitivity ;
 
-		position.y=Mathf.Lerp(position.y, desiredScrollposition ,Time.deltaTime*scrollspeed);
-		// Shift Acelleration
-		if (Input.GetKey(KeyCode.LeftShift))
+        // Shift Acelleration
+        if (keyboard.shiftKey.isPressed)
             cameraSpeed = (_savedCameraSpeed * 2f);
         else
             cameraSpeed = _savedCameraSpeed;
+        
+        position= new Vector3(position.x,Mathf.Lerp(position.y, desiredScrollposition, Time.deltaTime * scrollspeed),position.z);
+        
+        //// Camera Collision Check
+        //Ray ray = new Ray(position, TheCamera.transform.forward);
+        //Physics.Raycast(ray, out _rayHit, 32, GroundLayer);
 
-		//// Camera Collision Check
-		//Ray ray = new Ray(position, TheCamera.transform.forward);
-		//Physics.Raycast(ray, out _rayHit, 32, GroundLayer);
+        //// Don't allow the camera to leave the ground area
+        //position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
+        position.y = Mathf.Clamp(position.y, cameraMinHeight, cameraMaxHeight);
+        //position.z = Mathf.Clamp(position.z, cameraBorder, mapZSize - cameraBorder);
 
-		//// Don't allow the camera to leave the ground area
-		//position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
-		position.y = Mathf.Clamp(position.y, cameraMinHeight,cameraMaxHeight);
-		//position.z = Mathf.Clamp(position.z, cameraBorder, mapZSize - cameraBorder);
+        //// Effects when camera hit the ground or the top surface
+        //if (position.y <= _rayHit.point.y + cameraMinHeight + 1)
+        //	rotation.x = 20;
+        //else if (position.y >= _rayHit.point.y + cameraMaxHeight - 1)
+        //	rotation.x = 70;
 
-		//// Effects when camera hit the ground or the top surface
-		//if (position.y <= _rayHit.point.y + cameraMinHeight + 1)
-		//	rotation.x = 20;
-		//else if (position.y >= _rayHit.point.y + cameraMaxHeight - 1)
-		//	rotation.x = 70;
-
-		// Save Changes
-		TheCamera.transform.position = Vector3.Slerp(TheCamera.transform.position, position, .8f);
+        // Save Changes
+        TheCamera.transform.position = Vector3.Slerp(TheCamera.transform.position, position, .8f);
         TheCamera.transform.eulerAngles = Vector3.Slerp(TheCamera.transform.eulerAngles, rotation, .2f);
     }
 
-	public void FocusOnMainBuilding(Vector3 mainbuildingPos)
-	{
-		float y = TheCamera.transform.position.y;
-		float rotation = TheCamera.transform.rotation.eulerAngles.x * Mathf.Deg2Rad ;
-		float offset = (y / Mathf.Tan(rotation));
-		float newZ = mainbuildingPos.z - offset;
-		TheCamera.transform.position = new Vector3(mainbuildingPos.x, y, newZ);
-	}
+
+
+    public void FocusOnMainBuilding(Vector3 mainbuildingPos)
+    {
+        float y = TheCamera.transform.position.y;
+        float rotation = TheCamera.transform.rotation.eulerAngles.x * Mathf.Deg2Rad;
+        float offset = (y / Mathf.Tan(rotation));
+        float newZ = mainbuildingPos.z - offset;
+        TheCamera.transform.position = new Vector3(mainbuildingPos.x, y, newZ);
+    }
 }
