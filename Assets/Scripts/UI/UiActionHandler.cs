@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UiActionHandler : MonoBehaviour
 {
@@ -8,12 +9,12 @@ public class UiActionHandler : MonoBehaviour
 		
 		if (tradeVehicle != null)
 		{
+			print(EventSystem.current.currentSelectedGameObject);
+			// tradeVehicle.holdUpDuration;
 			StartCoroutine(tradeVehicle.HoldUpCoroutine());
 			
 		}
 	}
-
-
 	public void DestroySelected()
 	{
 		Building buildingToDestroy = SelectionManager.instance.selectedObject.GetComponent<Building>();
