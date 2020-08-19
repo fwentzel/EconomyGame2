@@ -129,7 +129,7 @@ public class ContextUiManager : MonoBehaviour
 
     public void UpdateContextUi(TradeVehicle vehicle)
     {
-        tradeVehicleStopButton.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= vehicle.holdUpCost;
+        tradeVehicleStopButton.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= vehicle.holdUpCost ;
         tradeVechicleStopCostText.text = vehicle.holdUpCost.ToString();
     }
 

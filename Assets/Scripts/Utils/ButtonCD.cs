@@ -9,24 +9,30 @@ public class ButtonCD : MonoBehaviour
    float cd=5;
 
    float t=0;
+   float t0 =0;
    float amount=0;
 
-   Button button => GetComponent<Button>();
-
+   Button button;
+   private void Awake() {
+        //in start so it can get cached in TradeElement Start method
+         button = GetComponent<Button>();
+        
+   }
     public void SetUp(float cd){
         this.cd=cd;
-        this.button.interactable=false;
-        t=0;
+        button.interactable=false;
+        t0=Time.time;
         amount=0;
     }
 
    private void Update()
 	{
-        t+=Time.deltaTime;
+        button.interactable=false;//hacky solution since Resource change triggers Updatecontext where only check against resourceamount
+        t=Time.time-t0;
         amount =  t/cd;
         button.image.fillAmount = amount;
-
-        if (amount >= 1)
+ 
+        if (amount >= 1 )
         {
             button.image.fillAmount = 1;
             button.interactable=true;

@@ -3,14 +3,14 @@ using UnityEngine.EventSystems;
 
 public class UiActionHandler : MonoBehaviour
 {
-	public void HoldUpSelected()
+	public void HoldUpSelected(ButtonCD buttonCD)
 	{
 		TradeVehicle tradeVehicle = SelectionManager.instance.selectedObject.GetComponent<TradeVehicle>();
 		
 		if (tradeVehicle != null)
 		{
-			print(EventSystem.current.currentSelectedGameObject);
-			// tradeVehicle.holdUpDuration;
+			buttonCD.SetUp(tradeVehicle.holdUpDuration);
+			buttonCD.enabled=true;
 			StartCoroutine(tradeVehicle.HoldUpCoroutine());
 			
 		}
