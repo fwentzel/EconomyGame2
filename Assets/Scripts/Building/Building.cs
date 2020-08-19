@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Building : MonoBehaviour
+using UnityEngine.InputSystem;
+public class Building : MonoBehaviour, ISelectable
 {
 
 	public ResourceManager resourceManager;
@@ -18,13 +19,7 @@ public class Building : MonoBehaviour
 	int triggerBonuslevelAt = 4;
 	int maxLevel = 7;
 
-	private void OnMouseUp()
-	{
-		if (EventSystem.current.IsPointerOverGameObject() || PlacementController.instance.isPlacing)
-			return;
-			SelectionManager.instance.selectedObject = gameObject;
-		ContextUiManager.instance.OpenContext(this);
-	}
+
 
 	public bool LevelUp()
 	{

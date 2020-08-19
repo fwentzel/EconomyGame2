@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class PlacementController : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class PlacementController : MonoBehaviour
 	Mesh groundMesh;
 	int xSize;
 	int zSize;
+	Mouse mouse;
 
 	private void Awake()
 	{
@@ -25,6 +27,7 @@ public class PlacementController : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
+		mouse= Mouse.current;
 	}
 
 	public void SetupGridParameter()
@@ -42,24 +45,14 @@ public class PlacementController : MonoBehaviour
 	{
 		if (placeableObject != null)
 		{
-			GetMouseWorldPosition();
+			mousePos=Utils.GetMouseGroundPosition(mouse.position.ReadValue());
 			MoveCurrentObjectToMouse();
 			UpdateGridPosition();
 			CheckInput();
 		}
 	}
 
-	private void GetMouseWorldPosition()
-	{
-		//Get Mouseposition in World coordinates on Ground Collider
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hitInfo;
-		int layermask = LayerMask.GetMask("Ground");
-		if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layermask))
-		{
-			mousePos = hitInfo.point;
-		}
-	}
+	
 
 	private void MoveCurrentObjectToMouse()
 	{
@@ -99,14 +92,14 @@ public class PlacementController : MonoBehaviour
 
 	private void CheckInput()
 	{
-		if (Input.GetMouseButtonUp(0))
+		if (mouse.leftButton.wasReleasedThisFrame)
 		{
 			if (!EventSystem.current.IsPointerOverGameObject())
 			{
 				FinishBuildProcess();
 			}
 		}
-		if (Input.GetMouseButtonUp(1))
+		if (mouse.rightButton.wasReleasedThisFrame)
 		{
 			CancelBuildProcess();
 		}

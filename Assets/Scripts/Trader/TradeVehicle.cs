@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TradeVehicle : MonoBehaviour
+public class TradeVehicle : MonoBehaviour,ISelectable
 {
 	public int holdUpCost { get; private set; } = 150;
 	public int holdUpDuration { get; private set; } = 5;
@@ -18,7 +18,7 @@ public class TradeVehicle : MonoBehaviour
 	{
 		yield return new WaitForSeconds(timeBeforeUnload);
 		rm.ChangeRessourceAmount(trade.fromTrader.resource, trade.fromTraderAmount);
-		if (SelectionManager.instance.selectedObject = gameObject)
+		if (SelectionManager.instance.selectedObject == gameObject)
 		{
 			SelectionManager.instance.Deselect();
 		}
@@ -37,10 +37,6 @@ public class TradeVehicle : MonoBehaviour
 		isStopped = false;
 	}
 
-	private void OnMouseUp()
-	{
-		SelectionManager.instance.selectedObject = gameObject;
-		ContextUiManager.instance.OpenContext(this);
-	}
+	
 
 }

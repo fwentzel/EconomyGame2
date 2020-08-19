@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
+
 public class MessageSystem : MonoBehaviour
 {
     public static MessageSystem instance;
     [SerializeField] GameObject messagePanel = null;
     [SerializeField] Transform contentParent = null;
     [SerializeField] GameObject textPrefab = null;
+    [SerializeField] int maxMessages = 4;
+    int msgCount = 0;
     WaitForSeconds cachedWait = new WaitForSeconds(5);
 
     private void Awake()
@@ -28,9 +32,9 @@ public class MessageSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Keyboard.current.enterKey.wasReleasedThisFrame)
         {
-            Message("HAU REEEIINNN!",Color.red);
+            Message("HAU REEEIINNN!", Color.red);
         }
     }
 
@@ -48,13 +52,22 @@ public class MessageSystem : MonoBehaviour
     }
     public void Message(string message, Color color = default)
     {
-        GameObject newChatMessage = Instantiate(textPrefab, contentParent);
+        GameObject newChatMessage=null;
+        msgCount++;
+        if (msgCount <= maxMessages)
+        {
+            newChatMessage = Instantiate(textPrefab, contentParent);
+        }else{
+            Transform t =contentParent.GetChild(0);
+            newChatMessage=t.gameObject;
+            t.SetSiblingIndex(contentParent.childCount);
+        }
+
         TMP_Text chatText = newChatMessage.GetComponent<TMP_Text>();
-
+        message = "[" + GameManager.instance.dayIndex + "] " + message;
         chatText.text = message;
-        
-        chatText.color = color== default ? Color.black : color; 
-        showChat();
 
+        chatText.color = color == default ? Color.black : color;
+        showChat();
     }
 }

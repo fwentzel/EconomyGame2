@@ -56,7 +56,7 @@ public class CityResourceLookup : MonoBehaviour
         if (freeCitizens <= 0)
             return;
         string message = string.Format("Team {0} took up a citizen from team {1}!", resourceManager.mainbuilding.team,citizens[0].team);
-        MessageSystem.instance.Message(message, Color.green);
+        MessageSystem.instance.Message(message);
         Destroy(citizens[0].gameObject);
         freeCitizens--;
         resourceManager.ChangeRessourceAmount(resource.citizens, 1);
@@ -66,7 +66,7 @@ public class CityResourceLookup : MonoBehaviour
     {
         
         string message = string.Format("Team {0} lost a citizen!", resourceManager.mainbuilding.team);
-        MessageSystem.instance.Message(message, Color.red);
+        MessageSystem.instance.Message(message);
         freeCitizens++;
         resourceManager.ChangeRessourceAmount(resource.citizens, -1);
 
