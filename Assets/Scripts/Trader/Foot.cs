@@ -25,7 +25,6 @@ public class Foot : TradeVehicle
         }
         else
         {
-
             HandleNavMeshAgent();
         }
     }

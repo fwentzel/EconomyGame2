@@ -61,6 +61,7 @@ public class BuildingAi : BaseAi
 	{
 		buildingList = new Dictionary<Type, List<Building>>() {
 			{typeof(House),new List<Building>() },
+			{typeof(Harbour),new List<Building>() },
 			{typeof(Farm),new List<Building>() }
 		};
 

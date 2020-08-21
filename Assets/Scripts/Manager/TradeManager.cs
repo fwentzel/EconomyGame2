@@ -88,8 +88,8 @@ public class TradeManager : MonoBehaviour
 
             fromTrader = tradingResources[randomTradeValues[i, 2]],
             fromTraderAmount = randomTradeValues[i, 1] - 30,
-            //type = tradeType.ship
-            type = (tradeType)Enum.GetValues(typeof(tradeType)).GetValue(randomTradeValues[i, 3])
+            type = tradeType.ship
+            // type = (tradeType)Enum.GetValues(typeof(tradeType)).GetValue(randomTradeValues[i, 3])
 
         };
 

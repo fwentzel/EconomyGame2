@@ -42,7 +42,7 @@ public class TeamScoreElement : MonoBehaviour
         {//-1 to account for header
             Instantiate(this, parent);
         }
-        bool found = false;
+        
         for (int i = 0; i < resourceManagers.Length; i++)
         {
             //+1 to account for Header Child
