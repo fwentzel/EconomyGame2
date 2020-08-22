@@ -5,58 +5,65 @@ using UnityEngine.InputSystem;
 
 public class SelectionManager : MonoBehaviour
 {
-	public static SelectionManager instance { get; private set; }
-	public event Action OnSelectionChange = delegate { };
+    public static SelectionManager instance { get; private set; }
+    public event Action OnSelectionChange = delegate { };
 
-	public GameObject selectedObject
-	{
-		get => SelectedObject;
-		set => SetSelectedObject(value);
-	}
+    public GameObject selectedObject
+    {
+        get => SelectedObject;
+        set => SetSelectedObject(value);
+    }
 
 
-	private GameObject SelectedObject;
-	
-	Building building;
+    private GameObject SelectedObject;
 
-	Inputmaster input;
-	Mouse mouse;
+    Building building;
 
-	private void Awake()
-	{
-		//singleton Check
-		if (instance == null)
-			instance = this;
-		else
-			Destroy(this);
-		input=new Inputmaster();
-		input.Selection.Click.canceled += _ => GetObjectFromClick();
-		mouse=Mouse.current;
-	}
-	private void OnEnable() {
-		input.Enable();
-	}
+    Inputmaster input;
+    Mouse mouse;
 
-	private void GetObjectFromClick(){
-		if (EventSystem.current.IsPointerOverGameObject() || PlacementController.instance.isPlacing)
-			return;
-		GameObject obj =Utils.GetObjectAtMousePos(mouse.position.ReadValue());
+    private void Awake()
+    {
+        //singleton Check
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(this);
+        input = new Inputmaster();
+        input.Selection.Click.canceled += _ => GetObjectFromClick();
+        mouse = Mouse.current;
+    }
+    private void OnEnable()
+    {
+        input.Enable();
+    }
 
-		selectedObject = obj;
-		OnSelectionChange?.Invoke();
-		ContextUiManager.instance.OpenContext(obj);
-	}
-	private void SetSelectedObject(GameObject value)
-	{
-		SelectedObject = value;
-			
-	}
+    private void GetObjectFromClick()
+    {
+        if (EventSystem.current.IsPointerOverGameObject() || PlacementController.instance.isPlacing)
+            return;
+        GameObject obj = Utils.GetObjectAtMousePos(mouse.position.ReadValue());
+        if (obj == null)
+            return;
+        if (ContextUiManager.instance.OpenContext(obj))
+        {
+            selectedObject = obj;
+            OnSelectionChange?.Invoke();
+        }
 
-	public void Deselect()
-	{
-		SelectedObject = null;
-		ContextUiManager.instance.CloseContextMenus();
-		OnSelectionChange?.Invoke();
-	}
+
+    }
+    private void SetSelectedObject(GameObject value)
+    {
+        SelectedObject = value;
+
+    }
+
+    public void Deselect()
+    {
+        SelectedObject = null;
+        ContextUiManager.instance.CloseAll();
+        OnSelectionChange?.Invoke();
+    }
 
 }

@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UiActionHandler : MonoBehaviour
 {
-	public void HoldUpSelected()
+	public void HoldUpSelected(ButtonCD buttonCD)
 	{
 		TradeVehicle tradeVehicle = SelectionManager.instance.selectedObject.GetComponent<TradeVehicle>();
 		
 		if (tradeVehicle != null)
 		{
+			buttonCD.SetUp(tradeVehicle.holdUpDuration);
+			buttonCD.enabled=true;
 			StartCoroutine(tradeVehicle.HoldUpCoroutine());
 			
 		}
 	}
-
-
 	public void DestroySelected()
 	{
 		Building buildingToDestroy = SelectionManager.instance.selectedObject.GetComponent<Building>();

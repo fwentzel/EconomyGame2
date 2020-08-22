@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ContextUiManager : MonoBehaviour
@@ -29,7 +30,7 @@ public class ContextUiManager : MonoBehaviour
         else
             Destroy(this);
         SetupUiElements();
-        CloseContextMenus();
+        CloseAll();
     }
 
     private void Start()
@@ -70,25 +71,33 @@ public class ContextUiManager : MonoBehaviour
         tradeVechicleStopCostText = tradeVehicleStopButton.GetComponentInChildren<Text>();
     }
 
-    public void OpenContext(GameObject obj)
+    public bool OpenContext(GameObject obj)
     {
         TradeVehicle vehicle = obj.GetComponent<ISelectable>() as TradeVehicle;
         if (vehicle != null)
+        {
             OpenContext(vehicle);
+            return true;
+        }
         Building building = obj.GetComponent<ISelectable>() as Building;
         if (building != null)
+        {
             OpenContext(building);
+            return true;
+        }
+        CloseAll();
+        return false;
     }
     public void OpenContext(TradeVehicle vehicle)
     {
-        CloseContextMenus();
+        CloseAll();
         tradeVehicleContextPanel.gameObject.SetActive(true);
         UpdateContextUi(vehicle);
     }
 
     public void OpenContext(Building building)
     {
-        CloseContextMenus();
+        CloseAll();
         if (building is Mainbuilding)
         {
             mainbuildingContextPanel.gameObject.SetActive(true);
@@ -120,11 +129,11 @@ public class ContextUiManager : MonoBehaviour
 
     public void UpdateContextUi(TradeVehicle vehicle)
     {
-        tradeVehicleStopButton.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= vehicle.holdUpCost;
+        tradeVehicleStopButton.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= vehicle.holdUpCost ;
         tradeVechicleStopCostText.text = vehicle.holdUpCost.ToString();
     }
 
-    public void CloseContextMenus()
+    public void CloseAll()
     {
         mainbuildingContextPanel.gameObject.SetActive(false);
         buildingContextPanel.gameObject.SetActive(false);

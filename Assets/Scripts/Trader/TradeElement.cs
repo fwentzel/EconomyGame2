@@ -15,7 +15,7 @@ public class TradeElement : MonoBehaviour
 
 	[SerializeField] Button acceptButton = null;
 
-
+	public ButtonCD buttonCD {get;private set;}
 	public bool accepted { get; private set; } = false;
 	public bool isOnCd { get; private set; } = false;
 
@@ -27,6 +27,7 @@ public class TradeElement : MonoBehaviour
 	private void Awake()
 	{
 		acceptButton.onClick.AddListener(delegate () { TradeAccepted(); });
+		buttonCD=acceptButton.GetComponent<ButtonCD>();
 	}
 
 	private void Start()
@@ -100,10 +101,15 @@ public class TradeElement : MonoBehaviour
 		MessageSystem.instance.Message("you accepted following Trade: "+ trade.ToString());
 		ResourceManager rm = GameManager.instance.localPlayer.mainbuilding.resourceManager;
 		TradeManager.instance.AcceptTrade(trade, rm);
+
 		foreach (TradeElement elem in TradeManager.instance.tradeElements)
 		{
-			elem.isOnCd=true;
-			elem.cd = TradeManager.instance.tradeCooldowns[rm];
+			elem.buttonCD.SetUp(TradeManager.instance.tradeCooldown);
+			elem.buttonCD.enabled=true;
+			
+			
+			// elem.isOnCd=true;
+			// elem.cd = TradeManager.instance.tradeCooldowns[rm];
 		}
 	}
 

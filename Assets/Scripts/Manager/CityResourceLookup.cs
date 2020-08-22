@@ -58,6 +58,7 @@ public class CityResourceLookup : MonoBehaviour
         string message = string.Format("Team {0} took up a citizen from team {1}!", resourceManager.mainbuilding.team,citizens[0].team);
         MessageSystem.instance.Message(message);
         Destroy(citizens[0].gameObject);
+        citizens.RemoveAt(0);
         freeCitizens--;
         resourceManager.ChangeRessourceAmount(resource.citizens, 1);
     }

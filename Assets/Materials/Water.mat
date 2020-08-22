@@ -23,15 +23,15 @@ Material:
     m_Floats:
     - EmergeWaveSpeed: 2.65
     - FalloffDist: 3.42
-    - RippleDensity: 185.82
-    - RippleSlimness: 10.04
+    - RippleDensity: 450.21
+    - RippleSlimness: 5.3
     - StartTime: -999
-    - Vector1_168C3FA6: 0
-    - Vector1_1A04170B: 0.84
+    - Vector1_168C3FA6: 0.59
+    - Vector1_1A04170B: 4.23
     - Vector1_3B82857A: 0
-    - Vector1_4B6860EC: 1.49
+    - Vector1_4B6860EC: 1.62
     - Vector1_54C9BD44: 0.57
-    - Vector1_62EFEF7D: 0.49
+    - Vector1_62EFEF7D: -0.44
     - Vector1_6F6CD7ED: 0.04
     - Vector1_7494CC42: 0.1
     - Vector1_828E09F1: 1.53
@@ -45,9 +45,9 @@ Material:
     - YOffset: -0.36
     - isEditor: 0
     m_Colors:
-    - Color_5868A3DB: {r: 0.9763621, g: 1.1031084, b: 1.9713216, a: 1}
-    - RippleColor: {r: 0, g: 0, b: 0, a: 0.2784314}
+    - Color_5868A3DB: {r: 0.012070045, g: 0.023536587, b: 0.057634465, a: 0.2901961}
+    - RippleColor: {r: 0.0979441, g: 0.11645126, b: 0.6698113, a: 0.20392157}
     - Vector2_2D24956B: {r: -0.02, g: 0.02, b: 0, a: 0}
     - Vector2_847799B5: {r: 0.05, g: -0.01, b: 0, a: 0}
-    - WaterColor: {r: 0.08938757, g: 0, b: 1, a: 0.5058824}
+    - WaterColor: {r: 0.08938751, g: 0, b: 1, a: 0.49019608}
   m_BuildTextureStacks: []
