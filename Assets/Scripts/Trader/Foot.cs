@@ -6,7 +6,7 @@ public class Foot : TradeVehicle
 {
     bool landed = false;
     public float fallSpeed = 1;
-    NavMeshAgent agent;
+   
 
     public override void SetUp(ResourceManager resourceManager, Trade trade)
     {
@@ -34,7 +34,6 @@ public class Foot : TradeVehicle
         if (!agent.hasPath)
             agent.SetDestination(rm.transform.position);
 
-        agent.isStopped = isStopped;
         float dist = agent.remainingDistance;
         if (dist != 0 && dist < 1f)
         {

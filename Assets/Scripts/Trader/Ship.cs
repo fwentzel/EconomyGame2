@@ -12,7 +12,6 @@ public class Ship : TradeVehicle
     Animator animator;
     float startTime;
     MapGenerator generator;
-    NavMeshAgent agent;
 
     Transform child => transform.GetChild(0);
 
