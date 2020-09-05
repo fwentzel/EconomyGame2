@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 public class Building : MonoBehaviour, ISelectable
 {
 
 	public ResourceManager resourceManager;
 	public int team = -1;
-	public Sprite sprite;
+	public  RenderTexture renderTexture;
 
 	[SerializeField] Mesh[] meshlevels=null;
 
