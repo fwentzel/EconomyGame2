@@ -9,7 +9,7 @@ public class BuildingAi : BaseAi
 	List<Vector2> availableBuildSpots;
 	int oldEnd;
 
-	public BuildingAi(Mainbuilding mainbuilding) : base(mainbuilding)
+	public BuildingAi(AiMaster master) : base(master)
 	{
 		GetSpecificsFromBuilding();
 		GetAvailableBuildSpots(1,2);
@@ -84,9 +84,9 @@ public class BuildingAi : BaseAi
 			if (building.LevelUp())
 				break;
 		}
-
-		if (gold < buildingList[type][0].buildCost)
+		if (buildingList[type].Count>0&&gold < buildingList[type][0].buildCost)
 			return typeof(TradeAi);
+
 		//Didnt Level up Farm, so we need a new one
 		Log(" Added " + type.ToString());
 		Vector3 pos = GetAvailablePosition();
@@ -96,9 +96,9 @@ public class BuildingAi : BaseAi
 
 	private void PlaceBuilding(Type type, Vector3 pos)
 	{
-		resourceManager.ChangeRessourceAmount(resource.gold, -buildingList[type][0].buildCost);
 		Building addedBuilding= mainbuilding.AddBuilding(type, pos);
 		buildingList[type].Add(addedBuilding);
+		resourceManager.ChangeRessourceAmount(resource.gold, -buildingList[type][0].buildCost);
 	}
 
 	private Vector3 GetAvailablePosition()

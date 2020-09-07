@@ -6,9 +6,12 @@ public abstract class BaseAi
 	public Mainbuilding mainbuilding;
 	public ResourceManager resourceManager;
 
-	public BaseAi(Mainbuilding mainbuilding)
+	AiMaster master;
+
+	public BaseAi(AiMaster master)
 	{
-		this.mainbuilding = mainbuilding;
+		this.master=master;
+		mainbuilding = master.mainbuilding;
 		resourceManager = mainbuilding.resourceManager;
 	}
 

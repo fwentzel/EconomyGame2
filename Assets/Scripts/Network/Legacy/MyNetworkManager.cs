@@ -24,10 +24,14 @@ public class MyNetworkManager : MonoBehaviour
 			Destroy(this);
 
 		
+
+		
 	}
 
 	private void Start()
 	{
+		maxConnections=FindObjectsOfType<Mainbuilding>().Length;
+		GameManager.instance.players = new Player[maxConnections];
 		OnServerAddPlayer();
 	}
 

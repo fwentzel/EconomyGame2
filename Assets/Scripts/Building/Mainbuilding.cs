@@ -22,10 +22,10 @@ public class Mainbuilding : Building
 		resourceManager.mainbuilding = this;
 	}
 
-	public void SetupMainBuilding()
+	public void SetupMainBuilding(bool isAi)
 	{
 		PopulateBuildungs();
-		if (GameManager.instance.players[team].isAi)
+		if (isAi)
 		{
 			//Add AI Elements
 			gameObject.AddComponent<StateMachine>();

@@ -5,7 +5,7 @@ public class TradeAi : BaseAi
 {
 	float safePercentOfResource = .1f;
 
-	public TradeAi(float safePercentOfResource,Mainbuilding mainbuilding):base(mainbuilding)
+	public TradeAi(float safePercentOfResource,AiMaster master) : base(master)
 	{
 		this.safePercentOfResource = safePercentOfResource;
 	}
@@ -25,10 +25,9 @@ public class TradeAi : BaseAi
 			{
 				Log("traded Safe");
 				TradeManager.instance.AcceptTrade(trade, resourceManager);
-				return typeof(TaxesAi);
 			}
 		}
 		Log("nothing to Trade ");
-		return typeof(BuildingAi);
+		return typeof(TradeVehicleAi);
 	}
 }

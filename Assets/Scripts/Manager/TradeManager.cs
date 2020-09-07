@@ -19,7 +19,9 @@ public class TradeManager : MonoBehaviour
     [SerializeField] Resource[] tradingResources = null;
     [SerializeField] GameObject tradeUiPanel = null;
 
-	public TradeTypeToPrefab[] tradeTypePrefabMap=default;
+    public TradeTypeToPrefab[] tradeTypePrefabMap = default;
+
+    public List<TradeVehicle> tradeVehicles { get; private set; } = new List<TradeVehicle>();
 
 
     MapGenerator generator;
@@ -88,8 +90,8 @@ public class TradeManager : MonoBehaviour
 
             fromTrader = tradingResources[randomTradeValues[i, 2]],
             fromTraderAmount = randomTradeValues[i, 1] - 30,
-            type = tradeType.ship
-            // type = (tradeType)Enum.GetValues(typeof(tradeType)).GetValue(randomTradeValues[i, 3])
+            // type = tradeType.ship
+            type = (tradeType)Enum.GetValues(typeof(tradeType)).GetValue(randomTradeValues[i, 3])
 
         };
 
@@ -144,20 +146,21 @@ public class TradeManager : MonoBehaviour
 
     private void SpawnVehicle(Trade trade, ResourceManager rm)
     {
-		GameObject prefab = null;
-		foreach (var item in tradeTypePrefabMap)
-		{
-			if(item.tradeType == trade.type)
-				prefab=item.prefab;
-		}
-		if(prefab==null)
-		{
-			Debug.LogWarning("Unknown Tradetype for tradetype to Pefab mapping!");
-			return;
-		}
+        GameObject prefab = null;
+        foreach (var item in tradeTypePrefabMap)
+        {
+            if (item.tradeType == trade.type)
+                prefab = item.prefab;
+        }
+        if (prefab == null)
+        {
+            Debug.LogWarning("Unknown Tradetype for tradetype to Pefab mapping!");
+            return;
+        }
         GameObject obj = Instantiate(prefab, new Vector3(0, 40, 0), Quaternion.identity);
-        var vehicle = obj.GetComponent<TradeVehicle>();
-		vehicle.SetUp(rm,trade);
+        TradeVehicle vehicle = obj.GetComponent<TradeVehicle>();
+        vehicle.SetUp(rm, trade);
+        tradeVehicles.Add(vehicle);
 
     }
 
@@ -176,5 +179,5 @@ public enum tradeType
     ship,
     foot,
     instant,
-	
+
 }

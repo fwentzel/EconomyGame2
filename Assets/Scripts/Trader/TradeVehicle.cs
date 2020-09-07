@@ -4,10 +4,10 @@ using UnityEngine.AI;
 
 public class TradeVehicle : MonoBehaviour,ISelectable
 {
-	public int holdUpCost { get; private set; } = 150;
+	public int holdUpCost { get; private set; } = 500;
 	public int holdUpDuration { get; private set; } = 5;
-	internal Trade trade;
-	internal ResourceManager rm;
+	Trade trade;
+	protected ResourceManager rm;
 	protected NavMeshAgent agent;
 
   public virtual void SetUp(ResourceManager resourceManager,Trade trade){
@@ -23,6 +23,7 @@ public class TradeVehicle : MonoBehaviour,ISelectable
 		{
 			SelectionManager.instance.Deselect();
 		}
+		TradeManager.instance.tradeVehicles.Remove(this);
 		Destroy(gameObject);
 	}
 
