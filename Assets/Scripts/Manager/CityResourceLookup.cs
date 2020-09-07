@@ -30,10 +30,10 @@ public class CityResourceLookup : MonoBehaviour
     }
 
 
-    public void PopulateResourceManagers()
+    public void PopulateResourceManagers(int numManagers)
     {
         Player[] players = GameManager.instance.players;
-        resourceManagers = new ResourceManager[players.Length];
+        resourceManagers = new ResourceManager[numManagers];
 
         for (int i = 0; i < resourceManagers.Length; i++)
         {

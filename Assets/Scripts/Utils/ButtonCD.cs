@@ -13,9 +13,12 @@ public class ButtonCD : MonoBehaviour
    float amount=0;
 
    Button button;
+   //Hacky solution to keep Tradeelemt non-interactable after cd
+   TradeElement tradeElement = null;
    private void Awake() {
         //in start so it can get cached in TradeElement Start method
          button = GetComponent<Button>();
+         tradeElement=transform.parent.GetComponent<TradeElement>();
         
    }
     public void SetUp(float cd){
@@ -36,6 +39,12 @@ public class ButtonCD : MonoBehaviour
         {
             button.image.fillAmount = 1;
             button.interactable=true;
+
+            //Hacky solution to keep Tradeelemt non-interactable after cd
+            if(tradeElement!=null){
+                tradeElement.checkInteractable();
+            }
+            
             enabled=false;
         }
 		

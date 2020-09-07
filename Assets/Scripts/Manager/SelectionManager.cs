@@ -45,9 +45,9 @@ public class SelectionManager : MonoBehaviour
         GameObject obj = Utils.GetObjectAtMousePos(mouse.position.ReadValue());
         if (obj == null)
             return;
+        selectedObject = obj;
         if (ContextUiManager.instance.OpenContext(obj))
         {
-            selectedObject = obj;
             OnSelectionChange?.Invoke();
         }
 

@@ -71,7 +71,7 @@ public class TradeElement : MonoBehaviour
 		EnableElement();
 	}
 
-	private void checkInteractable()
+	public void checkInteractable()
 	{
 		bool interactable = localRM.GetAmount(trade.toTrader.resource) > trade.toTraderAmount
 							&& accepted == false

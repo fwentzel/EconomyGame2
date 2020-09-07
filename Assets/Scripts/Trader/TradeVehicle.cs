@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
 public class TradeVehicle : MonoBehaviour,ISelectable
 {
-	public int holdUpCost { get; private set; } = 150;
+	public int holdUpCost { get; private set; } = 500;
 	public int holdUpDuration { get; private set; } = 5;
-	internal Trade trade;
-	internal ResourceManager rm;
-	internal bool isStopped=false;
+	Trade trade;
+	protected ResourceManager rm;
+	protected NavMeshAgent agent;
 
   public virtual void SetUp(ResourceManager resourceManager,Trade trade){
 	  rm=resourceManager;
@@ -22,6 +23,7 @@ public class TradeVehicle : MonoBehaviour,ISelectable
 		{
 			SelectionManager.instance.Deselect();
 		}
+		TradeManager.instance.tradeVehicles.Remove(this);
 		Destroy(gameObject);
 	}
 
@@ -32,9 +34,10 @@ public class TradeVehicle : MonoBehaviour,ISelectable
 			rm = ResourceUiManager.instance.activeResourceMan;
 
 		rm.ChangeRessourceAmount(resource.gold, -holdUpCost);
-		isStopped = true;
+
+		agent.isStopped = true;
 		yield return new WaitForSeconds(holdUpDuration);
-		isStopped = false;
+		agent.isStopped  = false;
 	}
 
 	
