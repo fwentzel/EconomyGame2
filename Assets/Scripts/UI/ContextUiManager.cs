@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ContextUiManager : MonoBehaviour
 {
     public static ContextUiManager instance { get; private set; }
 
     Transform buildingContextPanel = null;
-    Text buildingContextUiText;
+    TMP_Text buildingContextUiText;
     Button buildingContextUiLevelUpButton;
-    Text buildingContextUiLevelCostText;
+    TMP_Text buildingContextUiLevelCostText;
 
     Transform mainbuildingContextPanel = null;
-    Text mainbuildingContextUiText;
-    Text mainbuildingContextUiTaxesText;
+    TMP_Text mainbuildingContextUiText;
+    TMP_Text mainbuildingContextUiTaxesText;
     Slider mainbuildingContextUiTaxesSlider;
 
     Transform tradeVehicleContextPanel = null;
     Button tradeVehicleStopButton;
-    Text tradeVechicleStopCostText;
+    TMP_Text tradeVechicleStopCostText;
 
     // Use this for initialization
     private void Awake()
@@ -59,16 +60,16 @@ public class ContextUiManager : MonoBehaviour
         mainbuildingContextPanel = transform.Find("MainBuildingContextPanel");
         tradeVehicleContextPanel = transform.Find("TraderVehicleContextPanel");
 
-        buildingContextUiText = buildingContextPanel.GetChild(0).Find("ContextText").GetComponent<Text>();
+        buildingContextUiText = buildingContextPanel.GetChild(0).Find("ContextText").GetComponent<TMP_Text>();
         buildingContextUiLevelUpButton = buildingContextPanel.GetChild(0).Find("LevelUpButton").GetComponent<Button>();
-        buildingContextUiLevelCostText = buildingContextUiLevelUpButton.GetComponentInChildren<Text>();
+        buildingContextUiLevelCostText = buildingContextUiLevelUpButton.GetComponentInChildren<TMP_Text>();
 
-        mainbuildingContextUiText = mainbuildingContextPanel.GetChild(0).Find("ContextText").GetComponent<Text>();
-        mainbuildingContextUiTaxesText = mainbuildingContextPanel.GetChild(0).Find("TaxesText").GetComponent<Text>();
+        mainbuildingContextUiText = mainbuildingContextPanel.GetChild(0).Find("ContextText").GetComponent<TMP_Text>();
+        mainbuildingContextUiTaxesText = mainbuildingContextPanel.GetChild(0).Find("TaxesText").GetComponent<TMP_Text>();
         mainbuildingContextUiTaxesSlider = mainbuildingContextPanel.GetChild(0).GetComponentInChildren<Slider>();
 
         tradeVehicleStopButton = tradeVehicleContextPanel.GetChild(0).Find("HoldUpButton").GetComponent<Button>(); ;
-        tradeVechicleStopCostText = tradeVehicleStopButton.GetComponentInChildren<Text>();
+        tradeVechicleStopCostText = tradeVehicleStopButton.GetComponentInChildren<TMP_Text>();
     }
 
     public bool OpenContext(GameObject obj)
