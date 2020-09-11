@@ -16,7 +16,7 @@ public class Building : MonoBehaviour, ISelectable
 	public int level { get; private set; } = 1;
 	public bool canLevelUp { get; private set; } = false;
 
-	int triggerBonuslevelAt = 4;
+	int triggerBonuslevelEvery = 3;
 	int maxLevel = 7;
 
 
@@ -32,7 +32,7 @@ public class Building : MonoBehaviour, ISelectable
 
 	protected virtual void OnLevelUp()
 	{
-		if (level == triggerBonuslevelAt || level == maxLevel)
+		if (level % triggerBonuslevelEvery ==0 || level == maxLevel)
 			TriggerBonusLevel();
 
 		resourceManager.ChangeRessourceAmount(resource.gold, -levelCost);

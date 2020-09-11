@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 
@@ -72,6 +73,9 @@ public class CameraController : MonoBehaviour
 
     private void Height(float v)
     {
+        if(EventSystem.current.IsPointerOverGameObject()){
+            return;
+        }
         v/=120;        
         desiredScrollposition =Mathf.Clamp(desiredScrollposition - v * scrollSensitivity, cameraMinHeight, cameraMaxHeight); ;
 

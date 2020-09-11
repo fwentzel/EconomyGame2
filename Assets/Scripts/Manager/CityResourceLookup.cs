@@ -55,25 +55,37 @@ public class CityResourceLookup : MonoBehaviour
     {
         if (freeCitizens <= 0)
             return;
-        string message = string.Format("Team {0} took up a citizen from team {1}!", resourceManager.mainbuilding.team,citizens[0].team);
-        MessageSystem.instance.Message(message);
+        string message = string.Format("Team {0} took up a citizen from team {1}!", resourceManager.mainbuilding.team, citizens[0].team);
+        MessageSystem.instance.Message(message, Color.green);
         Destroy(citizens[0].gameObject);
         citizens.RemoveAt(0);
         freeCitizens--;
-        resourceManager.ChangeRessourceAmount(resource.citizens, 1);
+        foreach (House house in resourceManager.mainbuilding.buildings.FindAll(delegate (Building building){return building.GetType() == typeof(House);}))
+        {
+            if(house.currentAmount<house.capacity){
+                house.ChangeCitizenAmount(1);
+                break;
+            }
+        }
     }
 
     internal void LooseCitizen(ResourceManager resourceManager)
     {
-        
         string message = string.Format("Team {0} lost a citizen!", resourceManager.mainbuilding.team);
         MessageSystem.instance.Message(message);
         freeCitizens++;
-        resourceManager.ChangeRessourceAmount(resource.citizens, -1);
+        
+         foreach (House house in resourceManager.mainbuilding.buildings.FindAll(x => x.GetType() == typeof(House)))
+        {
+            if(house.currentAmount>0){
+                house.ChangeCitizenAmount(-1);
+                break;
+            }
+        }
 
         GameObject citizen = Instantiate(citizenPrefab, resourceManager.transform.position, Quaternion.identity);
-        Citizen citizenComponent =citizen.GetComponent<Citizen>();
-        citizen.GetComponent<Citizen>().team=resourceManager.mainbuilding.team;
+        Citizen citizenComponent = citizen.GetComponent<Citizen>();
+        citizen.GetComponent<Citizen>().team = resourceManager.mainbuilding.team;
         citizens.Add(citizenComponent);
     }
 }
