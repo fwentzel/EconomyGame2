@@ -74,31 +74,39 @@ public class ContextUiManager : MonoBehaviour
 
     public bool OpenContext(GameObject obj)
     {
-        TradeVehicle vehicle = obj.GetComponent<ISelectable>() as TradeVehicle;
+        CloseAll();
+        var selectable = obj.GetComponent<ISelectable>();
+
+
+        TradeVehicle vehicle = selectable as TradeVehicle;
         if (vehicle != null)
         {
+            //You shouldnt be able to hold up your own vehicle
+            if (selectable.GetTeam() == GameManager.instance.localPlayer.team)
+                return false;
+
             OpenContext(vehicle);
             return true;
         }
-        Building building = obj.GetComponent<ISelectable>() as Building;
+        Building building = selectable as Building;
         if (building != null)
         {
+            if (selectable.GetTeam() != GameManager.instance.localPlayer.team)
+                return false;
+
             OpenContext(building);
             return true;
         }
-        CloseAll();
         return false;
     }
     public void OpenContext(TradeVehicle vehicle)
     {
-        CloseAll();
         tradeVehicleContextPanel.gameObject.SetActive(true);
         UpdateContextUi(vehicle);
     }
 
     public void OpenContext(Building building)
     {
-        CloseAll();
         if (building is Mainbuilding)
         {
             mainbuildingContextPanel.gameObject.SetActive(true);
@@ -117,7 +125,7 @@ public class ContextUiManager : MonoBehaviour
     public void UpdateContextUi(Building building)
     {
         buildingContextUiText.text = building.GetStats();
-        buildingContextUiLevelCostText.text = building.levelCost.ToString();
+        buildingContextUiLevelCostText.text = building.GetLevelCostString();
         buildingContextUiLevelUpButton.interactable = building.CheckCanLevelUp();
     }
 
@@ -130,7 +138,7 @@ public class ContextUiManager : MonoBehaviour
 
     public void UpdateContextUi(TradeVehicle vehicle)
     {
-        tradeVehicleStopButton.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= vehicle.holdUpCost ;
+        tradeVehicleStopButton.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= vehicle.holdUpCost;
         tradeVechicleStopCostText.text = vehicle.holdUpCost.ToString();
     }
 

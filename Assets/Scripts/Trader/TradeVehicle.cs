@@ -40,6 +40,8 @@ public class TradeVehicle : MonoBehaviour,ISelectable
 		agent.isStopped  = false;
 	}
 
-	
-
+    public int GetTeam()
+    {
+        return rm.mainbuilding.team;
+    }
 }
