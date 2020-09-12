@@ -154,6 +154,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Farm
       objectReference: {fileID: 0}
+    - target: {fileID: 7070096531567707203, guid: f6b27aee87d74ed42943019371c2ead7,
+        type: 3}
+      propertyPath: m_Extents.y
+      value: 0.215
+      objectReference: {fileID: 0}
+    - target: {fileID: 7070096531567707203, guid: f6b27aee87d74ed42943019371c2ead7,
+        type: 3}
+      propertyPath: m_Extents.x
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7070096531567707203, guid: f6b27aee87d74ed42943019371c2ead7,
+        type: 3}
+      propertyPath: m_Extents.z
+      value: 0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3713326425922523391, guid: f6b27aee87d74ed42943019371c2ead7, type: 3}
     - {fileID: 4320241627775136609, guid: f6b27aee87d74ed42943019371c2ead7, type: 3}

@@ -67,6 +67,7 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         CheckSettings();
+        TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
         //controls.Camera.Move.performed+= ctx => Move(ctx.ReadValue<Vector2>());
         controls.Camera.Height.performed += ctx => Height(ctx.ReadValue<float>());
     }
