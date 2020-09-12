@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class UiManager : MonoBehaviour
 {
     public static UiManager instance { get; private set; }
@@ -12,7 +12,7 @@ public class UiManager : MonoBehaviour
     Transform menuPanel;
     Transform scoreboardPanel;
     GameObject newTradesTimerParent;
-    Text newTradesInText;
+    TMP_Text newTradesInText;
     Image newTradesInImage;
 
     Inputmaster input;
@@ -51,7 +51,7 @@ public class UiManager : MonoBehaviour
         traderPanel = transform.Find("TraderPanel");
 
         newTradesTimerParent = traderPanel.transform.Find("Timer").gameObject;
-        newTradesInText = newTradesTimerParent.transform.Find("NewTradesTimerText").GetComponent<Text>();
+        newTradesInText = newTradesTimerParent.transform.Find("NewTradesTimerText").GetComponent<TMP_Text>();
         newTradesInImage = newTradesTimerParent.transform.Find("NewTradeTimerForeground").GetComponent<Image>();
     }
     public void OpenMenu(GameObject menuToOpen)

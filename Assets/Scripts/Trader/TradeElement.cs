@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; 
 public class TradeElement : MonoBehaviour
 {
 	[SerializeField] Image toTraderImage = null;
-	[SerializeField] Text toTraderAmountText = null;
+	[SerializeField] TMP_Text toTraderAmountText = null;
 
 	[SerializeField] Image fromTraderImage = null;
-	[SerializeField] Text fromTraderAmountText = null;
+	[SerializeField] TMP_Text fromTraderAmountText = null;
 
-	[SerializeField] Text titleText = null;
+	[SerializeField] TMP_Text titleText = null;
 
-	[SerializeField] Text tradeTypeText = null;
+	[SerializeField] TMP_Text tradeTypeText = null;
 
 	[SerializeField] Button acceptButton = null;
 
