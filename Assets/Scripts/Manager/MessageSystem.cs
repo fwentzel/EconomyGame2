@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,7 @@ public class MessageSystem : MonoBehaviour
     [SerializeField] Transform contentParent = null;
     [SerializeField] GameObject textPrefab = null;
     [SerializeField] int maxMessages = 4;
+    Scrollbar scrollbar => messagePanel.GetComponent<ScrollRect>().verticalScrollbar;
     int msgCount = 0;
     WaitForSeconds cachedWait = new WaitForSeconds(5);
 
@@ -34,8 +36,9 @@ public class MessageSystem : MonoBehaviour
     {
         if (Keyboard.current.enterKey.wasReleasedThisFrame)
         {
-            Message("HAU REEEIINNN!", Color.red);
+            showChat();
         }
+
     }
 
     IEnumerator hideChat()
@@ -48,24 +51,33 @@ public class MessageSystem : MonoBehaviour
     {
         StopAllCoroutines();
         messagePanel.SetActive(true);
+        scrollbar.value = 0;
         StartCoroutine(hideChat());
     }
+    TMP_Text chatText;
     public void Message(string message, Color color = default)
     {
-        GameObject newChatMessage=null;
+        GameObject newChatMessage = null;
         msgCount++;
         if (msgCount <= maxMessages)
         {
             newChatMessage = Instantiate(textPrefab, contentParent);
-        }else{
-            Transform t =contentParent.GetChild(0);
-            newChatMessage=t.gameObject;
+        }
+        else
+        {
+            Transform t = contentParent.GetChild(0);
+            newChatMessage = t.gameObject;
             t.SetSiblingIndex(contentParent.childCount);
         }
 
-        TMP_Text chatText = newChatMessage.GetComponent<TMP_Text>();
+        chatText = newChatMessage.GetComponent<TMP_Text>();
         message = "[" + GameManager.instance.dayIndex + "] " + message;
         chatText.text = message;
+        chatText.GetTextInfo(message);
+        
+        RectTransform rect = newChatMessage.GetComponent<RectTransform>();
+
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y * chatText.textInfo.lineCount );
 
         chatText.color = color == default ? Color.black : color;
         showChat();
