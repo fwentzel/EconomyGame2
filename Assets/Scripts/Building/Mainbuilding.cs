@@ -45,7 +45,7 @@ public class Mainbuilding : Building
 		}
 
 		possibleBuildings = new Dictionary<Type, GameObject>();
-		foreach (ColorToObject cto in FindObjectOfType<MapGenerator>().colorObjectMappings)
+		foreach (ColorToObject cto in FindObjectOfType<MapGenerator>().colorToObjectMapping.colorObjectMappings)
 		{
 			Building building;
 			if ((building = cto.placeable.GetComponent<Building>()) != null)

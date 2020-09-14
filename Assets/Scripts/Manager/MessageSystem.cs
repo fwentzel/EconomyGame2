@@ -37,7 +37,10 @@ public class MessageSystem : MonoBehaviour
         if (Keyboard.current.enterKey.wasReleasedThisFrame)
         {
             showChat();
+            
         }
+
+        
 
     }
 
@@ -73,11 +76,7 @@ public class MessageSystem : MonoBehaviour
         chatText = newChatMessage.GetComponent<TMP_Text>();
         message = "[" + GameManager.instance.dayIndex + "] " + message;
         chatText.text = message;
-        chatText.GetTextInfo(message);
         
-        RectTransform rect = newChatMessage.GetComponent<RectTransform>();
-
-        rect.sizeDelta = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y * chatText.textInfo.lineCount );
 
         chatText.color = color == default ? Color.black : color;
         showChat();

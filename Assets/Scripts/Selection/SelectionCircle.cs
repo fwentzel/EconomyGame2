@@ -10,7 +10,9 @@ public class SelectionCircle : MonoBehaviour
 	bool isMovable = true;
 	float offset = 0;
 	// Update is called once per frame
-
+	private void Awake() {
+		spr.enabled = false;
+	}
 	private void Start()
 	{
 		SelectionManager.instance.OnSelectionChange += updateTransform;

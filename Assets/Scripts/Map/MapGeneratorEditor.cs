@@ -9,7 +9,6 @@ public class MapGeneratorEditor : Editor
 	//Custom inspector with button to generate map in edit mode
 	public override void OnInspectorGUI()
 	{
-		DrawDefaultInspector();
 		MapGenerator myTarget = (MapGenerator)target;		
 
 		//Display Button to activate the Mapgeneration in the Mapgenerator Script
@@ -17,6 +16,7 @@ public class MapGeneratorEditor : Editor
 		{
 			myTarget.GenerateMap();
 		}
+		DrawDefaultInspector();
 	}
 
 }

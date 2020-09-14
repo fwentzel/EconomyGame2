@@ -15,8 +15,8 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] Material material = null;
 
     [SerializeField] Team[] teams = null;
-    public ColorToObject[] colorObjectMappings;
-    [SerializeField] ColorToHeight[] colorHeightMappings = null;
+    public ColorToObjectMapping colorToObjectMapping;
+    public ColorToHeightMapping colorToHeightMapping;
 
     Mesh waterMesh;
     public int gridSpacing { get; private set; } = 1;
@@ -62,12 +62,12 @@ public class MapGenerator : MonoBehaviour
         xSize = mapTexture.width - mapTexture.width % 2;
         zSize = mapTexture.height - mapTexture.height % 2;
 
-        for (int i = 0; i < colorHeightMappings.Length; i++)
+        for (int i = 0; i < colorToHeightMapping.colorHeightMappings.Length; i++)
         {
-            if (colorHeightMappings[i].name.Equals("Water"))
+            if (colorToHeightMapping.colorHeightMappings[i].name.Equals("Water"))
             {
-                waterVertexHeight = colorHeightMappings[i].vertexHight;
-                waterColorValue=colorHeightMappings[i].value/255f;
+                waterVertexHeight = colorToHeightMapping.colorHeightMappings[i].vertexHight;
+                waterColorValue=colorToHeightMapping.colorHeightMappings[i].value/255f;
             }
         }
     }
@@ -181,7 +181,7 @@ public class MapGenerator : MonoBehaviour
             for (int x = 0; x <= xSize * gridSpacing; x += gridSpacing, i++)
             {
 
-                foreach (ColorToHeight heightMapping in colorHeightMappings)
+                foreach (ColorToHeight heightMapping in colorToHeightMapping.colorHeightMappings)
                 {
                     //get Texturecolors at vertexposition as well as left, lower and lower left of position
                     Color32 mapTextureColor = mapTexture.GetPixel(x, z);
@@ -214,7 +214,7 @@ public class MapGenerator : MonoBehaviour
                 //get textureColor at coordinates
                 Color32 mapTextureColor = mapTexture.GetPixel(x, z);
 
-                foreach (ColorToObject objectMapping in colorObjectMappings)
+                foreach (ColorToObject objectMapping in colorToObjectMapping.colorObjectMappings)
                 {
 
                     //check if texture has corresponding green-value as this mapping
