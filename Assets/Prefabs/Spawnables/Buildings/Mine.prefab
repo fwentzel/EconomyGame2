@@ -131,12 +131,17 @@ PrefabInstance:
     - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
         type: 3}
       propertyPath: m_Extents.x
-      value: 0.29
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
         type: 3}
       propertyPath: m_Extents.z
-      value: 0.32
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550439478716775528, guid: 6f696213203f17a4ca48cee4726d5fc0,
+        type: 3}
+      propertyPath: m_Extents.y
+      value: 0.35
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -5682945439405749430, guid: 6f696213203f17a4ca48cee4726d5fc0, type: 3}

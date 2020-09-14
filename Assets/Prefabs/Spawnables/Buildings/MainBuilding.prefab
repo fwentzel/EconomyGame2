@@ -26,9 +26,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceStartvalue: {fileID: 11400000, guid: b056d718145577a4099124971471c346, type: 2}
-  mainBuilding: {fileID: 0}
+  mainbuilding: {fileID: 0}
   foodRatioToLoyaltyChange: {fileID: 11400000, guid: 74c8d8a0b7b0b4048a253e48a26fafb5,
     type: 2}
+  isLoyaltyDecreasing: 0
 --- !u!114 &7934057579518317440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42,10 +43,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceManager: {fileID: 0}
-  team: {fileID: 0}
+  team: -1
+  renderTexture: {fileID: 0}
   meshlevels: []
-  buildCost: 50
-  levelCost: 100
   foodUsePerDayPerCitizen: 2
   gameOver: 0
   maxCitizens: 0
@@ -59,12 +59,12 @@ PrefabInstance:
     - target: {fileID: 4508116571335453268, guid: 7eb37859ffb14ea4182db2bad81211e3,
         type: 3}
       propertyPath: m_Extents.x
-      value: 0.23
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4508116571335453268, guid: 7eb37859ffb14ea4182db2bad81211e3,
         type: 3}
       propertyPath: m_Extents.z
-      value: 0.23
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4508116571335453268, guid: 7eb37859ffb14ea4182db2bad81211e3,
         type: 3}

@@ -46,7 +46,8 @@ public class SelectionManager : MonoBehaviour
         if (obj == null)
             return;
         selectedObject = obj;
-        if (ContextUiManager.instance.OpenContext(obj))
+
+        if (ContextUiManager.instance.OpenContext(obj))//false, if there is no type for selection or trying to select Obj from other team
         {
             OnSelectionChange?.Invoke();
         }

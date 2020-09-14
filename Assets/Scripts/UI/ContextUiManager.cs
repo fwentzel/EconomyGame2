@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ContextUiManager : MonoBehaviour
 {
     public static ContextUiManager instance { get; private set; }
 
     Transform buildingContextPanel = null;
-    Text buildingContextUiText;
+    TMP_Text buildingContextUiText;
     Button buildingContextUiLevelUpButton;
-    Text buildingContextUiLevelCostText;
+    TMP_Text buildingContextUiLevelCostText;
 
     Transform mainbuildingContextPanel = null;
-    Text mainbuildingContextUiText;
-    Text mainbuildingContextUiTaxesText;
+    TMP_Text mainbuildingContextUiText;
+    TMP_Text mainbuildingContextUiTaxesText;
     Slider mainbuildingContextUiTaxesSlider;
 
     Transform tradeVehicleContextPanel = null;
     Button tradeVehicleStopButton;
-    Text tradeVechicleStopCostText;
+    TMP_Text tradeVechicleStopCostText;
 
     // Use this for initialization
     private void Awake()
@@ -59,45 +60,53 @@ public class ContextUiManager : MonoBehaviour
         mainbuildingContextPanel = transform.Find("MainBuildingContextPanel");
         tradeVehicleContextPanel = transform.Find("TraderVehicleContextPanel");
 
-        buildingContextUiText = buildingContextPanel.GetChild(0).Find("ContextText").GetComponent<Text>();
+        buildingContextUiText = buildingContextPanel.GetChild(0).Find("ContextText").GetComponent<TMP_Text>();
         buildingContextUiLevelUpButton = buildingContextPanel.GetChild(0).Find("LevelUpButton").GetComponent<Button>();
-        buildingContextUiLevelCostText = buildingContextUiLevelUpButton.GetComponentInChildren<Text>();
+        buildingContextUiLevelCostText = buildingContextUiLevelUpButton.GetComponentInChildren<TMP_Text>();
 
-        mainbuildingContextUiText = mainbuildingContextPanel.GetChild(0).Find("ContextText").GetComponent<Text>();
-        mainbuildingContextUiTaxesText = mainbuildingContextPanel.GetChild(0).Find("TaxesText").GetComponent<Text>();
+        mainbuildingContextUiText = mainbuildingContextPanel.GetChild(0).Find("ContextText").GetComponent<TMP_Text>();
+        mainbuildingContextUiTaxesText = mainbuildingContextPanel.GetChild(0).Find("TaxesText").GetComponent<TMP_Text>();
         mainbuildingContextUiTaxesSlider = mainbuildingContextPanel.GetChild(0).GetComponentInChildren<Slider>();
 
         tradeVehicleStopButton = tradeVehicleContextPanel.GetChild(0).Find("HoldUpButton").GetComponent<Button>(); ;
-        tradeVechicleStopCostText = tradeVehicleStopButton.GetComponentInChildren<Text>();
+        tradeVechicleStopCostText = tradeVehicleStopButton.GetComponentInChildren<TMP_Text>();
     }
 
     public bool OpenContext(GameObject obj)
     {
-        TradeVehicle vehicle = obj.GetComponent<ISelectable>() as TradeVehicle;
+        CloseAll();
+        var selectable = obj.GetComponent<ISelectable>();
+
+
+        TradeVehicle vehicle = selectable as TradeVehicle;
         if (vehicle != null)
         {
+            //You shouldnt be able to hold up your own vehicle
+            if (selectable.GetTeam() == GameManager.instance.localPlayer.team)
+                return false;
+
             OpenContext(vehicle);
             return true;
         }
-        Building building = obj.GetComponent<ISelectable>() as Building;
+        Building building = selectable as Building;
         if (building != null)
         {
+            if (selectable.GetTeam() != GameManager.instance.localPlayer.team)
+                return false;
+
             OpenContext(building);
             return true;
         }
-        CloseAll();
         return false;
     }
     public void OpenContext(TradeVehicle vehicle)
     {
-        CloseAll();
         tradeVehicleContextPanel.gameObject.SetActive(true);
         UpdateContextUi(vehicle);
     }
 
     public void OpenContext(Building building)
     {
-        CloseAll();
         if (building is Mainbuilding)
         {
             mainbuildingContextPanel.gameObject.SetActive(true);
@@ -116,7 +125,7 @@ public class ContextUiManager : MonoBehaviour
     public void UpdateContextUi(Building building)
     {
         buildingContextUiText.text = building.GetStats();
-        buildingContextUiLevelCostText.text = building.levelCost.ToString();
+        buildingContextUiLevelCostText.text = building.GetLevelCostString();
         buildingContextUiLevelUpButton.interactable = building.CheckCanLevelUp();
     }
 
@@ -129,7 +138,7 @@ public class ContextUiManager : MonoBehaviour
 
     public void UpdateContextUi(TradeVehicle vehicle)
     {
-        tradeVehicleStopButton.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= vehicle.holdUpCost ;
+        tradeVehicleStopButton.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= vehicle.holdUpCost;
         tradeVechicleStopCostText.text = vehicle.holdUpCost.ToString();
     }
 

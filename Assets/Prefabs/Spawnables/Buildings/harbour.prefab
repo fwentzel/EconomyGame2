@@ -79,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceManager: {fileID: 0}
   team: -1
-  sprite: {fileID: 0}
+  renderTexture: {fileID: 0}
   meshlevels: []
 --- !u!208 &5305473601596832188
 NavMeshObstacle:
@@ -91,7 +91,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 1.875, y: 1.28, z: 2.015}
+  m_Extents: {x: 0.1, y: 0.35, z: 0.1}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1

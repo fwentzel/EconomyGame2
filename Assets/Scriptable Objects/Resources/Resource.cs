@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [CreateAssetMenu]
 public class Resource : ScriptableObject
@@ -7,7 +8,7 @@ public class Resource : ScriptableObject
 	public resource resource;
 	public int defaultStartAmount;
 	public Sprite sprite;
-	public Text uiDisplay;
+	public TMP_Text uiDisplay;
 	
 	public void SearchUiDisplay()
 	{
@@ -19,7 +20,7 @@ public class Resource : ScriptableObject
 				if (child.GetChild(0).GetComponent<Image>().mainTexture.name.Equals(sprite.name))
 				{
 					//second child holds Text Component
-					uiDisplay = child.GetChild(1).GetComponent<Text>();
+					uiDisplay = child.GetChild(1).GetComponent<TMP_Text>();
 				}
 			}
 		}

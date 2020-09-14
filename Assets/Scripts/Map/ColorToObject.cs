@@ -7,3 +7,4 @@ public class ColorToObject
 	public GameObject placeable;
 	
 }
+

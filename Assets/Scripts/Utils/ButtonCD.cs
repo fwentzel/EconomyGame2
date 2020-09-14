@@ -15,14 +15,16 @@ public class ButtonCD : MonoBehaviour
    Button button;
    //Hacky solution to keep Tradeelemt non-interactable after cd
    TradeElement tradeElement = null;
+   TradeVehicle vehicle;
    private void Awake() {
         //in start so it can get cached in TradeElement Start method
          button = GetComponent<Button>();
          tradeElement=transform.parent.GetComponent<TradeElement>();
         
    }
-    public void SetUp(float cd){
+    public void SetUp(float cd , TradeVehicle vehicle = null){
         this.cd=cd;
+        this.vehicle=vehicle;
         button.interactable=false;
         t0=Time.time;
         amount=0;
@@ -43,6 +45,10 @@ public class ButtonCD : MonoBehaviour
             //Hacky solution to keep Tradeelemt non-interactable after cd
             if(tradeElement!=null){
                 tradeElement.checkInteractable();
+            }
+            if (vehicle!=null)
+            {
+                ContextUiManager.instance.UpdateContextUi(vehicle);
             }
             
             enabled=false;
