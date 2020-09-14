@@ -10,6 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 049779119be98be4b96572503bcf3675, type: 3}
-  m_Name: New Color To Object Mapping
+  m_Name: ColToObject
   m_EditorClassIdentifier: 
-  colorObjectMappings: []
+  colorObjectMappings:
+  - name: MainBuilding
+    value: 255
+    placeable: {fileID: 5304397253622353194, guid: 0c3679cfa6b28434fa2e22e79adfd21e,
+      type: 3}
+  - name: House
+    value: 220
+    placeable: {fileID: 4595229145907955752, guid: f6b27aee87d74ed42943019371c2ead7,
+      type: 3}
+  - name: Farm
+    value: 190
+    placeable: {fileID: 7154957547538835007, guid: 7eb37859ffb14ea4182db2bad81211e3,
+      type: 3}
+  - name: Harbour
+    value: 160
+    placeable: {fileID: 2367563268605596646, guid: 742199b3aafbf12458324edc5c21b0cb,
+      type: 3}
+  - name: Rocks
+    value: 51
+    placeable: {fileID: 2321040318454111042, guid: b7124683c6494c14f86741df886c17f2,
+      type: 3}
+  - name: Forest
+    value: 50
+    placeable: {fileID: 5269855522899004666, guid: 3496802a0748d914485151785447d212,
+      type: 3}
