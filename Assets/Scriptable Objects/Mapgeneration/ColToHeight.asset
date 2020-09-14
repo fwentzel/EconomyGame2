@@ -10,6 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68441d72cf5d6044990018cf2e8ea70e, type: 3}
-  m_Name: ColorToHeight
+  m_Name: ColToHeight
   m_EditorClassIdentifier: 
-  colorHeightMappings: []
+  colorHeightMappings:
+  - name: Water
+    value: 255
+    vertexHight: -2
+  - name: Mountain
+    value: 100
+    vertexHight: 1

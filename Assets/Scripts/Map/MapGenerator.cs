@@ -190,8 +190,8 @@ public class MapGenerator : MonoBehaviour
                     Color32 mapTextureColorLeftXUpZ = mapTexture.GetPixel(x - 1, z - 1);
 
                     //check if left/lower texturepixel have same Value as this mapping
-                    if (heightMapping.value == mapTextureColor.r || heightMapping.value == mapTextureColorLeftX.r
-                        || heightMapping.value == mapTextureColorUpZ.r || heightMapping.value == mapTextureColorLeftXUpZ.r)
+                    if (heightMapping.value == mapTextureColor.b || heightMapping.value == mapTextureColorLeftX.b
+                        || heightMapping.value == mapTextureColorUpZ.b || heightMapping.value == mapTextureColorLeftXUpZ.b)
                     {
                         //use this mappings saved height for this vertex, if any of the left/lower texturepixel have corresponding value
                         vertices[i].y += heightMapping.vertexHight;
@@ -205,8 +205,6 @@ public class MapGenerator : MonoBehaviour
 
     private void BuildObjectsOnMap()
     {
-        
-
         for (int i = 0, z = 0; z <= zSize * gridSpacing; z += gridSpacing)
         {
             for (int x = 0; x <= xSize * gridSpacing; x += gridSpacing, i++)
@@ -236,11 +234,11 @@ public class MapGenerator : MonoBehaviour
 
                             //obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
-                            int teamColorValue = mapTextureColor.b;
-                            if (teamColorValue < teams.Length)//everything bigger is an object without a team like forests or rocks
+                            int teamColorValue = mapTextureColor.r;
+                            if (teamColorValue>0&&teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
                             {
-                                //set building Team equal to team at index [blue Channel value (0,4)]
-                                Team team = teams[teamColorValue];
+                                //set building Team equal to team at index [blue Channel value (1,4)]
+                                Team team = teams[teamColorValue-1];
 
                                 //TODO SAME CODE AS IN MAINBUILDING
                                 Building building = obj.GetComponent<Building>();
@@ -248,7 +246,7 @@ public class MapGenerator : MonoBehaviour
                                 building.SetLevelMesh();
 
 
-                                if (obj.GetComponent<Harbour>() != null)
+                                if (building is Harbour)
                                 {
 
                                     float r = mapTexture.GetPixel(x, z + 1).r;
