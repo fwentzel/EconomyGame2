@@ -11,6 +11,7 @@ public class PlacementController : MonoBehaviour
 	bool canBuild = true;
 	GameObject placeableObject;
 	Vector3 mousePos;
+	
 	int gridSpacing;
 	float gridPlacementOffset;
 	Mesh groundMesh;
@@ -45,7 +46,9 @@ public class PlacementController : MonoBehaviour
 	{
 		if (placeableObject != null)
 		{
-			mousePos=Utils.GetMouseGroundPosition(mouse.position.ReadValue());
+			Vector3 currMousePos=Utils.GetMouseGroundPosition(mouse.position.ReadValue());
+			if(currMousePos!=Vector3.zero)//Utilfunction returns Vector3.zero when mouse is not over Ground
+			 	mousePos=currMousePos;
 			MoveCurrentObjectToMouse();
 			UpdateGridPosition();
 			CheckInput();
@@ -59,6 +62,8 @@ public class PlacementController : MonoBehaviour
 		//calulate coordinates with normalizing by gridspacing
 		int newX = Mathf.RoundToInt((mousePos.x + gridPlacementOffset) / gridSpacing);
 		int newZ = Mathf.RoundToInt((mousePos.z + gridPlacementOffset) / gridSpacing);
+		if(newX==0||newZ==0)
+		return;
 		float newY = GetMeanHeightSurrounding(newX, newZ);
 		//readd gridSpacing and offset for final Objectposition
 		placeableObject.transform.position = new Vector3((float)newX * gridSpacing - gridPlacementOffset, newY,
@@ -69,6 +74,7 @@ public class PlacementController : MonoBehaviour
 	{
 		//ALSO USED IN MMAPGENERATION
 		int size = xSize + 1;
+
 		float newY = groundMesh.vertices[((newZ - 1) * size) + newX].y +
 					groundMesh.vertices[((newZ - 1) * size) + newX - 1].y +
 					 groundMesh.vertices[(newZ * size) + newX - 1].y +

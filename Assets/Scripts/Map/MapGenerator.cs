@@ -52,7 +52,7 @@ public class MapGenerator : MonoBehaviour
 
     public void SetupMap()
     {
-        
+
         waterMaterial.SetFloat("StartTime", -999);
         GenerateMap();
 
@@ -68,11 +68,11 @@ public class MapGenerator : MonoBehaviour
             if (colorToHeightMapping.colorHeightMappings[i].name.Equals("Water"))
             {
                 waterVertexHeight = colorToHeightMapping.colorHeightMappings[i].vertexHight;
-                waterColorValue=colorToHeightMapping.colorHeightMappings[i].value/255f;
+                waterColorValue = colorToHeightMapping.colorHeightMappings[i].value / 255f;
             }
         }
     }
-    
+
 
     private void OnDisable()
     {
@@ -94,8 +94,6 @@ public class MapGenerator : MonoBehaviour
         material.SetTexture("Texture2D_AD5527E4", mapTexture);
         // NavMeshBuilder.BuildNavMeshData();
     }
-
-
 
     private void DestroyChildren()
     {
@@ -236,10 +234,10 @@ public class MapGenerator : MonoBehaviour
                             //obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
                             int teamColorValue = mapTextureColor.r;
-                            if (teamColorValue>0&&teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
+                            if (teamColorValue > 0 && teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
                             {
                                 //set building Team equal to team at index [blue Channel value (1,4)]
-                                Team team = teams[teamColorValue-1];
+                                Team team = teams[teamColorValue - 1];
 
                                 //TODO SAME CODE AS IN MAINBUILDING
                                 Building building = obj.GetComponent<Building>();
@@ -250,25 +248,28 @@ public class MapGenerator : MonoBehaviour
                                 if (building is Harbour)
                                 {
 
-                                    float r = mapTexture.GetPixel(x, z + 1).r;
-                                    if (r == waterColorValue)
+
+                                    if (mapTexture.GetPixel(x, z + 1).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, 90);
+                                        obj.transform.position += Vector3.back;
                                         continue;
                                     }
-
-                                    r = mapTexture.GetPixel(x + 1, z).r;
-                                    if (r == waterColorValue)
+                                    if (mapTexture.GetPixel(x + 1, z).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, 180);
+                                        obj.transform.position += Vector3.left;
                                         continue;
                                     }
-                                    r = mapTexture.GetPixel(x, z - 1).r;
-                                    if (r == waterColorValue)
+                                    if (mapTexture.GetPixel(x, z - 1).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, -90);
+                                        obj.transform.position += Vector3.forward;
                                         continue;
+
                                     }
+                                    obj.transform.position += Vector3.right;
+
 
                                 }
                             }

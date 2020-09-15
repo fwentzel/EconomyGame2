@@ -46,7 +46,7 @@ MonoBehaviour:
   team: -1
   renderTexture: {fileID: 0}
   meshlevels: []
-  foodUsePerDayPerCitizen: 5
+  foodUsePerDayPerCitizen: 3
   gameOver: 0
   maxCitizens: 0
 --- !u!1001 &3086798398129089301

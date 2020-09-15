@@ -55,12 +55,8 @@ public class TeamScoreElement : MonoBehaviour
                 Color color= new Color(newVal, newVal, newVal, 255);
                 foreach (Image image in GetComponentsInChildren<Image>())
                 {
-                    image.color=color;
-                }
-                if (GameManager.instance.localPlayer.mainbuilding == rem.mainbuilding)
-                {
-                    //Found local player
-
+                    bool isLocalPlayersTeam=GameManager.instance.localPlayer.mainbuilding == rem.mainbuilding;
+                    image.color=isLocalPlayersTeam?Color.white:color;
                 }
                 break;
             }

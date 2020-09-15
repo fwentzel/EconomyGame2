@@ -7,7 +7,7 @@ public class BuildingAi : BaseAi
 	int maxGoldThreshold = 500;
 	Dictionary<Type, List<Building>> buildingList;
 	List<Vector2> availableBuildSpots;
-	int oldEnd;
+	int previousEnd;
 
 	public BuildingAi(AiMaster master) : base(master)
 	{
@@ -35,7 +35,7 @@ public class BuildingAi : BaseAi
 	{
 		if (start < 1)
 			start = 1;
-		oldEnd = end;
+		previousEnd = end;
 		availableBuildSpots = new List<Vector2>();
 		Vector2 mainPos = new Vector2(mainbuilding.transform.position.x, mainbuilding.transform.position.z);
 		for (int i = start; i < end; i++)
@@ -48,6 +48,7 @@ public class BuildingAi : BaseAi
 				}
 			}
 		}
+		//TODO bisschen hacky
 		foreach (Building building in mainbuilding.buildings)
 		{
 			Vector2 buildingPos = new Vector2(building.transform.position.x, building.transform.position.z);
@@ -104,7 +105,7 @@ public class BuildingAi : BaseAi
 	private Vector3 GetAvailablePosition()
 	{
 		if (availableBuildSpots.Count == 0)
-			GetAvailableBuildSpots(oldEnd, oldEnd + 1);
+			GetAvailableBuildSpots(previousEnd, previousEnd + 1);
 
 		int index = 0;
 		Vector3 pos = new Vector3(availableBuildSpots[index].x,PlacementController.instance.GetMeanHeightSurrounding(availableBuildSpots[index]), availableBuildSpots[index].y);

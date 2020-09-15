@@ -24,6 +24,7 @@ public class CameraController : MonoBehaviour
     // Editor Properties
     public Camera TheCamera;
     public LayerMask GroundLayer;
+    Vector3 mainbuildingPos = Vector2.zero;
 
     // Camera Properties
     public bool useDefaultSettings;
@@ -74,11 +75,12 @@ public class CameraController : MonoBehaviour
 
     private void Height(float v)
     {
-        if(EventSystem.current.IsPointerOverGameObject()){
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
             return;
         }
-        v/=120;        
-        desiredScrollposition =Mathf.Clamp(desiredScrollposition - v * scrollSensitivity, cameraMinHeight, cameraMaxHeight); ;
+        v /= 120;
+        desiredScrollposition = Mathf.Clamp(desiredScrollposition - v * scrollSensitivity, cameraMinHeight, cameraMaxHeight); ;
 
 
     }
@@ -149,11 +151,6 @@ public class CameraController : MonoBehaviour
         if (keyboard.eKey.isPressed)
             rotation.y += cameraSpeed * (Time.deltaTime * 32);
 
-        if (keyboard.leftAltKey.isPressed)
-        {
-            rotation.y = 0;
-            TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
-        }
 
         // Border Touch Movement
         // if (Input.mousePosition.y >= Screen.height - cameraBorder)
@@ -183,9 +180,9 @@ public class CameraController : MonoBehaviour
             cameraSpeed = (_savedCameraSpeed * 2f);
         else
             cameraSpeed = _savedCameraSpeed;
-        
-        position= new Vector3(position.x,Mathf.Lerp(position.y, desiredScrollposition, Time.deltaTime * scrollspeed),position.z);
-        
+
+        position = new Vector3(position.x, Mathf.Lerp(position.y, desiredScrollposition, Time.deltaTime * scrollspeed), position.z);
+
         //// Camera Collision Check
         //Ray ray = new Ray(position, TheCamera.transform.forward);
         //Physics.Raycast(ray, out _rayHit, 32, GroundLayer);
@@ -203,17 +200,27 @@ public class CameraController : MonoBehaviour
 
         // Save Changes
         TheCamera.transform.position = Vector3.Slerp(TheCamera.transform.position, position, .8f);
-        TheCamera.transform.eulerAngles = Vector3.Slerp(TheCamera.transform.eulerAngles, rotation, .2f);
+        if (keyboard.spaceKey.isPressed)
+        {
+            rotation.y = 0;
+            TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
+            if(mainbuildingPos!=Vector3.zero)
+                FocusOnMainBuilding(mainbuildingPos);
+        }
+        //TheCamera.transform.eulerAngles = Vector3.Slerp(TheCamera.transform.eulerAngles, rotation, .2f);
     }
 
 
 
     public void FocusOnMainBuilding(Vector3 mainbuildingPos)
     {
+
         float y = TheCamera.transform.position.y;
         float rotation = TheCamera.transform.rotation.eulerAngles.x * Mathf.Deg2Rad;
         float offset = (y / Mathf.Tan(rotation));
+        this.mainbuildingPos = mainbuildingPos;
         float newZ = mainbuildingPos.z - offset;
         TheCamera.transform.position = new Vector3(mainbuildingPos.x, y, newZ);
+
     }
 }

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Mainbuilding : Building
 {
@@ -63,7 +62,6 @@ public class Mainbuilding : Building
 		building.OnBuild(subtractFromResource);
 		building.team = team;
 		building.enabled = true;
-		
 	}
 
 	//Ai version
