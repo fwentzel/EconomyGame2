@@ -14,20 +14,20 @@ public class TradeAi : BaseAi
 	{
 		foreach (Trade trade in TradeManager.instance.tradeToElementMapping.Keys)
 		{
-			if (TradeManager.instance.tradeToElementMapping[trade].accepted)
-				continue;//Trade is no longer available, so move on to next one
+			//Trade is no longer available or Tradecooldown still active, so move on to next one
+			if (TradeManager.instance.tradeToElementMapping[trade].accepted ||
+			TradeManager.instance.tradeCooldowns[resourceManager] > Time.time)
+				continue;
 			
-			if (TradeManager.instance.tradeCooldowns[resourceManager] > Time.time)
-				continue;//Tradecooldown still active
+			
 			 //Berechnen wie viel Prozent der Ressourcen für diesen Trade abgeben werden. unter einem Threshold kann bedenkenlos getraded werden
 			float percentOfResource = (float)trade.toTraderAmount / resourceManager.GetAmount(trade.toTrader.resource);
 			if (percentOfResource < safePercentOfResource)
 			{
-				Log("traded Safe");
 				TradeManager.instance.AcceptTrade(trade, resourceManager);
 			}
 		}
-		Log("nothing to Trade ");
-		return typeof(TradeVehicleAi);
+		return typeof(TaxesAi);
+		// return typeof(TradeVehicleAi);
 	}
 }

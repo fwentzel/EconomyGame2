@@ -8,15 +8,16 @@ public class ResourceManager : MonoBehaviour
 {
     public ResourceStartvalue resourceStartvalue;
     Dictionary<resource, int> resourceAmount;
-    
+
     public Mainbuilding mainbuilding;
     public Curve foodRatioToLoyaltyChange;
     public event Action OnResourceChange = delegate { };
 
     public bool isLoyaltyDecreasing = false;
+    public int foodChange {get; private set;}
 
-    [SerializeField] int numSafeDaysAfterLoss=5;
-    int lastCitizenLost =-1;
+    [SerializeField] int numSafeDaysAfterLoss = 5;
+    int lastCitizenLost = -1;
 
     private void Awake()
     {
@@ -43,6 +44,7 @@ public class ResourceManager : MonoBehaviour
             return;
 
         CalculateGold();
+        CalculateFoodChange();
         CalculateFood();
         CalculateStone();
         CalculateLoyalty();
@@ -69,21 +71,21 @@ public class ResourceManager : MonoBehaviour
         {
             //can pickup any free ciziens
             //int random = Random.Range(1, 100);
-			//random <= diff &&
+            //random <= diff &&
             // if ( resourceAmount[resource.citizens] < mainbuilding.maxCitizens)
             // {
 
-                CitizenManager.instance.TakeCitizen(this);
+            CitizenManager.instance.TakeCitizen(this);
             // }
         }
-        else if (diff < -5 && lastCitizenLost+numSafeDaysAfterLoss < GameManager.instance.dayIndex)
+        else if (diff < -5 && lastCitizenLost + numSafeDaysAfterLoss < GameManager.instance.dayIndex)
         {
             //possibility that Citizens wander off
             // int random = Random.Range(-100, -20);
             // if (random <= diff)
             // {
-                CitizenManager.instance.LooseCitizen(this);
-                lastCitizenLost=GameManager.instance.dayIndex;
+            CitizenManager.instance.LooseCitizen(this);
+            lastCitizenLost = GameManager.instance.dayIndex;
             // }
         }
     }
@@ -96,7 +98,6 @@ public class ResourceManager : MonoBehaviour
     private void CalculateFood()
     {
         int foodAmount = resourceAmount[resource.food];
-        int foodChange = CalculateFoodChange();
         foodAmount += foodChange;
         if (foodAmount < 0)
         {
@@ -106,12 +107,12 @@ public class ResourceManager : MonoBehaviour
     }
 
 
-    public int CalculateFoodChange()
+    public void CalculateFoodChange()
     {
-        return CalculateFoodGenerated() - resourceAmount[resource.citizens] * mainbuilding.foodUsePerDayPerCitizen;
+        foodChange = CalculateFoodGenerated() - resourceAmount[resource.citizens] * mainbuilding.foodUsePerDayPerCitizen;
     }
 
-    public int CalculateFoodGenerated()
+    private int CalculateFoodGenerated()
     {
         int generatedAmount = 0;
         foreach (Building building in mainbuilding.buildings)
@@ -144,27 +145,28 @@ public class ResourceManager : MonoBehaviour
         int newLoyalty = resourceAmount[resource.loyalty];
         int oldLoyalty = newLoyalty;
         int citizens = resourceAmount[resource.citizens];
-        
-            //Evaluate animation curve to determine loyalty Change based on foodunits per citizens
-            float t = resourceAmount[resource.food] -  (citizens*mainbuilding.foodUsePerDayPerCitizen);
-            t=citizens>0?  t/(citizens*mainbuilding.foodUsePerDayPerCitizen):-10;
-            if(mainbuilding.GetComponent<StateMachine>()==null)
-            
-            newLoyalty += Mathf.RoundToInt(foodRatioToLoyaltyChange.curve.Evaluate(t));
 
-            // if (  citizens/mainbuilding.maxCitizens < .5f)
-            //     newLoyalty -= 5;
-        
+        //Evaluate animation curve to determine loyalty Change based on foodunits per citizens
+        float t = foodChange /(float)(mainbuilding.maxCitizens * mainbuilding.foodUsePerDayPerCitizen);
+
+        t = citizens > 0 ? t : -10;
+        // if (mainbuilding.GetComponent<StateMachine>() == null)
+        //     print(t);
+        newLoyalty += Mathf.RoundToInt(foodRatioToLoyaltyChange.curve.Evaluate(t));
+
+        // if (  citizens/mainbuilding.maxCitizens < .5f)
+        //     newLoyalty -= 5;
+
 
         //taxes in Range (0,10). taxes= 5 results in neutral loyaltychange
-        newLoyalty +=( 5 - mainbuilding.Taxes);
+        newLoyalty += (5 - mainbuilding.Taxes)/2;
 
 
         if (newLoyalty > 100)
             newLoyalty = 100;
         if (newLoyalty <= 0)
             newLoyalty = 0;
-        
+
         resourceAmount[resource.loyalty] = newLoyalty;
         isLoyaltyDecreasing = newLoyalty < oldLoyalty;
     }

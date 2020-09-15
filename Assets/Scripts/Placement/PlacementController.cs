@@ -144,11 +144,7 @@ public class PlacementController : MonoBehaviour
 
 	public void NewPlaceableObject(GameObject placeable)
 	{
-		if(placeable.GetComponent<Building>().buildCost >GameManager.instance.localPlayer.mainbuilding.resourceManager.GetAmount(resource.gold))
-		{
-			print("Not enough Gold to build this!");
-			return;
-		}
+		
 		//Turn on placement Grid and set Color to White
 		ConfigureGrid(true);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StateMachine : MonoBehaviour
@@ -9,7 +10,7 @@ public class StateMachine : MonoBehaviour
 	public event Action<BaseAi> OnStateChanged;
 	private void Awake()
 	{
-		InvokeRepeating("StateMachineUpdate", 0, 1f);
+		InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
 	}
 
 	private void StateMachineUpdate()
@@ -28,7 +29,9 @@ public class StateMachine : MonoBehaviour
 
 	private void SwitchToNewState(Type nextState)
 	{
-		currentState = availableStates[nextState];
+		//TODO only for debugging when removing different states
+		currentState =availableStates.ContainsKey(nextState)?availableStates[nextState]: availableStates.ElementAt(UnityEngine.Random.Range(0,availableStates.Count)).Value;
+		
 		OnStateChanged?.Invoke(currentState);
 	}
 }

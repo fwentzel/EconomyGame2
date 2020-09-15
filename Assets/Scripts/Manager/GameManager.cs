@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public event Action OnCalculateIntervall = delegate { };
     public event Action OnGameStart = delegate { };
     public int dayIndex = 0;
-    public int calcResourceIntervall = 10;
+    public int calcResourceIntervall = 5;
 
     public Player[] players;
     public Player localPlayer;
