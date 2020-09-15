@@ -27,6 +27,7 @@ public class CityResourceLookup : MonoBehaviour
     private void Start()
     {
         GameManager.instance.OnCalculateIntervall += UpdateCityResourceMean;
+        
     }
 
 
@@ -39,6 +40,7 @@ public class CityResourceLookup : MonoBehaviour
         {
             resourceManagers[i] = players[i].mainbuilding.resourceManager;
         }
+        UpdateCityResourceMean();
     }
 
     private void UpdateCityResourceMean()
@@ -49,6 +51,7 @@ public class CityResourceLookup : MonoBehaviour
             mean += resourceManager.GetAmount(resource.loyalty);
         }
         meanLoyalty = mean / resourceManagers.Length;
+        
     }
 
     internal void TakeCitizen(ResourceManager resourceManager)

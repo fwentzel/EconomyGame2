@@ -15,6 +15,8 @@ public class ResourceManager : MonoBehaviour
 
     public bool isLoyaltyDecreasing = false;
 
+    int lastCitizenLost =-1;
+
     private void Awake()
     {
         PopulateRessourceAmounts();
@@ -62,24 +64,25 @@ public class ResourceManager : MonoBehaviour
     {
         float diff = resourceAmount[resource.loyalty] - CityResourceLookup.instance.meanLoyalty;
 
-        if (diff > 0)
+        if (diff > 20)
         {
             //can pickup any free ciziens
-            int random = Random.Range(1, 100);
+            //int random = Random.Range(1, 100);
 			//random <= diff &&
-            if ( resourceAmount[resource.citizens] < mainbuilding.maxCitizens)
-            {
+            // if ( resourceAmount[resource.citizens] < mainbuilding.maxCitizens)
+            // {
+
                 CityResourceLookup.instance.TakeCitizen(this);
-            }
+            // }
         }
-        else if (diff < -5)
+        else if (diff < -15 && lastCitizenLost+10 < GameManager.instance.dayIndex)
         {
             //possibility that Citizens wander off
-            int random = Random.Range(-100, -20);
-            if (random <= diff)
-            {
+            // int random = Random.Range(-100, -20);
+            // if (random <= diff)
+            // {
                 CityResourceLookup.instance.LooseCitizen(this);
-            }
+            // }
         }
     }
 
@@ -145,13 +148,13 @@ public class ResourceManager : MonoBehaviour
         {
             //Evaluate animation curve to determine loyalty Change based on foodunits per citizens
             float t = (resourceAmount[resource.food] * mainbuilding.foodUsePerDayPerCitizen) / citizens;
+            if(mainbuilding.team==3)
+            print(t);
             foodLoyaltyChange = foodRatioToLoyaltyChange.curve.Evaluate(t);
 
             if (mainbuilding.maxCitizens / citizens < .5f)
                 newLoyalty -= 5;
         }
-        else
-            newLoyalty -= 10;
 
         //taxes in Range (0,10). taxes= 5 results in neutral loyaltychange
         newLoyalty += 5 - mainbuilding.Taxes;
@@ -161,9 +164,8 @@ public class ResourceManager : MonoBehaviour
         if (newLoyalty > 100)
             newLoyalty = 100;
         if (newLoyalty <= 0)
-        {
             newLoyalty = 0;
-        }
+        
         resourceAmount[resource.loyalty] = (int)newLoyalty;
         isLoyaltyDecreasing = newLoyalty < oldLoyalty;
     }

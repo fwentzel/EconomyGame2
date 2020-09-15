@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Stone
   m_EditorClassIdentifier: 
   resource: 4
-  defaultStartAmount: 40
+  defaultStartAmount: 0
   sprite: {fileID: 21300000, guid: 7c6c8b4baa5364447a19c7dc2fec3fa3, type: 3}
   uiDisplay: {fileID: 0}

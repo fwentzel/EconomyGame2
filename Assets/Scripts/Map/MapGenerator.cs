@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -78,7 +79,6 @@ public class MapGenerator : MonoBehaviour
         waterMaterial.SetFloat("StartTime", -999);
     }
 
-
     public void GenerateMap()
     {
         DestroyChildren();
@@ -92,6 +92,7 @@ public class MapGenerator : MonoBehaviour
         BuildObjectsOnMap();
         material.SetInt("Vector1_2D88299F", gridSpacing);
         material.SetTexture("Texture2D_AD5527E4", mapTexture);
+        // NavMeshBuilder.BuildNavMeshData();
     }
 
 

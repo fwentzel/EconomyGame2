@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Food
   m_EditorClassIdentifier: Assembly-CSharp::Resource
   resource: 0
-  defaultStartAmount: 50
+  defaultStartAmount: 0
   sprite: {fileID: 21300000, guid: b915a7ee8a2712a43a9ed2e24541c454, type: 3}
   uiDisplay: {fileID: 0}
