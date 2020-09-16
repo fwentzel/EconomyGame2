@@ -25,22 +25,20 @@ public class UiManager : MonoBehaviour
             Destroy(this);
 
         SetupUiElements();
-        input = new Inputmaster();
+
         CloseAll();
 
         TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine(StartNewTradeTimerCoroutine(arrivalIn));
     }
 
-    private void OnEnable()
-    {
-        input.Enable();
-    }
     private void Start()
     {
+        input = InputMasterManager.instance.inputMaster;
         input.Menus.Trader.performed += _ => OpenMenu(traderPanel.gameObject);
         input.Menus.Scoreboard.started += _ => OpenMenu(scoreboardPanel.gameObject);
         input.Menus.Scoreboard.canceled += _ => CloseAll();
         input.Menus.Menu.performed += _ => OpenMenu(menuPanel.gameObject);
+        input.Menus.Enable();
     }
 
     private void SetupUiElements()

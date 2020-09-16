@@ -15,6 +15,7 @@ public class MessageSystem : MonoBehaviour
     Scrollbar scrollbar => messagePanel.GetComponent<ScrollRect>().verticalScrollbar;
     int msgCount = 0;
     WaitForSeconds cachedWait = new WaitForSeconds(5);
+    Inputmaster input;
 
     private void Awake()
     {
@@ -30,18 +31,15 @@ public class MessageSystem : MonoBehaviour
     private void Start()
     {
         messagePanel.SetActive(false);
+        input=InputMasterManager.instance.inputMaster;
     }
 
     private void Update()
     {
-        if (Keyboard.current.enterKey.wasReleasedThisFrame)
+        if (input.Menus.enabled&& Keyboard.current.enterKey.wasReleasedThisFrame)
         {
             showChat();
-            
         }
-
-        
-
     }
 
     IEnumerator hideChat()

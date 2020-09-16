@@ -747,6 +747,52 @@ public class @Inputmaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Debug"",
+            ""id"": ""48d78e61-57eb-4206-b722-bf6a6f6a861a"",
+            ""actions"": [
+                {
+                    ""name"": ""HandleInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""3542ec81-4c84-463e-9971-8bcb61d2110e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ToggleDebug"",
+                    ""type"": ""Button"",
+                    ""id"": ""f432b7f6-42e8-4c3e-b7d1-3fd7c2a36ff9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""76def3c8-953b-482d-b75e-4213a990a78a"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse and Keyboard"",
+                    ""action"": ""ToggleDebug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a25cb0e-4210-4a83-ae55-b5f6f169fda7"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse and Keyboard"",
+                    ""action"": ""HandleInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -796,6 +842,10 @@ public class @Inputmaster : IInputActionCollection, IDisposable
         m_LevelEditor = asset.FindActionMap("LevelEditor", throwIfNotFound: true);
         m_LevelEditor_Click = m_LevelEditor.FindAction("Click", throwIfNotFound: true);
         m_LevelEditor_Drag = m_LevelEditor.FindAction("Drag", throwIfNotFound: true);
+        // Debug
+        m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
+        m_Debug_HandleInput = m_Debug.FindAction("HandleInput", throwIfNotFound: true);
+        m_Debug_ToggleDebug = m_Debug.FindAction("ToggleDebug", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1110,6 +1160,47 @@ public class @Inputmaster : IInputActionCollection, IDisposable
         }
     }
     public LevelEditorActions @LevelEditor => new LevelEditorActions(this);
+
+    // Debug
+    private readonly InputActionMap m_Debug;
+    private IDebugActions m_DebugActionsCallbackInterface;
+    private readonly InputAction m_Debug_HandleInput;
+    private readonly InputAction m_Debug_ToggleDebug;
+    public struct DebugActions
+    {
+        private @Inputmaster m_Wrapper;
+        public DebugActions(@Inputmaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @HandleInput => m_Wrapper.m_Debug_HandleInput;
+        public InputAction @ToggleDebug => m_Wrapper.m_Debug_ToggleDebug;
+        public InputActionMap Get() { return m_Wrapper.m_Debug; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebugActions set) { return set.Get(); }
+        public void SetCallbacks(IDebugActions instance)
+        {
+            if (m_Wrapper.m_DebugActionsCallbackInterface != null)
+            {
+                @HandleInput.started -= m_Wrapper.m_DebugActionsCallbackInterface.OnHandleInput;
+                @HandleInput.performed -= m_Wrapper.m_DebugActionsCallbackInterface.OnHandleInput;
+                @HandleInput.canceled -= m_Wrapper.m_DebugActionsCallbackInterface.OnHandleInput;
+                @ToggleDebug.started -= m_Wrapper.m_DebugActionsCallbackInterface.OnToggleDebug;
+                @ToggleDebug.performed -= m_Wrapper.m_DebugActionsCallbackInterface.OnToggleDebug;
+                @ToggleDebug.canceled -= m_Wrapper.m_DebugActionsCallbackInterface.OnToggleDebug;
+            }
+            m_Wrapper.m_DebugActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @HandleInput.started += instance.OnHandleInput;
+                @HandleInput.performed += instance.OnHandleInput;
+                @HandleInput.canceled += instance.OnHandleInput;
+                @ToggleDebug.started += instance.OnToggleDebug;
+                @ToggleDebug.performed += instance.OnToggleDebug;
+                @ToggleDebug.canceled += instance.OnToggleDebug;
+            }
+        }
+    }
+    public DebugActions @Debug => new DebugActions(this);
     private int m_MouseandKeyboardSchemeIndex = -1;
     public InputControlScheme MouseandKeyboardScheme
     {
@@ -1151,5 +1242,10 @@ public class @Inputmaster : IInputActionCollection, IDisposable
     {
         void OnClick(InputAction.CallbackContext context);
         void OnDrag(InputAction.CallbackContext context);
+    }
+    public interface IDebugActions
+    {
+        void OnHandleInput(InputAction.CallbackContext context);
+        void OnToggleDebug(InputAction.CallbackContext context);
     }
 }

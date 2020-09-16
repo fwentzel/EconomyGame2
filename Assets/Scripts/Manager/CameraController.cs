@@ -61,16 +61,18 @@ public class CameraController : MonoBehaviour
     Mouse mouse;
     private void Awake()
     {
-        controls = new Inputmaster();
+        
         keyboard = Keyboard.current;
         mouse = Mouse.current;
     }
     void Start()
     {
+        controls=InputMasterManager.instance.inputMaster;
         CheckSettings();
         TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
         //controls.Camera.Move.performed+= ctx => Move(ctx.ReadValue<Vector2>());
         controls.Camera.Height.performed += ctx => Height(ctx.ReadValue<float>());
+        controls.Camera.Enable();
     }
 
     private void Height(float v)
@@ -90,15 +92,6 @@ public class CameraController : MonoBehaviour
         Move();
     }
 
-    private void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        controls.Disable();
-    }
 
     void CheckSettings()
     {
@@ -121,6 +114,7 @@ public class CameraController : MonoBehaviour
 
     void Move()
     {
+        if(!controls.Camera.enabled) return;
         Vector3 position = TheCamera.transform.position;
         Vector3 rotation = new Vector3(TheCamera.transform.eulerAngles.x, TheCamera.transform.eulerAngles.y, 0);
 

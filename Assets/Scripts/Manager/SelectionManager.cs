@@ -29,14 +29,15 @@ public class SelectionManager : MonoBehaviour
             instance = this;
         else
             Destroy(this);
-        input = new Inputmaster();
-        input.Selection.Click.canceled += _ => GetObjectFromClick();
+        
         mouse = Mouse.current;
     }
-    private void OnEnable()
-    {
-        input.Enable();
+    private void Start() {
+        input = InputMasterManager.instance.inputMaster;
+        input.Selection.Click.canceled += _ => GetObjectFromClick();
+        input.Selection.Enable();
     }
+    
 
     private void GetObjectFromClick()
     {

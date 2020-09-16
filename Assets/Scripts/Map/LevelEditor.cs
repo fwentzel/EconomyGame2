@@ -63,11 +63,12 @@ public class LevelEditor : MonoBehaviour
 
     private void SetUpInput()
     {
-        input = new Inputmaster();
+        input = InputMasterManager.instance.inputMaster;
         input.UI.Click.started += _ => Paint();
         input.LevelEditor.Drag.started += _ => InvokeRepeating("Paint", 0, 0.01f);
         input.LevelEditor.Drag.canceled += _ => CancelInvoke();
-        input.Enable();
+        input.UI.Enable();
+        input.LevelEditor.Enable();
         mouse = Mouse.current;
         keyboard = Keyboard.current;
     }
