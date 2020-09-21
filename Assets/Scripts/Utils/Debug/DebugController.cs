@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class DebugController : MonoBehaviour
 {
@@ -19,10 +17,7 @@ public class DebugController : MonoBehaviour
 
     private void Awake()
     {
-        inputMaster = InputMasterManager.instance.inputMaster;
-        inputMaster.Debug.ToggleDebug.performed += _ => OnToggleDebug();
-        inputMaster.Debug.HandleInput.performed += _ => HandleInput();
-
+        
     
         ADD_RES = new DebugCommand<resource, int>("add_res", "Add specified res amount. Possible resources: food, loyalty, gold, citizens, stone ", "add_res <resource><amount>", (x, y) =>
        {
@@ -35,6 +30,14 @@ public class DebugController : MonoBehaviour
         ADD_RES,
         HELP
     };
+
+    }
+
+    private void Start() {
+        inputMaster = InputMasterManager.instance.inputMaster;
+        inputMaster.Debug.ToggleDebug.performed += _ => OnToggleDebug();
+        inputMaster.Debug.HandleInput.performed += _ => HandleInput();
+         inputMaster.Debug.Enable();
 
     }
 
@@ -84,6 +87,7 @@ public class DebugController : MonoBehaviour
                 }
             }
         }
+        input="";
     }
 
 Vector2 scroll;
@@ -114,13 +118,5 @@ Vector2 scroll;
         GUI.Box(new Rect(0, y, Screen.width, 30), "");
         GUI.backgroundColor = new Color(0, 0, 0, 0);
         input = GUI.TextField(new Rect(10f, y + 5f, Screen.width - 20f, 20f), input);
-    }
-    private void OnEnable()
-    {
-        inputMaster.Debug.Enable();
-    }
-    private void OnDisable()
-    {
-        inputMaster.Debug.Disable();
     }
 }

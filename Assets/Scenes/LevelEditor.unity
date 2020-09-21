@@ -5313,6 +5313,7 @@ GameObject:
   - component: {fileID: 1872019352}
   - component: {fileID: 1872019351}
   - component: {fileID: 1872019355}
+  - component: {fileID: 1872019356}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -5429,6 +5430,18 @@ MonoBehaviour:
   colorToObjectMapping: {fileID: 11400000, guid: 26df46e61a8da424b8b9d5271313f155,
     type: 2}
   paintColor: {r: 0.62059253, g: 0.6226415, b: 0, a: 1}
+--- !u!114 &1872019356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872019350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9dc67c5a703adf47a0c1b84012be629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1892892751
 GameObject:
   m_ObjectHideFlags: 0

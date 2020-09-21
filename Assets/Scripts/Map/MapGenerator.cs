@@ -234,6 +234,7 @@ public class MapGenerator : MonoBehaviour
                             //obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
                             int teamColorValue = mapTextureColor.r;
+                            
                             if (teamColorValue > 0 && teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
                             {
                                 //set building Team equal to team at index [blue Channel value (1,4)]
@@ -269,9 +270,13 @@ public class MapGenerator : MonoBehaviour
 
                                     }
                                     obj.transform.position += Vector3.right;
-
-
                                 }
+                            }
+
+                            //Trees random transform
+                            Forest forest=obj.GetComponent<Forest>();
+                            if ( forest !=null){
+                                forest.OnBuild();
                             }
 
                         }

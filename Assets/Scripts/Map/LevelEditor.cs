@@ -202,7 +202,6 @@ public class LevelEditor : MonoBehaviour
         {
             print("map already exists. Overwriting newmap.asset!");
         }
-        mapNameInput.text = "newMap";
         SetDimensions();
         SetUpNewTexture();
         SetUpImage();

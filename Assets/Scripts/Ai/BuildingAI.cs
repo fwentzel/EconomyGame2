@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BuildingAi : BaseAi
 {
-    int maxGoldThreshold = 500;
     Dictionary<Type, List<Building>> buildingList;
     List<Vector2> availableBuildSpots;
     int previousEnd;
@@ -24,7 +23,9 @@ public class BuildingAi : BaseAi
         {
             UpgradeOrBuild(typeof(Farm));
         }
-        if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team].Count == 0&& resourceManager.foodChange > 0 || resourceManager.GetAmount(resource.gold) > maxGoldThreshold)
+        if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team].Count == 0
+        && resourceManager.foodChange > 0 
+        || resourceManager.GetAmount(resource.food) > (resourceManager.GetAmount(resource.citizens)*mainbuilding.foodUsePerDayPerCitizen)*2)//double the food that is needed for ctizens
         {
             //Act and Build 
             UpgradeOrBuild(typeof(House));
@@ -85,11 +86,11 @@ public class BuildingAi : BaseAi
         //Try Levelling Up
         foreach (var building in buildingList[type])
         {
-            if (gold >=building.levelCost && building.LevelUp())
+            if (gold >= building.levelCost && building.LevelUp())
                 return;
         }
 
-		//check if there is enough money to build new Building
+        //check if there is enough money to build new Building
         if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
             return;
 
