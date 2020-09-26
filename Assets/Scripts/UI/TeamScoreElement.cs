@@ -42,7 +42,7 @@ public class TeamScoreElement : MonoBehaviour
         {//-1 to account for header
             Instantiate(this, parent);
         }
-        
+
         for (int i = 0; i < resourceManagers.Length; i++)
         {
             //+1 to account for Header Child
@@ -52,11 +52,11 @@ public class TeamScoreElement : MonoBehaviour
                 float newVal = i % 2 == 0 ? 125 : 150;
                 //convert to colorspace 0-1
                 newVal /= 255;
-                Color color= new Color(newVal, newVal, newVal, 255);
+                Color color = new Color(newVal, newVal, newVal, 255);
                 foreach (Image image in GetComponentsInChildren<Image>())
                 {
-                    bool isLocalPlayersTeam=GameManager.instance.localPlayer.mainbuilding == rem.mainbuilding;
-                    image.color=isLocalPlayersTeam?Color.white:color;
+                    bool isLocalPlayersTeam = GameManager.instance.localPlayer.mainbuilding == rem.mainbuilding;
+                    image.color = isLocalPlayersTeam ? Color.white : color;
                 }
                 break;
             }
@@ -73,6 +73,19 @@ public class TeamScoreElement : MonoBehaviour
         foodText.text = rem.GetAmount(resource.food).ToString();
         stoneText.text = rem.GetAmount(resource.stone).ToString();
         teamText.text = rem.mainbuilding.team.ToString();
+        if(rem.mainbuilding.gameOver){
+            SetTeamGameOver();
+            return;
+        }
+    }
+
+    public void SetTeamGameOver()
+    {
+        GameManager.instance.OnCalculateIntervall -= UpdateScore;
+        foreach (Image image in GetComponentsInChildren<Image>())
+        {
+            image.color = Color.red;
+        }
     }
 
 }

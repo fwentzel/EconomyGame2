@@ -136,9 +136,6 @@ public class CameraController : MonoBehaviour
             position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
         }
 
-
-
-
         // Q, E, Alt Rotation
         if (keyboard.qKey.isPressed)
             rotation.y -= cameraSpeed * (Time.deltaTime * 32);
@@ -146,15 +143,16 @@ public class CameraController : MonoBehaviour
             rotation.y += cameraSpeed * (Time.deltaTime * 32);
 
 
-        // Border Touch Movement
-        // if (Input.mousePosition.y >= Screen.height - cameraBorder)
-        //    position += new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        // if (Input.mousePosition.y <= 0 + cameraBorder)
-        //    position -= new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        // if (Input.mousePosition.x >= Screen.width - cameraBorder)
-        //    position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
-        // if (Input.mousePosition.x <= 0 + cameraBorder)
-        //    position -= new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
+        //Border Touch Movement
+        Vector2 mousePos=mouse.position.ReadValue();
+        if (mousePos.y >= Screen.height - cameraBorder)
+           position += new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
+        if (mousePos.y <= 0 + cameraBorder)
+           position -= new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
+        if (mousePos.x >= Screen.width - cameraBorder)
+           position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
+        if (mousePos.x <= 0 + cameraBorder)
+           position -= new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
 
 
         // Mouse Rotation
@@ -181,10 +179,10 @@ public class CameraController : MonoBehaviour
         //Ray ray = new Ray(position, TheCamera.transform.forward);
         //Physics.Raycast(ray, out _rayHit, 32, GroundLayer);
 
-        //// Don't allow the camera to leave the ground area
-        //position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
-        position.y = Mathf.Clamp(position.y, cameraMinHeight, cameraMaxHeight);
-        //position.z = Mathf.Clamp(position.z, cameraBorder, mapZSize - cameraBorder);
+        // Don't allow the camera to leave the ground area
+        // position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
+        // position.y = Mathf.Clamp(position.y, cameraMinHeight, cameraMaxHeight);
+        // position.z = Mathf.Clamp(position.z, cameraBorder, mapZSize - cameraBorder);
 
         //// Effects when camera hit the ground or the top surface
         //if (position.y <= _rayHit.point.y + cameraMinHeight + 1)
