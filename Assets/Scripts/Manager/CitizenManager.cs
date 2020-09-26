@@ -27,7 +27,7 @@ public class CitizenManager : MonoBehaviour
 
     private void SetupFreeCitizens()
     {
-        for (int i = 0; i < GameManager.instance.players.Length; i++)
+        for (int i = 1; i <= GameManager.instance.players.Length; i++)
         {
             freeCitizensPerTeam[i] = new List<Citizen>();
         }

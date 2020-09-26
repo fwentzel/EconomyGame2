@@ -38,10 +38,13 @@ public class LevelEditor : MonoBehaviour
         mapNameInput.text = arr[arr.Length - 1].Split('.')[0];
         SetDimensions();
         SetUpNewTexture();
-        SetUpInput();
+        
         SetUpImage();
         paintColor = Color.black;
         Debug.Log("<color=red>IMPORTANT:</color> Atleast one house per team is necessary!");
+    }
+    private void Start() {
+        SetUpInput();
     }
 
     private void Update()
