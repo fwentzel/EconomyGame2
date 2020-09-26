@@ -144,15 +144,15 @@ public class CameraController : MonoBehaviour
 
 
         //Border Touch Movement
-        Vector2 mousePos=mouse.position.ReadValue();
-        if (mousePos.y >= Screen.height - cameraBorder)
-           position += new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        if (mousePos.y <= 0 + cameraBorder)
-           position -= new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        if (mousePos.x >= Screen.width - cameraBorder)
-           position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
-        if (mousePos.x <= 0 + cameraBorder)
-           position -= new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
+        // Vector2 mousePos=mouse.position.ReadValue();
+        // if (mousePos.y >= Screen.height - cameraBorder)
+        //    position += new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
+        // if (mousePos.y <= 0 + cameraBorder)
+        //    position -= new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
+        // if (mousePos.x >= Screen.width - cameraBorder)
+        //    position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
+        // if (mousePos.x <= 0 + cameraBorder)
+        //    position -= new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
 
 
         // Mouse Rotation

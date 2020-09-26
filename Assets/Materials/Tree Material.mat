@@ -112,7 +112,7 @@ Material:
     m_Colors:
     - Color_FB376F2F: {r: 0, g: 0.21176471, b: 0, a: 1}
     - Pos: {r: -21.68, g: 1, b: 0, a: 0}
-    - WindDir: {r: 1.7110817, g: -0.28401795, b: 0, a: 0}
+    - WindDir: {r: 1.3708627, g: -0.32596236, b: 0, a: 0}
     - _BaseColor: {r: 0.051619805, g: 0.3773585, b: 0.08339916, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

@@ -67,3 +67,4 @@ public class DebugCommand<T1,T2> : DebugCommandBase
 
     }
 }
+

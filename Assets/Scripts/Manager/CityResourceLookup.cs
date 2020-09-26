@@ -36,7 +36,7 @@ public class CityResourceLookup : MonoBehaviour
 
         for (int i = 0; i < resourceManagers.Length; i++)
         {
-            resourceManagers[i] = players[i].mainbuilding.resourceManager;
+            resourceManagers[players[i].team-1] = players[i].mainbuilding.resourceManager;
         }
         UpdateCityResourceMean();
     }
