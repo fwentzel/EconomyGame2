@@ -25,7 +25,7 @@
     }
     public override string GetStats()
     {
-        return "Type: House" + "\nTeam: " + team + "\nLevel: " + level + "\nCurrent: " + currentAmount + "\nCapacity: " + capacity;
+        return $"House\nLevel  {level} \nCapacity: {currentAmount} / {capacity}";
     }
     protected override void TriggerBonusLevel()
     {

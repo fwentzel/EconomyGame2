@@ -158,8 +158,8 @@ public class ResourceManager : MonoBehaviour
         //     newLoyalty -= 5;
 
 
-        //taxes in Range (0,10). taxes= 5 results in neutral loyaltychange
-        newLoyalty += (5 - mainbuilding.Taxes)/2;
+        //taxes in Range (0,20). taxes= 10 results in neutral loyaltychange
+        newLoyalty += ((mainbuilding.maxTaxes/2) - mainbuilding.Taxes)/2;
 
 
         if (newLoyalty > 100)

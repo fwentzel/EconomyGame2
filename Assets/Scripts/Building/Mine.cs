@@ -32,10 +32,7 @@ public class Mine : Building
 	}
 	public override string GetStats()
 	{
-		string stats = "Type: Mine" + "\nTeam: " + team + "\nLevel: " + level;
-		stats += "\nStone/Intervall: " + unitsPerIntervall;
-
-		return stats;
+		return $"Mine\nLevel {level}\nGenerates {unitsPerIntervall} Stone";
 	}
 
 	public override void CheckCanBuild(Collider other, bool onEnter)

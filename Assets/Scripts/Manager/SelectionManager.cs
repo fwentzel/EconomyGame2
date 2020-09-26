@@ -34,7 +34,7 @@ public class SelectionManager : MonoBehaviour
     }
     private void Start() {
         input = InputMasterManager.instance.inputMaster;
-        input.Selection.Click.canceled += _ => GetObjectFromClick();
+        input.Selection.Click.started += _ => GetObjectFromClick();
         input.Selection.Enable();
     }
     
