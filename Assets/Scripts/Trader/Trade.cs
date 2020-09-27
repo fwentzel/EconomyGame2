@@ -9,7 +9,7 @@ public struct Trade
 
     public override string ToString()
     {	
-		string msg= string.Format("{0} {1} per  {2} for {3} {4}",fromTraderAmount,fromTrader.resource,type,toTraderAmount,toTrader.resource);
+		string msg= string.Format("{0} {1} via {2} for {3} {4}",fromTraderAmount,fromTrader.resource,type,toTraderAmount,toTrader.resource);
         return msg;
     }
 }

@@ -12,7 +12,7 @@ public class DebugController : MonoBehaviour
 
     public static DebugCommand<resource, int> ADD_RES;
     public static DebugCommand HELP;
-
+    public static DebugCommand<string> MESSAGE;
     public static DebugCommand<Trade, ResourceManager> TRADE;
 
     public List<object> commandList;
@@ -23,7 +23,10 @@ public class DebugController : MonoBehaviour
 
     private void Awake()
     {
-
+        MESSAGE = new DebugCommand<string>("msg", "Send specified Message", "msg <message>", (x) =>
+       {
+           MessageSystem.instance.Message(x);
+       });
 
         ADD_RES = new DebugCommand<resource, int>("add_res", "Add specified res amount. Possible resources: food, loyalty, gold, citizens, stone ", "add_res <resource><amount>", (x, y) =>
        {
@@ -38,8 +41,9 @@ public class DebugController : MonoBehaviour
         HELP = new DebugCommand("help", "show help and description of all available commands", "help", () => showHelp = true);
 
         commandList = new List<object>{
-                TRADE,
+        TRADE,
         ADD_RES,
+        MESSAGE,
         HELP
     };
 
@@ -71,6 +75,8 @@ public class DebugController : MonoBehaviour
     }
     private void HandleInput()
     {
+        if (string.IsNullOrEmpty(input)) return;
+
         string[] properties = input.Split(' ');
         for (int i = 0; i < commandList.Count; i++)
         {
@@ -86,6 +92,10 @@ public class DebugController : MonoBehaviour
                 else if (commandList[i] is DebugCommand<int> commandInt)
                 {
                     commandInt.Invoke(int.Parse(properties[1]));
+                }
+                else if (commandList[i] is DebugCommand<string> commandString)
+                {
+                    commandString.Invoke(input);
                 }
                 else if (commandList[i] is DebugCommand<resource, int> commandResInt)
                 {
@@ -108,16 +118,16 @@ public class DebugController : MonoBehaviour
                     Trade newTrade = new Trade
                     {
                         toTrader = TradeManager.instance.GetTradingResource(resTo),
-                        toTraderAmount = int.TryParse(properties[3],out amount)?amount:0,
+                        toTraderAmount = int.TryParse(properties[3], out amount) ? amount : 0,
 
                         fromTrader = TradeManager.instance.GetTradingResource(resFrom),
-                        fromTraderAmount = int.TryParse(properties[5],out amount)?amount:0,
+                        fromTraderAmount = int.TryParse(properties[5], out amount) ? amount : 0,
                         // type = tradeType.ship
                         type = tradeType.TryParse(properties[6], out tradeType) ? tradeType : tradeType.ship
 
                     };
 
-                    ResourceManager resourceManager = CityResourceLookup.instance.resourceManagers[(int.TryParse(properties[5],out amount)?amount:1)-1];
+                    ResourceManager resourceManager = CityResourceLookup.instance.resourceManagers[(int.TryParse(properties[5], out amount) ? amount : 1) - 1];
                     if (resourceManager == null)
                         resourceManager = ResourceUiManager.instance.activeResourceMan;
 
@@ -156,6 +166,9 @@ public class DebugController : MonoBehaviour
 
         GUI.Box(new Rect(0, y, Screen.width, 30), "");
         GUI.backgroundColor = new Color(0, 0, 0, 0);
+        GUI.SetNextControlName("MyTextField");
         input = GUI.TextField(new Rect(10f, y + 5f, Screen.width - 20f, 20f), input);
+        GUI.FocusControl("MyTextField");
+        
     }
 }

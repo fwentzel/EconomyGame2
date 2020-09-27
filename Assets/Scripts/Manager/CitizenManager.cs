@@ -47,7 +47,7 @@ public class CitizenManager : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < freeCitizensPerTeam.Count; i++)
+            for (int i = 1; i <= freeCitizensPerTeam.Count; i++)
             {
                 if (freeCitizensPerTeam[i].Count > 0)
                 {

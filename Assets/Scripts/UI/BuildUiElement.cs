@@ -32,12 +32,12 @@ public class BuildUiElement : MonoBehaviour
 
         disableWhenFreeCitizens = building is House;
 
-        button.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) > buildCost;
+        button.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= buildCost;
     }
 
     private void CheckInteractable()
     {
-        bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) > buildCost;
+        bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= buildCost;
         if (disableWhenFreeCitizens)
             interactable &= CitizenManager.instance.freeCitizensPerTeam[activeRM.mainbuilding.team].Count == 0;
 
