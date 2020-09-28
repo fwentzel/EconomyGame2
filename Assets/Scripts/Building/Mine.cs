@@ -37,6 +37,8 @@ public class Mine : Building
 
 	public override void CheckCanBuild(Collider other, bool onEnter)
 	{
+		if(other==null)return;
+		
 		if (onEnter)
 		{
 			if (other.tag.Equals("RockResource"))
@@ -50,10 +52,9 @@ public class Mine : Building
 						PlacementController.instance.SetCanBuild(false);
 						return;
 					}
-
 				}
-
-				PlacementController.instance.SetCanBuild(true);
+				bool b=Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, transform.position) <= PlacementController.instance.maxPlacementRange;
+				PlacementController.instance.SetCanBuild(b);
 			}
 		}
 		else

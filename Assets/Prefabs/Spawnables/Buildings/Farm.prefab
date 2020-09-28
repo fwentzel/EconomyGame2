@@ -36,8 +36,7 @@ MonoBehaviour:
   - {fileID: 4300000, guid: 3046ffab76ef8a2459125ddd7502081b, type: 3}
   - {fileID: 4300000, guid: dbaa07085d8352b40ba9e4382cfaad2b, type: 3}
   - {fileID: 4300000, guid: 47714fade9030154ab0473afb784568c, type: 3}
-  buildCost: 250
-  levelCost: 100
+  buildCost: 120
   unitsPerIntervall: 4
 --- !u!1001 &6669280694705909271
 PrefabInstance:

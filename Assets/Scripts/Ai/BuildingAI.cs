@@ -12,7 +12,7 @@ public class BuildingAi : BaseAi
     public BuildingAi(AiMaster master) : base(master)
     {
         GetSpecificsFromBuilding();
-        GetAvailableBuildSpots(1, 2);
+        GetAvailableBuildSpots(1, PlacementController.instance.maxPlacementRange);
     }
 
     public override Type Tick()
@@ -96,7 +96,8 @@ public class BuildingAi : BaseAi
 
         //Didnt Level up, so we need a new one
         Vector3 pos = GetAvailablePosition();
-        PlaceBuilding(type, pos);
+        if(pos!=Vector3.zero)//if equal, no space left
+            PlaceBuilding(type, pos);
     }
 
     private void PlaceBuilding(Type type, Vector3 pos)
@@ -108,8 +109,11 @@ public class BuildingAi : BaseAi
 
     private Vector3 GetAvailablePosition()
     {
-        if (availableBuildSpots.Count == 0)
-            GetAvailableBuildSpots(previousEnd, previousEnd + 1);
+        if (availableBuildSpots.Count == 0){
+            Debug.Log("AI CANT BUILD ANYMORE");
+            return Vector3.zero;
+            // GetAvailableBuildSpots(previousEnd, previousEnd + 1);
+        }
 
         int index = 0;
         Vector3 pos = new Vector3(availableBuildSpots[index].x, PlacementController.instance.GetMeanHeightSurrounding(availableBuildSpots[index]), availableBuildSpots[index].y);
