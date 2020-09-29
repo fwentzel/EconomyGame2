@@ -51,7 +51,7 @@ public class TradeManager : MonoBehaviour
     }
 
     void Setup(){
-        foreach (ResourceManager resourceManger in CityResourceLookup.instance.resourceManagers)
+        foreach (ResourceManager resourceManger in CitysMeanResource.instance.resourceManagers)
         {
             tradeCooldowns.Add(resourceManger, Time.time);
         }

@@ -22,6 +22,7 @@ public class BuildingAi : BaseAi
         if (resourceManager.foodChange <= 0 || resourceManager.isLoyaltyDecreasing)
         {
             UpgradeOrBuild(typeof(Farm));
+            
         }
         if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team].Count == 0
         && resourceManager.foodChange > 0 

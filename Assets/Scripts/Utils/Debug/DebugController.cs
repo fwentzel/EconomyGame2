@@ -127,7 +127,7 @@ public class DebugController : MonoBehaviour
 
                     };
 
-                    ResourceManager resourceManager = CityResourceLookup.instance.resourceManagers[(int.TryParse(properties[5], out amount) ? amount : 1) - 1];
+                    ResourceManager resourceManager = CitysMeanResource.instance.resourceManagers[(int.TryParse(properties[5], out amount) ? amount : 1) - 1];
                     if (resourceManager == null)
                         resourceManager = ResourceUiManager.instance.activeResourceMan;
 

@@ -9,7 +9,7 @@ public class ResourceManager : MonoBehaviour
     public ResourceStartvalue resourceStartvalue;
     Dictionary<resource, int> resourceAmount;
 
-    public Mainbuilding mainbuilding;
+    public Mainbuilding mainbuilding ;
     public Curve foodRatioToLoyaltyChange;
     public event Action OnResourceChange = delegate { };
 
@@ -21,21 +21,16 @@ public class ResourceManager : MonoBehaviour
 
     private void Awake()
     {
-        PopulateRessourceAmounts();
-    }
-
-    private void Start()
-    {
-        GameManager.instance.OnCalculateIntervall += CalculateNextDay;
-    }
-
-    private void PopulateRessourceAmounts()
-    {
         resourceAmount = new Dictionary<resource, int>();
         foreach (Resource resource in resourceStartvalue.startValues)
         {
             resourceAmount[resource.resource] = resource.defaultStartAmount;
         }
+    }
+
+    private void Start()
+    {
+        GameManager.instance.OnCalculateIntervall += CalculateNextDay;
     }
 
     private void CalculateNextDay()
@@ -65,7 +60,7 @@ public class ResourceManager : MonoBehaviour
 
     private void CompareToMeanCityResources()
     {
-        float diff = resourceAmount[resource.loyalty] - CityResourceLookup.instance.meanLoyalty;
+        float diff = resourceAmount[resource.loyalty] - CitysMeanResource.instance.resourseMeanDict[resource.loyalty];
 
         if (diff > 10)
         {
@@ -150,13 +145,7 @@ public class ResourceManager : MonoBehaviour
         float t = foodChange / (float)(mainbuilding.maxCitizens * mainbuilding.foodUsePerDayPerCitizen);
 
         t = citizens > 0 ? t : -10;
-        // if (mainbuilding.GetComponent<StateMachine>() == null)
-        //     print(t);
         newLoyalty += Mathf.RoundToInt(foodRatioToLoyaltyChange.curve.Evaluate(t));
-
-        // if (  citizens/mainbuilding.maxCitizens < .5f)
-        //     newLoyalty -= 5;
-
 
         //taxes in Range (0,20). taxes= 10 results in neutral loyaltychange
         newLoyalty += ((mainbuilding.maxTaxes / 2) - mainbuilding.Taxes) / 2;

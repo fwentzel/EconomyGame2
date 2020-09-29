@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 
 
         }
-        CityResourceLookup.instance.PopulateResourceManagers(mainbuildings.Length);
+        CitysMeanResource.instance.PopulateResourceManagers(mainbuildings.Length);
     }
 
     void RpcStartInvokeCalcIntervall()
