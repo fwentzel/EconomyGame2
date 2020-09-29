@@ -47,6 +47,10 @@ public class TradeManager : MonoBehaviour
 
     private void Start()
     {
+        GameManager.instance.OnGameStart += Setup;
+    }
+
+    void Setup(){
         foreach (ResourceManager resourceManger in CityResourceLookup.instance.resourceManagers)
         {
             tradeCooldowns.Add(resourceManger, Time.time);

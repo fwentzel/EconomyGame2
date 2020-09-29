@@ -18,8 +18,8 @@
     protected override void OnLevelUp()
     {
         base.OnLevelUp();
-        unitsPerIntervall++;
-        resourceManager.ChangeRessourceAmount(resource.food, 1);
+        resourceManager.ChangeRessourceAmount(resource.food, unitsPerIntervall);
+        unitsPerIntervall*=2;
 
     }
 

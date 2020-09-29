@@ -37,8 +37,13 @@ public class ContextUiManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.instance.OnGameStart += () => ResourceUiManager.instance.activeResourceMan.OnResourceChange += TriggerUpdateContext;
+        GameManager.instance.OnGameStart += t;
 
+    }
+    void t()
+    {
+        print("y");
+        ResourceUiManager.instance.activeResourceMan.OnResourceChange += TriggerUpdateContext;
     }
 
     void TriggerUpdateContext()
@@ -131,7 +136,7 @@ public class ContextUiManager : MonoBehaviour
 
     public void UpdateContextUi(Mainbuilding mainbuilding)
     {
-        mainbuildingContextUiTaxesSlider.maxValue=mainbuilding.maxTaxes;
+        mainbuildingContextUiTaxesSlider.maxValue = mainbuilding.maxTaxes;
         mainbuildingContextUiTaxesText.text = $"Taxes:  {mainbuilding.Taxes}/{mainbuilding.maxTaxes} per citizen";
         mainbuildingContextUiText.text = mainbuilding.GetStats();
         mainbuildingContextUiTaxesSlider.value = mainbuilding.Taxes;

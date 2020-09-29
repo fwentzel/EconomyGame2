@@ -23,8 +23,8 @@ public class Mine : Building
 	protected override void OnLevelUp()
 	{
 		base.OnLevelUp();
-		unitsPerIntervall++;
-		resourceManager.ChangeRessourceAmount(resource.stone, 1);
+		resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
+		unitsPerIntervall*=2;
 	}
 	protected override void TriggerBonusLevel()
 	{

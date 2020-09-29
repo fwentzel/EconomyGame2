@@ -29,15 +29,15 @@
     }
     protected override void TriggerBonusLevel()
     {
-        capacity += 2;
-        ChangeCitizenAmount(1);
+        capacity *= 2;
+        ChangeCitizenAmount(2);
     }
 
     protected override void OnLevelUp()
     {
         base.OnLevelUp();
-        capacity++;
-        resourceManager.mainbuilding.maxCitizens += 1;
+        capacity+=2;
+        resourceManager.mainbuilding.maxCitizens += 2;
 		ResourceUiManager.instance.UpdateRessourceUI(resource.citizens);
         
     }

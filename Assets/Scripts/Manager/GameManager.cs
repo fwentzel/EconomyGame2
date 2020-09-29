@@ -35,11 +35,11 @@ public class GameManager : MonoBehaviour
     {
         if (Keyboard.current.fKey.isPressed)
         {
-            Time.timeScale = 5;
+            Time.timeScale = 1;
         }
         else
         {
-            Time.timeScale = 1;
+            Time.timeScale = 10;
         }
     }
 

@@ -8,7 +8,7 @@ public class WindManager:MonoBehaviour
     [SerializeField] Material material;
     private void Start()
     {
-        GameManager.instance.OnCalculateIntervall += ChangeWindDir;
+        //GameManager.instance.OnCalculateIntervall += ChangeWindDir;
     }
 
     private void ChangeWindDir()

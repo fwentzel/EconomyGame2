@@ -28,9 +28,12 @@ public class MyNetworkManager : MonoBehaviour
 	private void Start()
 	{
 		maxConnections=FindObjectsOfType<Mainbuilding>().Length;
-		OnServerAddPlayer();
+		StartCoroutine(SimulateLoadingTime());
 	}
-
+	IEnumerator SimulateLoadingTime(){
+		yield return new WaitForSeconds(.5f);
+			OnServerAddPlayer();
+	}
 	public void OnServerAddPlayer()
 	{
 		connectedPlayers++;

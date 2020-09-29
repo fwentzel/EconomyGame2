@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class InputMasterManager : MonoBehaviour
 {
-    public Inputmaster inputMaster{get;private set;}
-    public static InputMasterManager instance;
-    
+    public static InputMasterManager instance { get; private set; }
+    public Inputmaster inputMaster { get; private set; } 
+
     private void Awake()
     {
         if (instance == null)
@@ -12,6 +12,6 @@ public class InputMasterManager : MonoBehaviour
         else
             Destroy(this);
 
-        inputMaster = new Inputmaster();
+        inputMaster= new Inputmaster();
     }
 }

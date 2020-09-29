@@ -16,15 +16,10 @@ MonoBehaviour:
   team: -1
   renderTexture: {fileID: 8400000, guid: c1b98c3da5df27c45bb3e5bf0afd51ac, type: 2}
   meshlevels:
-  - {fileID: 4300000, guid: ee8eb427bf60afa48aadc18c3e83dafe, type: 3}
-  - {fileID: 4300000, guid: aa4bbc9f80f4e59468469077a836313b, type: 3}
-  - {fileID: 4300000, guid: ff0c5730e5fa3234caf0037697be949a, type: 3}
-  - {fileID: 4300000, guid: c1491311318644f4686d01746b0851bf, type: 3}
   - {fileID: 4300000, guid: 7dbb85b420d23544682d44616881aed8, type: 3}
   - {fileID: 4300000, guid: 78f4b8e7c73a0104a8112763cb8f5aec, type: 3}
   - {fileID: 4300000, guid: f727ded922603934b962032566006696, type: 3}
   buildCost: 100
-  levelCost: 75
   capacity: 2
 --- !u!1001 &780965403494922283
 PrefabInstance:
@@ -97,7 +92,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 4300000, guid: ee8eb427bf60afa48aadc18c3e83dafe, type: 3}
+      objectReference: {fileID: 4300000, guid: 7dbb85b420d23544682d44616881aed8, type: 3}
     - target: {fileID: 3824404263819456515, guid: 6f696213203f17a4ca48cee4726d5fc0,
         type: 3}
       propertyPath: m_Name

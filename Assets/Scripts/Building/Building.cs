@@ -19,10 +19,12 @@ public class Building : MonoBehaviour, ISelectable
     public int level { get; private set; } = 1;
     public bool canLevelUp { get; private set; } = false;
 
-    int triggerBonuslevelAfter = 4;
-    int maxLevel = 7;
+    int maxLevel;
 
-
+    private void Awake()
+    {
+        SetLevelMesh();
+    }
     public String GetLevelCostString()
     {
         return level == maxLevel ? "MAX" : levelCost.ToString();
@@ -38,7 +40,7 @@ public class Building : MonoBehaviour, ISelectable
 
     protected virtual void OnLevelUp()
     {
-        if (level > triggerBonuslevelAfter || level == maxLevel)
+        if (level == maxLevel)
             TriggerBonusLevel();
 
         resourceManager.ChangeRessourceAmount(resource.gold, -levelCost);
@@ -65,7 +67,9 @@ public class Building : MonoBehaviour, ISelectable
     {
         if (subtractResource)
             resourceManager.ChangeRessourceAmount(resource.gold, -buildCost);
-        levelCost = Mathf.RoundToInt(buildCost * .9f);
+        levelCost = Mathf.RoundToInt(buildCost * 2.5f);
+        maxLevel = meshlevels.Length;
+
     }
 
     public virtual void DestroyBuilding()

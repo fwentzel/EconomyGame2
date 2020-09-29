@@ -34,8 +34,8 @@ public class CameraController : MonoBehaviour
     public float cameraBorder;
 
     // Minimun and maxium distance from the detected ground the Camera can be
-    [Range(.8f, 15f)]
-    public float cameraMinHeight;
+   
+     float cameraMinHeight=5;
     [Range(.8f, 50f)]
     public float cameraMaxHeight;
 
@@ -73,6 +73,21 @@ public class CameraController : MonoBehaviour
         //controls.Camera.Move.performed+= ctx => Move(ctx.ReadValue<Vector2>());
         controls.Camera.Height.performed += ctx => Height(ctx.ReadValue<float>());
         controls.Camera.Enable();
+        SetCameraHeight();
+       
+    }
+
+    private void SetCameraHeight()
+    {
+        ColorToHeight[] cth = FindObjectOfType<MapGenerator>().colorToHeightMapping.colorHeightMappings;
+        for (int i = 0; i < cth.Length; i++)
+        {
+          if(cth[i].vertexHight>=1){
+               cameraMinHeight = cth[i].vertexHight+2;
+               return;
+          }  
+        }
+
     }
 
     private void Height(float v)
