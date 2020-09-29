@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
 		{
 			ResourceUiManager.instance.activeResourceMan = mainbuilding.resourceManager;
 			CameraController camControl = FindObjectOfType<CameraController>();
-			camControl.FocusOnMainBuilding(mainbuilding.transform.position);
+			camControl.MoveCamOverObjectAt(mainbuilding.transform.position);
 		}
 	}
 	

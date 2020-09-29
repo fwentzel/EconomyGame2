@@ -14,7 +14,7 @@ public class Utils : MonoBehaviour
 		{
 			return  hitInfo.point;
 		}
-		return new Vector3();
+		return Vector3.zero;
 	}
 
     public static GameObject GetObjectAtMousePos(Vector2 mouseScreenPos)

@@ -23,8 +23,8 @@ public class Mine : Building
 	protected override void OnLevelUp()
 	{
 		base.OnLevelUp();
-		unitsPerIntervall++;
-		resourceManager.ChangeRessourceAmount(resource.stone, 1);
+		resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
+		unitsPerIntervall*=2;
 	}
 	protected override void TriggerBonusLevel()
 	{
@@ -32,14 +32,13 @@ public class Mine : Building
 	}
 	public override string GetStats()
 	{
-		string stats = "Type: Mine" + "\nTeam: " + team + "\nLevel: " + level;
-		stats += "\nStone/Intervall: " + unitsPerIntervall;
-
-		return stats;
+		return $"Mine\nLevel {level}\nGenerates {unitsPerIntervall} Stone";
 	}
 
 	public override void CheckCanBuild(Collider other, bool onEnter)
 	{
+		if(other==null)return;
+		
 		if (onEnter)
 		{
 			if (other.tag.Equals("RockResource"))
@@ -53,10 +52,9 @@ public class Mine : Building
 						PlacementController.instance.SetCanBuild(false);
 						return;
 					}
-
 				}
-
-				PlacementController.instance.SetCanBuild(true);
+				bool b=Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, transform.position) <= PlacementController.instance.maxPlacementRange;
+				PlacementController.instance.SetCanBuild(b);
 			}
 		}
 		else

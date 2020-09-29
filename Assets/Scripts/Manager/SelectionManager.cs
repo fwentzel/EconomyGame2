@@ -29,14 +29,15 @@ public class SelectionManager : MonoBehaviour
             instance = this;
         else
             Destroy(this);
-        input = new Inputmaster();
-        input.Selection.Click.canceled += _ => GetObjectFromClick();
+        
         mouse = Mouse.current;
     }
-    private void OnEnable()
-    {
-        input.Enable();
+    private void Start() {
+        input = InputMasterManager.instance.inputMaster;
+        input.Selection.Click.started += _ => GetObjectFromClick();
+        input.Selection.Enable();
     }
+    
 
     private void GetObjectFromClick()
     {
@@ -54,9 +55,10 @@ public class SelectionManager : MonoBehaviour
 
 
     }
-    private void SetSelectedObject(GameObject value)
+    private void SetSelectedObject(GameObject obj)
     {
-        SelectedObject = value;
+        SelectedObject = obj;
+        
 
     }
 

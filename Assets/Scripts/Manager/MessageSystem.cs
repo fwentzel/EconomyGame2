@@ -10,11 +10,12 @@ public class MessageSystem : MonoBehaviour
     public static MessageSystem instance;
     [SerializeField] GameObject messagePanel = null;
     [SerializeField] Transform contentParent = null;
-    [SerializeField] GameObject textPrefab = null;
+    [SerializeField] GameObject messagePrefab = null;
     [SerializeField] int maxMessages = 4;
     Scrollbar scrollbar => messagePanel.GetComponent<ScrollRect>().verticalScrollbar;
     int msgCount = 0;
     WaitForSeconds cachedWait = new WaitForSeconds(5);
+    Inputmaster input;
 
     private void Awake()
     {
@@ -30,18 +31,17 @@ public class MessageSystem : MonoBehaviour
     private void Start()
     {
         messagePanel.SetActive(false);
+        input=InputMasterManager.instance.inputMaster;
     }
 
     private void Update()
     {
-        if (Keyboard.current.enterKey.wasReleasedThisFrame)
-        {
-            showChat();
-            
-        }
-
         
-
+        if (input.Menus.enabled&& Keyboard.current.enterKey.wasReleasedThisFrame)
+        {
+            // Message("BRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+            showChat();
+        }
     }
 
     IEnumerator hideChat()
@@ -64,7 +64,7 @@ public class MessageSystem : MonoBehaviour
         msgCount++;
         if (msgCount <= maxMessages)
         {
-            newChatMessage = Instantiate(textPrefab, contentParent);
+            newChatMessage = Instantiate(messagePrefab, contentParent);
         }
         else
         {
@@ -73,12 +73,22 @@ public class MessageSystem : MonoBehaviour
             t.SetSiblingIndex(contentParent.childCount);
         }
 
-        chatText = newChatMessage.GetComponent<TMP_Text>();
+        chatText = newChatMessage.GetComponentInChildren<TMP_Text>();
         message = "[" + GameManager.instance.dayIndex + "] " + message;
         chatText.text = message;
-        
-
         chatText.color = color == default ? Color.black : color;
         showChat();
+        //chatText.ForceMeshUpdate();
+        // chatText.GetTextInfo(message);
+        RectTransform rectTransform=newChatMessage.GetComponent<RectTransform>();
+        StartCoroutine(ResizeMessage(rectTransform));
+       
+    }
+    IEnumerator ResizeMessage(RectTransform rectTransform){
+
+        yield return 0;
+        
+        rectTransform.sizeDelta=new Vector2(rectTransform.sizeDelta.x,chatText.preferredHeight);
+
     }
 }

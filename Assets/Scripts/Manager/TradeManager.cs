@@ -47,6 +47,10 @@ public class TradeManager : MonoBehaviour
 
     private void Start()
     {
+        GameManager.instance.OnGameStart += Setup;
+    }
+
+    void Setup(){
         foreach (ResourceManager resourceManger in CityResourceLookup.instance.resourceManagers)
         {
             tradeCooldowns.Add(resourceManger, Time.time);
@@ -128,13 +132,14 @@ public class TradeManager : MonoBehaviour
         }
     }
 
-    public void AcceptTrade(Trade trade, ResourceManager rm)
+    public void AcceptTrade(Trade trade, ResourceManager rm, bool isDebug = false)
     {
-        tradeToElementMapping[trade].DisableElement();
         rm.ChangeRessourceAmount(trade.toTrader.resource, -trade.toTraderAmount);
-
         SpawnVehicle(trade, rm);
 
+        if (isDebug) return;
+
+        tradeToElementMapping[trade].DisableElement();
         tradeCooldowns[rm] = Time.time + tradeCooldown;
 
         acceptedTrades++;
@@ -172,6 +177,16 @@ public class TradeManager : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         GenerateNewTrades(maxTrades);
+    }
+
+    public Resource GetTradingResource(resource res)
+    {
+        for (int i = 0; i < tradingResources.Length; i++)
+        {
+            if (tradingResources[i].resource == res)
+                return tradingResources[i];
+        }
+        return null;
     }
 }
 public enum tradeType

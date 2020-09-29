@@ -1,6 +1,4 @@
-﻿using BansheeGz.BGSpline.Components;
-using BansheeGz.BGSpline.Curve;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;

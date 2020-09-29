@@ -24,6 +24,7 @@ public class CameraController : MonoBehaviour
     // Editor Properties
     public Camera TheCamera;
     public LayerMask GroundLayer;
+    Vector3 mainbuildingPos = Vector2.zero;
 
     // Camera Properties
     public bool useDefaultSettings;
@@ -33,8 +34,8 @@ public class CameraController : MonoBehaviour
     public float cameraBorder;
 
     // Minimun and maxium distance from the detected ground the Camera can be
-    [Range(.8f, 15f)]
-    public float cameraMinHeight;
+   
+     float cameraMinHeight=5;
     [Range(.8f, 50f)]
     public float cameraMaxHeight;
 
@@ -60,25 +61,43 @@ public class CameraController : MonoBehaviour
     Mouse mouse;
     private void Awake()
     {
-        controls = new Inputmaster();
+        
         keyboard = Keyboard.current;
         mouse = Mouse.current;
     }
     void Start()
     {
+        controls=InputMasterManager.instance.inputMaster;
         CheckSettings();
         TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
         //controls.Camera.Move.performed+= ctx => Move(ctx.ReadValue<Vector2>());
         controls.Camera.Height.performed += ctx => Height(ctx.ReadValue<float>());
+        controls.Camera.Enable();
+        SetCameraHeight();
+       
+    }
+
+    private void SetCameraHeight()
+    {
+        ColorToHeight[] cth = FindObjectOfType<MapGenerator>().colorToHeightMapping.colorHeightMappings;
+        for (int i = 0; i < cth.Length; i++)
+        {
+          if(cth[i].vertexHight>=1){
+               cameraMinHeight = cth[i].vertexHight+2;
+               return;
+          }  
+        }
+
     }
 
     private void Height(float v)
     {
-        if(EventSystem.current.IsPointerOverGameObject()){
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
             return;
         }
-        v/=120;        
-        desiredScrollposition =Mathf.Clamp(desiredScrollposition - v * scrollSensitivity, cameraMinHeight, cameraMaxHeight); ;
+        v /= 120;
+        desiredScrollposition = Mathf.Clamp(desiredScrollposition - v * scrollSensitivity, cameraMinHeight, cameraMaxHeight); ;
 
 
     }
@@ -88,15 +107,6 @@ public class CameraController : MonoBehaviour
         Move();
     }
 
-    private void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        controls.Disable();
-    }
 
     void CheckSettings()
     {
@@ -119,6 +129,7 @@ public class CameraController : MonoBehaviour
 
     void Move()
     {
+        if(!controls.Camera.enabled) return;
         Vector3 position = TheCamera.transform.position;
         Vector3 rotation = new Vector3(TheCamera.transform.eulerAngles.x, TheCamera.transform.eulerAngles.y, 0);
 
@@ -140,29 +151,22 @@ public class CameraController : MonoBehaviour
             position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
         }
 
-
-
-
         // Q, E, Alt Rotation
         if (keyboard.qKey.isPressed)
             rotation.y -= cameraSpeed * (Time.deltaTime * 32);
         if (keyboard.eKey.isPressed)
             rotation.y += cameraSpeed * (Time.deltaTime * 32);
 
-        if (keyboard.leftAltKey.isPressed)
-        {
-            rotation.y = 0;
-            TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
-        }
 
-        // Border Touch Movement
-        // if (Input.mousePosition.y >= Screen.height - cameraBorder)
+        //Border Touch Movement
+        // Vector2 mousePos=mouse.position.ReadValue();
+        // if (mousePos.y >= Screen.height - cameraBorder)
         //    position += new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        // if (Input.mousePosition.y <= 0 + cameraBorder)
+        // if (mousePos.y <= 0 + cameraBorder)
         //    position -= new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * (cameraSpeed * Time.deltaTime);
-        // if (Input.mousePosition.x >= Screen.width - cameraBorder)
+        // if (mousePos.x >= Screen.width - cameraBorder)
         //    position += new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
-        // if (Input.mousePosition.x <= 0 + cameraBorder)
+        // if (mousePos.x <= 0 + cameraBorder)
         //    position -= new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * (cameraSpeed * Time.deltaTime);
 
 
@@ -183,17 +187,17 @@ public class CameraController : MonoBehaviour
             cameraSpeed = (_savedCameraSpeed * 2f);
         else
             cameraSpeed = _savedCameraSpeed;
-        
-        position= new Vector3(position.x,Mathf.Lerp(position.y, desiredScrollposition, Time.deltaTime * scrollspeed),position.z);
-        
+
+        position = new Vector3(position.x, Mathf.Lerp(position.y, desiredScrollposition, Time.deltaTime * scrollspeed), position.z);
+
         //// Camera Collision Check
         //Ray ray = new Ray(position, TheCamera.transform.forward);
         //Physics.Raycast(ray, out _rayHit, 32, GroundLayer);
 
-        //// Don't allow the camera to leave the ground area
-        //position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
-        position.y = Mathf.Clamp(position.y, cameraMinHeight, cameraMaxHeight);
-        //position.z = Mathf.Clamp(position.z, cameraBorder, mapZSize - cameraBorder);
+        // Don't allow the camera to leave the ground area
+        // position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
+        // position.y = Mathf.Clamp(position.y, cameraMinHeight, cameraMaxHeight);
+        // position.z = Mathf.Clamp(position.z, cameraBorder, mapZSize - cameraBorder);
 
         //// Effects when camera hit the ground or the top surface
         //if (position.y <= _rayHit.point.y + cameraMinHeight + 1)
@@ -203,17 +207,27 @@ public class CameraController : MonoBehaviour
 
         // Save Changes
         TheCamera.transform.position = Vector3.Slerp(TheCamera.transform.position, position, .8f);
-        TheCamera.transform.eulerAngles = Vector3.Slerp(TheCamera.transform.eulerAngles, rotation, .2f);
+        if (keyboard.spaceKey.isPressed)
+        {
+            rotation.y = 0;
+            TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
+            if(mainbuildingPos!=Vector3.zero)
+                MoveCamOverObjectAt(mainbuildingPos);
+        }
+        //TheCamera.transform.eulerAngles = Vector3.Slerp(TheCamera.transform.eulerAngles, rotation, .2f);
     }
 
 
 
-    public void FocusOnMainBuilding(Vector3 mainbuildingPos)
+    public void MoveCamOverObjectAt(Vector3 objectPos)
     {
+
         float y = TheCamera.transform.position.y;
         float rotation = TheCamera.transform.rotation.eulerAngles.x * Mathf.Deg2Rad;
         float offset = (y / Mathf.Tan(rotation));
-        float newZ = mainbuildingPos.z - offset;
-        TheCamera.transform.position = new Vector3(mainbuildingPos.x, y, newZ);
+        this.mainbuildingPos = objectPos;
+        float newZ = objectPos.z - offset;
+        TheCamera.transform.position = new Vector3(objectPos.x, y, newZ);
+
     }
 }

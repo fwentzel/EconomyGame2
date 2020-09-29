@@ -29,6 +29,7 @@ MonoBehaviour:
   team: -1
   renderTexture: {fileID: 8400000, guid: c0228741d2d2d2449ad5c0a5ea1044da, type: 2}
   meshlevels: []
+  buildCost: 200
   unitsPerIntervall: 10
 --- !u!1001 &3870323613934889621
 PrefabInstance:

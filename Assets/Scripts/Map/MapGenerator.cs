@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -51,7 +52,7 @@ public class MapGenerator : MonoBehaviour
 
     public void SetupMap()
     {
-        
+
         waterMaterial.SetFloat("StartTime", -999);
         GenerateMap();
 
@@ -67,17 +68,16 @@ public class MapGenerator : MonoBehaviour
             if (colorToHeightMapping.colorHeightMappings[i].name.Equals("Water"))
             {
                 waterVertexHeight = colorToHeightMapping.colorHeightMappings[i].vertexHight;
-                waterColorValue=colorToHeightMapping.colorHeightMappings[i].value/255f;
+                waterColorValue = colorToHeightMapping.colorHeightMappings[i].value / 255f;
             }
         }
     }
-    
+
 
     private void OnDisable()
     {
         waterMaterial.SetFloat("StartTime", -999);
     }
-
 
     public void GenerateMap()
     {
@@ -92,9 +92,8 @@ public class MapGenerator : MonoBehaviour
         BuildObjectsOnMap();
         material.SetInt("Vector1_2D88299F", gridSpacing);
         material.SetTexture("Texture2D_AD5527E4", mapTexture);
+        // NavMeshBuilder.BuildNavMeshData();
     }
-
-
 
     private void DestroyChildren()
     {
@@ -229,16 +228,22 @@ public class MapGenerator : MonoBehaviour
                             float newY = vertices[i].y;
                             newY = 0;
                             //instantiate given prefab and set Position at coordinsates + gridspacing/2 offset and vertexheigth
+
+# if(UNITY_EDITOR)
+                            GameObject obj = PrefabUtility.InstantiatePrefab(objectMapping.placeable, transform) as GameObject;
+#else
                             GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
+#endif
                             obj.transform.position = new Vector3(x + gridSpacing / 2.0f, newY, z + gridSpacing / 2.0f);
 
                             //obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
                             int teamColorValue = mapTextureColor.r;
-                            if (teamColorValue>0&&teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
+
+                            if (teamColorValue > 0 && teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
                             {
                                 //set building Team equal to team at index [blue Channel value (1,4)]
-                                Team team = teams[teamColorValue-1];
+                                Team team = teams[teamColorValue - 1];
 
                                 //TODO SAME CODE AS IN MAINBUILDING
                                 Building building = obj.GetComponent<Building>();
@@ -249,27 +254,35 @@ public class MapGenerator : MonoBehaviour
                                 if (building is Harbour)
                                 {
 
-                                    float r = mapTexture.GetPixel(x, z + 1).r;
-                                    if (r == waterColorValue)
+
+                                    if (mapTexture.GetPixel(x, z + 1).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, 90);
+                                        obj.transform.position += Vector3.back;
                                         continue;
                                     }
-
-                                    r = mapTexture.GetPixel(x + 1, z).r;
-                                    if (r == waterColorValue)
+                                    if (mapTexture.GetPixel(x + 1, z).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, 180);
+                                        obj.transform.position += Vector3.left;
                                         continue;
                                     }
-                                    r = mapTexture.GetPixel(x, z - 1).r;
-                                    if (r == waterColorValue)
+                                    if (mapTexture.GetPixel(x, z - 1).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, -90);
+                                        obj.transform.position += Vector3.forward;
                                         continue;
-                                    }
 
+                                    }
+                                    obj.transform.position += Vector3.right;
                                 }
+                            }
+
+                            //Trees random transform
+                            Forest forest = obj.GetComponent<Forest>();
+                            if (forest != null)
+                            {
+                                forest.OnBuild();
                             }
 
                         }

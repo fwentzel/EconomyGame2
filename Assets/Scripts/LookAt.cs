@@ -2,11 +2,11 @@
 
 public class LookAt : MonoBehaviour
 {
-	public Transform mainCamera;
+	 Transform mainCamera;
     // Start is called before the first frame update
     void Start()
     {
-        
+        mainCamera=Camera.main.transform;
     }
 
     // Update is called once per frame

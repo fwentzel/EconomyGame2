@@ -4,111 +4,120 @@ using UnityEngine;
 
 public class BuildingAi : BaseAi
 {
-	int maxGoldThreshold = 500;
-	Dictionary<Type, List<Building>> buildingList;
-	List<Vector2> availableBuildSpots;
-	int oldEnd;
+    Dictionary<Type, List<Building>> buildingList;
+    List<Vector2> availableBuildSpots;
+    int previousEnd;
+    int gold;
 
-	public BuildingAi(AiMaster master) : base(master)
-	{
-		GetSpecificsFromBuilding();
-		GetAvailableBuildSpots(1,2);
-	}
+    public BuildingAi(AiMaster master) : base(master)
+    {
+        GetSpecificsFromBuilding();
+        GetAvailableBuildSpots(1, PlacementController.instance.maxPlacementRange);
+    }
 
-	public override Type Tick()
-	{
-		int gold = resourceManager.GetAmount(resource.gold);
-		if (resourceManager.CalculateFoodChange() < 0)
-		{
-			return UpgradeOrBuild(gold, typeof(Farm));
-		}
-		if (resourceManager.GetAmount(resource.gold) > maxGoldThreshold)
-		{
-			//Act and Build 
-			return UpgradeOrBuild(gold, typeof(House));
-		}
+    public override Type Tick()
+    {
+        gold = resourceManager.GetAmount(resource.gold);
+        resourceManager.CalculateFoodChange();
+        if (resourceManager.foodChange <= 0 || resourceManager.isLoyaltyDecreasing)
+        {
+            UpgradeOrBuild(typeof(Farm));
+        }
+        if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team].Count == 0
+        && resourceManager.foodChange > 0 
+        || resourceManager.GetAmount(resource.food) > (resourceManager.GetAmount(resource.citizens)*mainbuilding.foodUsePerDayPerCitizen)*2)//double the food that is needed for ctizens
+        {
+            //Act and Build 
+            UpgradeOrBuild(typeof(House));
+        }
 
-		return typeof(TradeAi);
-	}
+        return typeof(TradeAi);
+    }
 
-	private void GetAvailableBuildSpots(int start, int end)
-	{
-		if (start < 1)
-			start = 1;
-		oldEnd = end;
-		availableBuildSpots = new List<Vector2>();
-		Vector2 mainPos = new Vector2(mainbuilding.transform.position.x, mainbuilding.transform.position.z);
-		for (int i = start; i < end; i++)
-		{
-			for (int x = -i; x <= i; x++)
-			{
-				for (int z = -i; z <= i; z++)
-				{
-					availableBuildSpots.Add(mainPos + new Vector2(x , z));
-				}
-			}
-		}
-		foreach (Building building in mainbuilding.buildings)
-		{
-			Vector2 buildingPos = new Vector2(building.transform.position.x, building.transform.position.z);
-			if (availableBuildSpots.Contains(buildingPos))
-				availableBuildSpots.Remove(buildingPos);
-		}
-	}
+    private void GetAvailableBuildSpots(int start, int end)
+    {
+        if (start < 1)
+            start = 1;
+        previousEnd = end;
+        availableBuildSpots = new List<Vector2>();
+        Vector2 mainPos = new Vector2(mainbuilding.transform.position.x, mainbuilding.transform.position.z);
+        for (int i = start; i < end; i++)
+        {
+            for (int x = -i; x <= i; x++)
+            {
+                for (int z = -i; z <= i; z++)
+                {
 
-	//duplicatin code
-	private void GetSpecificsFromBuilding()
-	{
-		buildingList = new Dictionary<Type, List<Building>>() {
-			{typeof(House),new List<Building>() },
-			{typeof(Harbour),new List<Building>() },
-			{typeof(Farm),new List<Building>() }
-		};
+                    availableBuildSpots.Add(mainPos + new Vector2(x, z));
+                }
+            }
+        }
+        //remove mainbuilding pos
+        availableBuildSpots.Remove(mainPos);
 
-		foreach (Building building in mainbuilding.buildings)
-		{
-			buildingList[building.GetType()].Add(building);
-		}
-	}
+        //TODO bisschen hacky
+        foreach (Building building in mainbuilding.buildings)
+        {
+            Vector2 buildingPos = new Vector2(building.transform.position.x, building.transform.position.z);
+            if (availableBuildSpots.Contains(buildingPos))
+                availableBuildSpots.Remove(buildingPos);
+        }
+    }
 
-	
+    //duplicatin code
+    private void GetSpecificsFromBuilding()
+    {
+        buildingList = new Dictionary<Type, List<Building>>() {
+            {typeof(House),new List<Building>() },
+            {typeof(Harbour),new List<Building>() },
+            {typeof(Farm),new List<Building>() }
+        };
 
-	private Type UpgradeOrBuild(int gold, Type type)
-	{
-		//Act and Build 
-		foreach (var building in buildingList[type])
-		{
-			if (gold < building.levelCost)
-				continue;
+        foreach (Building building in mainbuilding.buildings)
+        {
+            buildingList[building.GetType()].Add(building);
+        }
+    }
 
-			if (building.LevelUp())
-				break;
-		}
-		if (buildingList[type].Count>0&&gold < buildingList[type][0].buildCost)
-			return typeof(TradeAi);
 
-		//Didnt Level up Farm, so we need a new one
-		Log(" Added " + type.ToString());
-		Vector3 pos = GetAvailablePosition();
-		PlaceBuilding(type, pos);
-		return typeof(TradeAi);
-	}
 
-	private void PlaceBuilding(Type type, Vector3 pos)
-	{
-		Building addedBuilding= mainbuilding.AddBuilding(type, pos);
-		buildingList[type].Add(addedBuilding);
-		resourceManager.ChangeRessourceAmount(resource.gold, -buildingList[type][0].buildCost);
-	}
+    private void UpgradeOrBuild(Type type)
+    {
+        //Try Levelling Up
+        foreach (var building in buildingList[type])
+        {
+            if (gold >= building.levelCost && building.LevelUp())
+                return;
+        }
 
-	private Vector3 GetAvailablePosition()
-	{
-		if (availableBuildSpots.Count == 0)
-			GetAvailableBuildSpots(oldEnd, oldEnd + 1);
+        //check if there is enough money to build new Building
+        if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
+            return;
 
-		int index = 0;
-		Vector3 pos = new Vector3(availableBuildSpots[index].x,PlacementController.instance.GetMeanHeightSurrounding(availableBuildSpots[index]), availableBuildSpots[index].y);
-		availableBuildSpots.RemoveAt(index);
-		return pos;
-	}
+        //Didnt Level up, so we need a new one
+        Vector3 pos = GetAvailablePosition();
+        if(pos!=Vector3.zero)//if equal, no space left
+            PlaceBuilding(type, pos);
+    }
+
+    private void PlaceBuilding(Type type, Vector3 pos)
+    {
+        Building addedBuilding = mainbuilding.AddBuilding(type, pos);
+        buildingList[type].Add(addedBuilding);
+
+    }
+
+    private Vector3 GetAvailablePosition()
+    {
+        if (availableBuildSpots.Count == 0){
+            Debug.Log("AI CANT BUILD ANYMORE");
+            return Vector3.zero;
+            // GetAvailableBuildSpots(previousEnd, previousEnd + 1);
+        }
+
+        int index = 0;
+        Vector3 pos = new Vector3(availableBuildSpots[index].x, PlacementController.instance.GetMeanHeightSurrounding(availableBuildSpots[index]), availableBuildSpots[index].y);
+        availableBuildSpots.RemoveAt(index);
+        return pos;
+    }
 }

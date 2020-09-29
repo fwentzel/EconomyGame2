@@ -13,16 +13,18 @@ public class Building : MonoBehaviour, ISelectable
 
     [SerializeField] Mesh[] meshlevels = null;
 
-    public int buildCost { get; private set; } = 50;
+    public int buildCost = 50;
     public int levelCost { get; private set; } = 100;
 
     public int level { get; private set; } = 1;
     public bool canLevelUp { get; private set; } = false;
 
-    int triggerBonuslevelEvery = 3;
-    int maxLevel = 7;
+    int maxLevel;
 
-
+    private void Awake()
+    {
+        SetLevelMesh();
+    }
     public String GetLevelCostString()
     {
         return level == maxLevel ? "MAX" : levelCost.ToString();
@@ -38,7 +40,7 @@ public class Building : MonoBehaviour, ISelectable
 
     protected virtual void OnLevelUp()
     {
-        if (level % triggerBonuslevelEvery == 0 || level == maxLevel)
+        if (level == maxLevel)
             TriggerBonusLevel();
 
         resourceManager.ChangeRessourceAmount(resource.gold, -levelCost);
@@ -65,6 +67,9 @@ public class Building : MonoBehaviour, ISelectable
     {
         if (subtractResource)
             resourceManager.ChangeRessourceAmount(resource.gold, -buildCost);
+        levelCost = Mathf.RoundToInt(buildCost * 2.5f);
+        maxLevel = meshlevels.Length;
+
     }
 
     public virtual void DestroyBuilding()
@@ -82,14 +87,23 @@ public class Building : MonoBehaviour, ISelectable
 
     public virtual void CheckCanBuild(Collider other, bool onEnter)
     {
-        if (other.tag.Equals("Ground"))
+        //only distance check
+        if (other == null)
+        {
+            PlacementController.instance.SetCanBuild(Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, transform.position) <= PlacementController.instance.maxPlacementRange);
             return;
+        }
+
+        if (other.CompareTag("Ground")) return;
+
+        //entered a collieder, so disable build
         if (onEnter)
         {
             PlacementController.instance.SetCanBuild(false);
         }
         else
         {
+            //TODO
             PlacementController.instance.SetCanBuild(true);
         }
     }
@@ -98,7 +112,7 @@ public class Building : MonoBehaviour, ISelectable
     {
         return resourceManager.GetAmount(resource.gold) >= levelCost && level < maxLevel;
     }
-  
+
     public int GetTeam()
     {
         return team;

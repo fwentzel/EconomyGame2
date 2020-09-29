@@ -8,6 +8,7 @@ public class ContextUiManager : MonoBehaviour
 {
     public static ContextUiManager instance { get; private set; }
 
+    [SerializeField] int offsetY = 50;
     Transform buildingContextPanel = null;
     TMP_Text buildingContextUiText;
     Button buildingContextUiLevelUpButton;
@@ -36,22 +37,21 @@ public class ContextUiManager : MonoBehaviour
 
     private void Start()
     {
-        ResourceUiManager.instance.activeResourceMan.OnResourceChange += TriggerUpdateContext;
+        GameManager.instance.OnGameStart += ()=>ResourceUiManager.instance.activeResourceMan.OnResourceChange += TriggerUpdateContext;
+
     }
 
     void TriggerUpdateContext()
     {
         GameObject selected = SelectionManager.instance.selectedObject;
-        if (selected != null)
-        {
-            Building bld = selected.GetComponent<Building>();
-            TradeVehicle vhcl = selected.GetComponent<TradeVehicle>();
-            if (bld != null)
-                UpdateContextUi(bld);
-            else if (vhcl != null)
-                UpdateContextUi(vhcl);
-        }
+        if (selected == null) return;
 
+        Building building = selected.GetComponent<Building>();
+        TradeVehicle vehicle = selected.GetComponent<TradeVehicle>();
+        if (building != null)
+            UpdateContextUi(building);
+        else if (vehicle != null)
+            UpdateContextUi(vehicle);
     }
 
     private void SetupUiElements()
@@ -76,7 +76,7 @@ public class ContextUiManager : MonoBehaviour
     {
         CloseAll();
         var selectable = obj.GetComponent<ISelectable>();
-
+        transform.position = obj.transform.position + new Vector3(0, offsetY, 0);
 
         TradeVehicle vehicle = selectable as TradeVehicle;
         if (vehicle != null)
@@ -131,7 +131,8 @@ public class ContextUiManager : MonoBehaviour
 
     public void UpdateContextUi(Mainbuilding mainbuilding)
     {
-        mainbuildingContextUiTaxesText.text = "Taxes: " + mainbuilding.Taxes + " /10 per citizen";
+        mainbuildingContextUiTaxesSlider.maxValue = mainbuilding.maxTaxes;
+        mainbuildingContextUiTaxesText.text = $"Taxes:  {mainbuilding.Taxes}/{mainbuilding.maxTaxes} per citizen";
         mainbuildingContextUiText.text = mainbuilding.GetStats();
         mainbuildingContextUiTaxesSlider.value = mainbuilding.Taxes;
     }

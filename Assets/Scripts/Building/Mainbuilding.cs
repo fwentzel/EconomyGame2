@@ -2,19 +2,19 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Mainbuilding : Building
 {
-	[Range(0, 10)]
-	private int taxes = 5;
+	private int taxes = 10;
 	public int foodUsePerDayPerCitizen = 2;
 	[SerializeField]
 	public List<Building> buildings { get; private set; }
 	public Dictionary<Type, GameObject> possibleBuildings;
-	public int Taxes { get => taxes; set => taxes = Mathf.Clamp(value, 0, 10); }
+	public int Taxes { get => taxes; set => taxes = Mathf.Clamp(value, 0, maxTaxes); }
 	public bool gameOver=false;
 	public int maxCitizens = 0;
+
+	public int maxTaxes = 20;
 
 	private void Awake()
 	{
@@ -63,7 +63,6 @@ public class Mainbuilding : Building
 		building.OnBuild(subtractFromResource);
 		building.team = team;
 		building.enabled = true;
-		
 	}
 
 	//Ai version
@@ -83,8 +82,7 @@ public class Mainbuilding : Building
 
 	public override string GetStats()
 	{
-		string stats = "Type: Mainbuilding" + " \nTeam: " + team;
-		return stats;
+		return "Mainbuilding";
 	}
 
 }

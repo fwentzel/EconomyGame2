@@ -10,7 +10,7 @@ public class LevelEditor : MonoBehaviour
 {
     Texture2D mapTexture;
     Texture2D tempMap;
-    [SerializeField] RawImage image;
+    [SerializeField] RawImage image= default;
     Vector3 imagePos;
     [SerializeField] TMP_InputField mapNameInput = default;
     [SerializeField] TMP_InputField dimenionsInput = default;
@@ -18,9 +18,10 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] Vector2Int dimensions = new Vector2Int(50, 50);
     Vector2Int imageDimensions;
     Inputmaster input;
-    inputmodes inputmode = inputmodes.objects;
+    inputmodes inputmode = inputmodes.brush;
 
     Mouse mouse;
+    Keyboard keyboard;
     [Range(1, 10)]
     [SerializeField] int brushSize = 3;
 
@@ -33,12 +34,26 @@ public class LevelEditor : MonoBehaviour
     private void Awake()
     {
         dimenionsInput.text = $"{dimensions.x},{dimensions.y}";
-        mapNameInput.text = "map1";
+        string[] arr = AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("t:texture2D", new[] { "Assets/Textures/Maps" })[0]).Split('/');
+        mapNameInput.text = arr[arr.Length - 1].Split('.')[0];
         SetDimensions();
         SetUpNewTexture();
-        SetUpInput();
+        
         SetUpImage();
         paintColor = Color.black;
+        Debug.Log("<color=red>IMPORTANT:</color> Atleast one house per team is necessary!");
+    }
+    private void Start() {
+        SetUpInput();
+    }
+
+    private void Update()
+    {
+        if (keyboard.digit1Key.wasPressedThisFrame) ChangeTeam(1);
+        if (keyboard.digit2Key.wasPressedThisFrame) ChangeTeam(2);
+        if (keyboard.digit3Key.wasPressedThisFrame) ChangeTeam(3);
+        if (keyboard.digit4Key.wasPressedThisFrame) ChangeTeam(4);
+
     }
 
     private void SetUpImage()
@@ -51,12 +66,14 @@ public class LevelEditor : MonoBehaviour
 
     private void SetUpInput()
     {
-        input = new Inputmaster();
+        input = InputMasterManager.instance.inputMaster;
         input.UI.Click.started += _ => Paint();
         input.LevelEditor.Drag.started += _ => InvokeRepeating("Paint", 0, 0.01f);
         input.LevelEditor.Drag.canceled += _ => CancelInvoke();
-        input.Enable();
+        input.UI.Enable();
+        input.LevelEditor.Enable();
         mouse = Mouse.current;
+        keyboard = Keyboard.current;
     }
 
     private void SetUpNewTexture()
@@ -97,16 +114,21 @@ public class LevelEditor : MonoBehaviour
         //green for Objects
         foreach (var item in colorToObjectMapping.colorObjectMappings)
         {
-            if (item.name.Equals(name))
+            if (item.name == name)
             {
                 paintColor.g = item.value / 255f;
                 paintColor.b = 0;
-                inputmode = inputmodes.buidlings;
+                inputmode = inputmodes.single;
 
                 if (item.value < 100)//OBJECTS
                 {
                     paintColor.r = 0;
-                    inputmode = inputmodes.objects;
+
+                    inputmode = item.name == "Forest" ? inputmodes.brush : inputmodes.single;
+                }
+                else if (paintColor.r == 0)
+                {
+                    paintColor.r = 1/255f;//set defualt value for team
                 }
 
                 print("Painting: " + name);
@@ -128,7 +150,7 @@ public class LevelEditor : MonoBehaviour
         }
         foreach (var item in colorToHeightMapping.colorHeightMappings)
         {
-            if (item.name.Equals(name))
+            if (item.name == name)
             {
                 paintColor.b = item.value / 255f;
                 paintColor.g = 0;
@@ -178,12 +200,11 @@ public class LevelEditor : MonoBehaviour
     public void New()
     {
         String path = GetMapPath();
-        Texture2D _mapTexture = AssetDatabase.LoadAssetAtPath(mapPath+"newMap.asset", typeof(Texture2D)) as Texture2D;
+        Texture2D _mapTexture = AssetDatabase.LoadAssetAtPath(mapPath + "newMap.asset", typeof(Texture2D)) as Texture2D;
         if (_mapTexture != null)
         {
             print("map already exists. Overwriting newmap.asset!");
         }
-        mapNameInput.text="newMap";
         SetDimensions();
         SetUpNewTexture();
         SetUpImage();
@@ -204,7 +225,7 @@ public class LevelEditor : MonoBehaviour
 
     String GetMapPath()
     {
-        return  mapPath + mapNameInput.text + ".asset";
+        return mapPath + mapNameInput.text + ".asset";
     }
     public void ChangeTeam(float _team)
     {
@@ -226,7 +247,7 @@ public class LevelEditor : MonoBehaviour
         Vector2Int pos = PosInImage();
         if (pos.x < 0)
             return;
-        int tmpSize = inputmode == inputmodes.buidlings ? 1 : brushSize;
+        int tmpSize = inputmode == inputmodes.single ? 1 : brushSize;
         int size = tmpSize / 2;
         if (size == 0)
         {
@@ -270,6 +291,6 @@ public class LevelEditor : MonoBehaviour
 public enum inputmodes
 {
     height,
-    objects,
-    buidlings
+    brush,
+    single
 }

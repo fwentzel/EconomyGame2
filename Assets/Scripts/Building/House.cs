@@ -25,19 +25,19 @@
     }
     public override string GetStats()
     {
-        return "Type: House" + "\nTeam: " + team + "\nLevel: " + level + "\nCurrent: " + currentAmount + "\nCapacity: " + capacity;
+        return $"House\nLevel  {level} \nCapacity: {currentAmount} / {capacity}";
     }
     protected override void TriggerBonusLevel()
     {
-        capacity += 2;
-        ChangeCitizenAmount(1);
+        capacity *= 2;
+        ChangeCitizenAmount(2);
     }
 
     protected override void OnLevelUp()
     {
         base.OnLevelUp();
-        capacity++;
-        resourceManager.mainbuilding.maxCitizens += 1;
+        capacity+=2;
+        resourceManager.mainbuilding.maxCitizens += 2;
 		ResourceUiManager.instance.UpdateRessourceUI(resource.citizens);
         
     }
