@@ -37,13 +37,8 @@ public class ContextUiManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.instance.OnGameStart += t;
+        GameManager.instance.OnGameStart += ()=>ResourceUiManager.instance.activeResourceMan.OnResourceChange += TriggerUpdateContext;
 
-    }
-    void t()
-    {
-        print("y");
-        ResourceUiManager.instance.activeResourceMan.OnResourceChange += TriggerUpdateContext;
     }
 
     void TriggerUpdateContext()

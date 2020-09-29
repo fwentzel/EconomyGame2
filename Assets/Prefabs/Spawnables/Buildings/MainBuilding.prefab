@@ -30,6 +30,7 @@ MonoBehaviour:
   foodRatioToLoyaltyChange: {fileID: 11400000, guid: 74c8d8a0b7b0b4048a253e48a26fafb5,
     type: 2}
   isLoyaltyDecreasing: 0
+  numSafeDaysAfterLoss: 5
 --- !u!114 &7934057579518317440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43,12 +44,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceManager: {fileID: 0}
-  team: -1
+  team: 4
   renderTexture: {fileID: 0}
   meshlevels: []
-  foodUsePerDayPerCitizen: 3
+  buildCost: 50
+  foodUsePerDayPerCitizen: 5
   gameOver: 0
   maxCitizens: 0
+  maxTaxes: 20
 --- !u!1001 &3086798398129089301
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -84,17 +87,17 @@ PrefabInstance:
     - target: {fileID: 6884737216131090460, guid: 7eb37859ffb14ea4182db2bad81211e3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.262
+      value: 8.5
       objectReference: {fileID: 0}
     - target: {fileID: 6884737216131090460, guid: 7eb37859ffb14ea4182db2bad81211e3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.063316
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6884737216131090460, guid: 7eb37859ffb14ea4182db2bad81211e3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 30.234
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 6884737216131090460, guid: 7eb37859ffb14ea4182db2bad81211e3,
         type: 3}

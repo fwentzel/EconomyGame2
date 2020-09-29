@@ -212,22 +212,22 @@ public class CameraController : MonoBehaviour
             rotation.y = 0;
             TheCamera.transform.eulerAngles = new Vector3(TheCamera.transform.eulerAngles.x, 0, 0);
             if(mainbuildingPos!=Vector3.zero)
-                FocusOnMainBuilding(mainbuildingPos);
+                MoveCamOverObjectAt(mainbuildingPos);
         }
         //TheCamera.transform.eulerAngles = Vector3.Slerp(TheCamera.transform.eulerAngles, rotation, .2f);
     }
 
 
 
-    public void FocusOnMainBuilding(Vector3 mainbuildingPos)
+    public void MoveCamOverObjectAt(Vector3 objectPos)
     {
 
         float y = TheCamera.transform.position.y;
         float rotation = TheCamera.transform.rotation.eulerAngles.x * Mathf.Deg2Rad;
         float offset = (y / Mathf.Tan(rotation));
-        this.mainbuildingPos = mainbuildingPos;
-        float newZ = mainbuildingPos.z - offset;
-        TheCamera.transform.position = new Vector3(mainbuildingPos.x, y, newZ);
+        this.mainbuildingPos = objectPos;
+        float newZ = objectPos.z - offset;
+        TheCamera.transform.position = new Vector3(objectPos.x, y, newZ);
 
     }
 }

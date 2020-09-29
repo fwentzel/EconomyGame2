@@ -55,9 +55,10 @@ public class SelectionManager : MonoBehaviour
 
 
     }
-    private void SetSelectedObject(GameObject value)
+    private void SetSelectedObject(GameObject obj)
     {
-        SelectedObject = value;
+        SelectedObject = obj;
+        
 
     }
 

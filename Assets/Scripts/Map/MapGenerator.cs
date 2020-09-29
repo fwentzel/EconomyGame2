@@ -228,13 +228,18 @@ public class MapGenerator : MonoBehaviour
                             float newY = vertices[i].y;
                             newY = 0;
                             //instantiate given prefab and set Position at coordinsates + gridspacing/2 offset and vertexheigth
+
+# if(UNITY_EDITOR)
+                            GameObject obj = PrefabUtility.InstantiatePrefab(objectMapping.placeable, transform) as GameObject;
+#else
                             GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
+#endif
                             obj.transform.position = new Vector3(x + gridSpacing / 2.0f, newY, z + gridSpacing / 2.0f);
 
                             //obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
                             int teamColorValue = mapTextureColor.r;
-                            
+
                             if (teamColorValue > 0 && teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
                             {
                                 //set building Team equal to team at index [blue Channel value (1,4)]
@@ -274,8 +279,9 @@ public class MapGenerator : MonoBehaviour
                             }
 
                             //Trees random transform
-                            Forest forest=obj.GetComponent<Forest>();
-                            if ( forest !=null){
+                            Forest forest = obj.GetComponent<Forest>();
+                            if (forest != null)
+                            {
                                 forest.OnBuild();
                             }
 
