@@ -142,10 +142,10 @@ public class ResourceManager : MonoBehaviour
         int citizens = resourceAmount[resource.citizens];
 
         //Evaluate animation curve to determine loyalty Change based on foodunits per citizens
-        float t = foodChange / (float)(mainbuilding.maxCitizens * mainbuilding.foodUsePerDayPerCitizen);
-
-        t = citizens > 0 ? t : -10;
-        newLoyalty += Mathf.RoundToInt(foodRatioToLoyaltyChange.curve.Evaluate(t));
+       foreach (var item in CitysMeanResource.instance.resourseMeanDict)
+       {
+           
+       }
 
         //taxes in Range (0,20). taxes= 10 results in neutral loyaltychange
         newLoyalty += ((mainbuilding.maxTaxes / 2) - mainbuilding.Taxes) / 2;

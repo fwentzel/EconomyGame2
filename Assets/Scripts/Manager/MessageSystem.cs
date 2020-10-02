@@ -74,7 +74,7 @@ public class MessageSystem : MonoBehaviour
         }
 
         chatText = newChatMessage.GetComponentInChildren<TMP_Text>();
-        message = "[" + GameManager.instance.dayIndex + "] " + message;
+        // message = "[" + GameManager.instance.dayIndex + "] " + message;
         chatText.text = message;
         chatText.color = color == default ? Color.black : color;
         showChat();

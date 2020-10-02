@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "ScriptableObj/ResourceStartvalue")]
 public class ResourceStartvalue : ScriptableObject
 {
 	//serves as variable for curves used in eg loyaltychange calculation

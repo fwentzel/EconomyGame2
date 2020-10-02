@@ -30,7 +30,7 @@ public class LevelEditor : MonoBehaviour
 
     [SerializeField] Color paintColor;
 
-    string mapPath => "Assets/Textures/Maps/";
+    string mapPath = "Assets/Textures/Maps/";
     private void Awake()
     {
         dimenionsInput.text = $"{dimensions.x},{dimensions.y}";

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "ScriptableObj/Resource")]
 public class Resource : ScriptableObject
 {
 	public resource resource;

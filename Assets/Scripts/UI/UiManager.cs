@@ -11,6 +11,7 @@ public class UiManager : MonoBehaviour
     Transform traderPanel;
     Transform menuPanel;
     Transform scoreboardPanel;
+     GameObject blurTransform;
     GameObject newTradesTimerParent;
     TMP_Text newTradesInText;
     Image newTradesInImage;
@@ -47,6 +48,7 @@ public class UiManager : MonoBehaviour
         settingsPanel = transform.Find("SettingsPanel");
         scoreboardPanel = transform.Find("ScoreboardPanel");
         traderPanel = transform.Find("TraderPanel");
+        blurTransform=transform.Find("Blur").gameObject;
 
         newTradesTimerParent = traderPanel.transform.Find("Timer").gameObject;
         newTradesInText = newTradesTimerParent.transform.Find("NewTradesTimerText").GetComponent<TMP_Text>();
@@ -60,8 +62,11 @@ public class UiManager : MonoBehaviour
         }
         bool wasActive = menuToOpen.activeSelf;
         CloseAll();
-        if (wasActive == false)
+        if (wasActive == false){
             menuToOpen.SetActive(true);
+            blurTransform.SetActive(true);
+        }
+        
     }
 
     public void CloseAll()
@@ -70,6 +75,7 @@ public class UiManager : MonoBehaviour
         settingsPanel.gameObject.SetActive(false);
         menuPanel.gameObject.SetActive(false);
         scoreboardPanel.gameObject.SetActive(false);
+        blurTransform.gameObject.SetActive(false);
     }
 
     private IEnumerator StartNewTradeTimerCoroutine(int arrivalIn)

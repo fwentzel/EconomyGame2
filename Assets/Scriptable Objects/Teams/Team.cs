@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "ScriptableObj/Teams")]
 public class Team : ScriptableObject
 {
 	public int teamID;
