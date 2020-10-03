@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
-[CreateAssetMenu(menuName = "ScriptableObj/Resource")]
+[CreateAssetMenu(menuName = "ScriptableObj/Resource")][Serializable]
 public class Resource : ScriptableObject
 {
     public resource resource;
@@ -17,4 +18,5 @@ public class Resource : ScriptableObject
         obj.transform.GetChild(0).GetComponent<Image>().sprite = sprite;
 
     }
+	
 }

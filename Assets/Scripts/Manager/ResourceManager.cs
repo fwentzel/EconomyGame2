@@ -22,9 +22,9 @@ public class ResourceManager : MonoBehaviour
     private void Awake()
     {
         resourceAmount = new Dictionary<resource, int>();
-        foreach (Resource resource in resourceStartvalue.startValues)
+        foreach (var item in resourceStartvalue.resourceStartValues)
         {
-            resourceAmount[resource.resource] = resource.defaultStartAmount;
+            resourceAmount[item.Key.resource] = item.Value;
         }
     }
 

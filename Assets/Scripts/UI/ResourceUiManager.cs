@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Linq;
 
 public class ResourceUiManager : MonoBehaviour
 {
@@ -22,13 +23,13 @@ public class ResourceUiManager : MonoBehaviour
             Destroy(this);
 
         SetupResourceUi();
-        defaultTextColor = res.startValues[0].uiText.color;
+        defaultTextColor = res.resourceStartValues.First().Key.uiText.color;
     }
 
     private void SetupResourceUi()
     {
         Transform resourceUiParent = transform.Find("CityResourcePanel");
-        foreach (Resource resource in res.startValues)
+        foreach (Resource resource in  res.resourceStartValues.Keys)
         {
             GameObject obj = Instantiate(resourceUiPrefab, resourceUiParent);
             resource.Setup(obj);
@@ -36,14 +37,11 @@ public class ResourceUiManager : MonoBehaviour
 
         //move timer object to last position
         resourceUiParent.transform.GetChild(0).SetAsLastSibling();
-        
-
     }
 
     public void UpdateRessourceUI()
     {
-
-        foreach (Resource res in res.startValues)
+        foreach (Resource res in res.resourceStartValues.Keys)
         {
             if (res.resource == resource.loyalty)
                 res.uiText.color = activeResourceMan.isLoyaltyDecreasing ? Color.red : defaultTextColor;
@@ -54,7 +52,7 @@ public class ResourceUiManager : MonoBehaviour
     public void UpdateRessourceUI(resource resourceType)
     {
 
-        Resource _res = res.startValues.Find(x => x.resource == resourceType);
+        Resource _res = res.resourceStartValues.FirstOrDefault(pair => pair.Key.resource == resourceType).Key;
         if (_res.resource == resource.loyalty)
             _res.uiText.color = activeResourceMan.isLoyaltyDecreasing ? Color.red : defaultTextColor;
         _res.uiText.text = currentRessouceManagerToShow.GetAmountUI(_res.resource);

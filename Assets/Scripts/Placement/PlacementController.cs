@@ -145,9 +145,7 @@ public class PlacementController : MonoBehaviour
 
     public void NewPlaceableObject(GameObject placeable)
     {
-        
-        //Turn on placement Grid and set Color to White
-        ConfigureGrid(true);
+
 
         //Instantiate new object to place and add necessary components. Make sure Collider is Trigger for OnTriggerEnter()
         //TODO take from pool?
@@ -162,7 +160,9 @@ public class PlacementController : MonoBehaviour
         placeableObject.GetComponent<BoxCollider>().isTrigger = true;
         isPlacing = true;
         UiManager.instance.CloseAll();
-        
+
+        //Turn on placement Grid and set Color to White
+        ConfigureGrid(true);
     }
 
     private void ConfigureGrid(bool isStart)
@@ -170,11 +170,13 @@ public class PlacementController : MonoBehaviour
         if (isStart)
         {
             Vector3 pos = ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position;
-            Vector4 posRange = new Vector4(pos.x, pos.y, pos.z, maxPlacementRange+.5f);
+            Vector4 posRange = new Vector4(pos.x, pos.y, pos.z, maxPlacementRange + .5f);
+            if (placeableObject.GetComponent<Building>().IgnoreMaxPlacementRange)
+                posRange.w *= 3;
             gridMaterial.SetVector("MainBuildPos", posRange);
 
             toggleGrid(1);
-            
+
 
         }
         else

@@ -18,6 +18,7 @@ public class Building : MonoBehaviour, ISelectable
 
     public int level { get; private set; } = 1;
     public bool canLevelUp { get; private set; } = false;
+    public bool IgnoreMaxPlacementRange { get; protected set; } = false;
 
     int maxLevel;
 

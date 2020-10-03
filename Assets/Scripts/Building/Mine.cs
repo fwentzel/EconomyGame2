@@ -3,12 +3,12 @@
 public class Mine : Building
 {
     public int unitsPerIntervall;
+    
     private Collider[] overlapResults = new Collider[5];
 
-    private void Awake()
-    {
-        PlacementController.instance.SetCanBuild(false);
-    }
+ private void Awake() {
+    IgnoreMaxPlacementRange=true;
+ }
     public override void OnBuild(bool subtractResource = true)
     {
         resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
