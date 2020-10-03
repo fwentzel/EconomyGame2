@@ -68,8 +68,8 @@ public class ContextUiManager : MonoBehaviour
         mainbuildingContextUiTaxesText = mainbuildingContextPanel.GetChild(0).Find("TaxesText").GetComponent<TMP_Text>();
         mainbuildingContextUiTaxesSlider = mainbuildingContextPanel.GetChild(0).GetComponentInChildren<Slider>();
 
-        tradeVehicleStopButton = tradeVehicleContextPanel.GetChild(0).Find("HoldUpButton").GetComponent<Button>(); ;
-        tradeVechicleStopCostText = tradeVehicleStopButton.GetComponentInChildren<TMP_Text>();
+        tradeVehicleStopButton = tradeVehicleContextPanel.GetChild(0).Find("CDButton").GetComponent<Button>(); ;
+        tradeVechicleStopCostText = tradeVehicleContextPanel.GetChild(0).transform.Find("CostText").GetComponent<TMP_Text>();
     }
 
     public bool OpenContext(GameObject obj)

@@ -2,17 +2,18 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-[RequireComponent(typeof(Image))]
+[RequireComponent(typeof(Graphic))]
 public class ColorPaletteForImage : MonoBehaviour
 {
     [SerializeField] string paletteName = "UI";
     Colorpalette palette;
     [Range(0, 19)] [SerializeField] int colorlevel = 0;
     Image image;
+    Graphic graphic;
 
     void OnValidate()
     {
-        if (image == null || palette == null)
+        if (graphic == null || palette == null)
             Reset();
         if (colorlevel > palette.colors.Length - 1)
             colorlevel = 0;
@@ -20,14 +21,14 @@ public class ColorPaletteForImage : MonoBehaviour
             colorlevel = palette.colors.Length - 1;
 
         Color newColor = palette.colors[colorlevel];
-        newColor.a = image.color.a;
-        image.color = newColor;
+        newColor.a = graphic.color.a;
+        graphic.color = newColor;
     }
 
     private void Reset()
     {
 
-        image = GetComponent<Image>();
+        graphic = GetComponent<Graphic>();
         GetPalette();
     }
 

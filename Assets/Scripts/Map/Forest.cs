@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Forest : MonoBehaviour
+public class Forest : ResourceObject
 {
 
     public void OnBuild()

@@ -53,8 +53,7 @@ public class Mine : Building
 						return;
 					}
 				}
-				bool b=Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, transform.position) <= PlacementController.instance.maxPlacementRange;
-				PlacementController.instance.SetCanBuild(b);
+				PlacementController.instance.SetCanBuild(true);
 			}
 		}
 		else

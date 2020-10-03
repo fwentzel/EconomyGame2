@@ -10,6 +10,7 @@ public class GameTimer : MonoBehaviour
     public bool isRunning = false;
 
     Color bgColor;
+    Color fgColor ;
 
     Image backgroundImage;
     bool foregroundIsWhite = true;
@@ -18,6 +19,7 @@ public class GameTimer : MonoBehaviour
         timerImage = GetComponent<Image>();
         backgroundImage = transform.parent.GetChild(0).GetComponent<Image>();
         bgColor = backgroundImage.color;
+        fgColor  = timerImage.color;
     }
 
     public void StartTimer(float dayLength)
@@ -32,14 +34,14 @@ public class GameTimer : MonoBehaviour
         if (isRunning)
         {//Reduce fill amount 
             fillAmount += 1.0f / dayLength * Time.deltaTime;
-			
-            if (fillAmount >= 1){
 
-                timerImage.color = foregroundIsWhite ? bgColor : Color.white;
-            backgroundImage.color = foregroundIsWhite ? Color.white : bgColor;
-            foregroundIsWhite = !foregroundIsWhite;
-            fillAmount = 0;
-			}
+            if (fillAmount >= 1)
+            {
+                timerImage.color = foregroundIsWhite ? bgColor : fgColor;
+                backgroundImage.color = foregroundIsWhite ? fgColor : bgColor;
+                foregroundIsWhite = !foregroundIsWhite;
+                fillAmount = 0;
+            }
         }
         timerImage.fillAmount = fillAmount;
 

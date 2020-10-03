@@ -9,8 +9,8 @@ public class UiActionHandler : MonoBehaviour
 
         if (tradeVehicle != null)
         {
-            buttonCD.SetUp(tradeVehicle.holdUpDuration, tradeVehicle);
-            buttonCD.enabled = true;
+            buttonCD.SetUp(tradeVehicle.holdUpDuration);
+            buttonCD.OnCDFinished+= delegate(){ContextUiManager.instance.UpdateContextUi(tradeVehicle);};
             StartCoroutine(tradeVehicle.HoldUpCoroutine());
 
         }

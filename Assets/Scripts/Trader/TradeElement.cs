@@ -29,6 +29,7 @@ public class TradeElement : MonoBehaviour
 	{
 		acceptButton.onClick.AddListener(delegate () { TradeAccepted(); });
 		buttonCD=acceptButton.GetComponent<ButtonCD>();
+		buttonCD.OnCDFinished+=checkInteractable;
 	}
 
 	private void Start()
@@ -106,11 +107,6 @@ public class TradeElement : MonoBehaviour
 		foreach (TradeElement elem in TradeManager.instance.tradeElements)
 		{
 			elem.buttonCD.SetUp(TradeManager.instance.tradeCooldown);
-			elem.buttonCD.enabled=true;
-			
-			
-			// elem.isOnCd=true;
-			// elem.cd = TradeManager.instance.tradeCooldowns[rm];
 		}
 	}
 

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6615324913359123241}
   - component: {fileID: 1162219044079042707}
   - component: {fileID: 1423379690645617053}
+  - component: {fileID: 1717427169810576450}
   m_Layer: 5
   m_Name: Buildelement
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  m_Color: {r: 0.7607844, g: 0.21176472, b: 0.08627451, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -160,6 +161,20 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 0
+--- !u!114 &1717427169810576450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6615324913359123243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbfd73f87ae32684e80515c04cafb3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paletteName: UI
+  colorlevel: 3
 --- !u!1 &6615324915002170934
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +320,7 @@ GameObject:
   - component: {fileID: 358998610792846093}
   - component: {fileID: 2047147933959753778}
   - component: {fileID: 8964501542335263611}
+  - component: {fileID: 7959583264096015258}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -366,3 +382,18 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &7959583264096015258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8592463420434433875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: 1}
+  m_UseGraphicAlpha: 1

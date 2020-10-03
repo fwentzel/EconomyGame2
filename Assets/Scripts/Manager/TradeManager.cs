@@ -66,7 +66,7 @@ public class TradeManager : MonoBehaviour
 
     public void StartTradeOffer()
     {
-        StartCoroutine(AnnounceNewTradesCoroutine(3));
+        StartCoroutine(AnnounceNewTradesCoroutine(1));
     }
 
     private void GenerateNewTrades(int amount)
