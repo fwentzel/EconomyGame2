@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour
 
     void RpcStartInvokeCalcIntervall()
     {
+        InputMasterManager.instance.inputMaster.Menus.Enable();
         OnGameStart?.Invoke();
         InvokeRepeating("InvokeCalculateResource", calcResourceIntervall, calcResourceIntervall);
         ResourceUiManager.instance.UpdateRessourceUI();

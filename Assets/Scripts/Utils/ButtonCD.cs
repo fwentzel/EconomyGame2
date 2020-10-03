@@ -25,7 +25,6 @@ public class ButtonCD : MonoBehaviour
         mask = transform.GetChild(0).GetComponent<Image>();
         mask.fillAmount = 0;
         enabled=false;
-
     }
     public void SetUp(float cd)
     {

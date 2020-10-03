@@ -13,7 +13,7 @@ public class TradeManager : MonoBehaviour
     public static TradeManager instance { get; private set; }
     public Dictionary<Trade, TradeElement> tradeToElementMapping { get; private set; }
     public Dictionary<ResourceManager, float> tradeCooldowns { get; private set; }
-    public int tradeCooldown { get; private set; } = 20;
+    public int tradeCooldown { get; private set; } = 3;
     public TradeElement[] tradeElements { get; private set; } = new TradeElement[6];
 
     [SerializeField] Resource[] tradingResources = null;

@@ -240,21 +240,25 @@ public class MapGenerator : MonoBehaviour
 
                             int teamColorValue = mapTextureColor.r;
 
-                            if (teamColorValue > 0 && teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
+                            if (teamColorValue > 0 && teamColorValue <= teams.Length)//everything bigger 
                             {
                                 //set building Team equal to team at index [blue Channel value (1,4)]
                                 Team team = teams[teamColorValue - 1];
+                                ResourceObject resourceObject = obj.GetComponent<ResourceObject>();
+                                if (resourceObject != null)
+                                {
+                                    resourceObject.team = team.teamID;
+                                    resourceObject.OnBuild();
+                                    continue;
+                                }
 
                                 //TODO SAME CODE AS IN MAINBUILDING
                                 Building building = obj.GetComponent<Building>();
                                 building.team = team.teamID;
                                 building.SetLevelMesh();
 
-
                                 if (building is Harbour)
                                 {
-
-
                                     if (mapTexture.GetPixel(x, z + 1).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, 90);
@@ -278,12 +282,6 @@ public class MapGenerator : MonoBehaviour
                                 }
                             }
 
-                            //Trees random transform
-                            Forest forest = obj.GetComponent<Forest>();
-                            if (forest != null)
-                            {
-                                forest.OnBuild();
-                            }
 
                         }
                     }

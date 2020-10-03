@@ -15,6 +15,7 @@ public class TradeElement : MonoBehaviour
 	[SerializeField] TMP_Text tradeTypeText = null;
 
 	[SerializeField] Button acceptButton = null;
+	[SerializeField] Color takenDisabledColor= Color.red;
 
 	public ButtonCD buttonCD {get;private set;}
 	public bool accepted { get; private set; } = false;
@@ -24,16 +25,23 @@ public class TradeElement : MonoBehaviour
 	int amount;
 	float cd = 0;
 	ResourceManager localRM;
+	Color normalColor;
 
 	private void Awake()
 	{
 		acceptButton.onClick.AddListener(delegate () { TradeAccepted(); });
 		buttonCD=acceptButton.GetComponent<ButtonCD>();
 		buttonCD.OnCDFinished+=checkInteractable;
+		normalColor=acceptButton.image.color;
+		
+	}
+	private void Start() {
+		Setup();
 	}
 
-	private void Start()
+	private void Setup()
 	{
+		print("setup called");
 		localRM = ResourceUiManager.instance.activeResourceMan;
 		localRM.OnResourceChange += checkInteractable;
 		
@@ -85,20 +93,16 @@ public class TradeElement : MonoBehaviour
 	public void DisableElement()
 	{
 		accepted = true;
-		var colors = acceptButton.colors;
-		colors.disabledColor = Color.red;
-		acceptButton.colors = colors;
+		acceptButton.image.color=takenDisabledColor;
 	}
 
 	public void EnableElement()
 	{
 		accepted = false;
-		var colors = acceptButton.colors;
-		colors.disabledColor = Color.grey;
-		acceptButton.colors = colors;
+		acceptButton.image.color=normalColor;
 	}
 
-	private void TradeAccepted()
+	public void TradeAccepted()
 	{
 		MessageSystem.instance.Message("you accepted following Trade: "+ trade.ToString());
 		ResourceManager rm = GameManager.instance.localPlayer.mainbuilding.resourceManager;

@@ -24,6 +24,7 @@ public class Building : MonoBehaviour, ISelectable
     private void Awake()
     {
         SetLevelMesh();
+        
     }
     public String GetLevelCostString()
     {
@@ -93,7 +94,6 @@ public class Building : MonoBehaviour, ISelectable
             PlacementController.instance.SetCanBuild(Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, transform.position) <= PlacementController.instance.maxPlacementRange);
             return;
         }
-
         if (other.CompareTag("Ground")) return;
 
         //entered a collieder, so disable build

@@ -8,7 +8,7 @@ public class ContextUiManager : MonoBehaviour
 {
     public static ContextUiManager instance { get; private set; }
 
-    [SerializeField] int offsetY = 50;
+    [SerializeField] float offsetY = 3.5f;
     Transform buildingContextPanel = null;
     TMP_Text buildingContextUiText;
     Button buildingContextUiLevelUpButton;
@@ -18,10 +18,13 @@ public class ContextUiManager : MonoBehaviour
     TMP_Text mainbuildingContextUiText;
     TMP_Text mainbuildingContextUiTaxesText;
     Slider mainbuildingContextUiTaxesSlider;
+    TMP_Text mainBuildingContextUiFoodText;
 
     Transform tradeVehicleContextPanel = null;
     Button tradeVehicleStopButton;
     TMP_Text tradeVechicleStopCostText;
+
+    Canvas canvas;
 
     // Use this for initialization
     private void Awake()
@@ -37,8 +40,7 @@ public class ContextUiManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.instance.OnGameStart += ()=>ResourceUiManager.instance.activeResourceMan.OnResourceChange += TriggerUpdateContext;
-
+        GameManager.instance.OnGameStart += () => ResourceUiManager.instance.activeResourceMan.OnResourceChange += TriggerUpdateContext;
     }
 
     void TriggerUpdateContext()
@@ -56,28 +58,33 @@ public class ContextUiManager : MonoBehaviour
 
     private void SetupUiElements()
     {
+        canvas = GetComponent<Canvas>();
+
         buildingContextPanel = transform.Find("BuildingContextPanel");
         mainbuildingContextPanel = transform.Find("MainBuildingContextPanel");
         tradeVehicleContextPanel = transform.Find("TraderVehicleContextPanel");
 
-        buildingContextUiText = buildingContextPanel.GetChild(0).Find("ContextText").GetComponent<TMP_Text>();
-        buildingContextUiLevelUpButton = buildingContextPanel.GetChild(0).Find("LevelUpButton").GetComponent<Button>();
+        buildingContextUiText = buildingContextPanel.Find("ContextText").GetComponent<TMP_Text>();
+        buildingContextUiLevelUpButton = buildingContextPanel.Find("LevelUpButton").GetComponent<Button>();
         buildingContextUiLevelCostText = buildingContextUiLevelUpButton.GetComponentInChildren<TMP_Text>();
 
-        mainbuildingContextUiText = mainbuildingContextPanel.GetChild(0).Find("ContextText").GetComponent<TMP_Text>();
-        mainbuildingContextUiTaxesText = mainbuildingContextPanel.GetChild(0).Find("TaxesText").GetComponent<TMP_Text>();
-        mainbuildingContextUiTaxesSlider = mainbuildingContextPanel.GetChild(0).GetComponentInChildren<Slider>();
+        mainbuildingContextUiText = mainbuildingContextPanel.Find("ContextText").GetComponent<TMP_Text>();
+        mainbuildingContextUiTaxesText = mainbuildingContextPanel.Find("TaxesText").GetComponent<TMP_Text>();
+        mainbuildingContextUiTaxesSlider = mainbuildingContextPanel.GetComponentInChildren<Slider>();
+        mainBuildingContextUiFoodText = mainbuildingContextPanel.Find("FoodPerCitizenText").GetComponent<TMP_Text>();
 
-        tradeVehicleStopButton = tradeVehicleContextPanel.GetChild(0).Find("CDButton").GetComponent<Button>(); ;
-        tradeVechicleStopCostText = tradeVehicleContextPanel.GetChild(0).transform.Find("CostText").GetComponent<TMP_Text>();
+        tradeVehicleStopButton = tradeVehicleContextPanel.Find("CDButton").GetComponent<Button>(); ;
+        tradeVechicleStopCostText = tradeVehicleContextPanel.transform.Find("CostText").GetComponent<TMP_Text>();
     }
 
     public bool OpenContext(GameObject obj)
     {
         CloseAll();
         var selectable = obj.GetComponent<ISelectable>();
-        transform.position = obj.transform.position + new Vector3(0, offsetY, 0);
+        if (selectable == null) return false;
 
+        transform.position = obj.transform.position + new Vector3(0, offsetY, 0);
+        canvas.enabled = true;
         TradeVehicle vehicle = selectable as TradeVehicle;
         if (vehicle != null)
         {
@@ -135,6 +142,7 @@ public class ContextUiManager : MonoBehaviour
         mainbuildingContextUiTaxesText.text = $"Taxes:  {mainbuilding.Taxes}/{mainbuilding.maxTaxes} per citizen";
         mainbuildingContextUiText.text = mainbuilding.GetStats();
         mainbuildingContextUiTaxesSlider.value = mainbuilding.Taxes;
+        mainBuildingContextUiFoodText.text = $"{mainbuilding.foodUsePerDayPerCitizen} food per citizen per day";
     }
 
     public void UpdateContextUi(TradeVehicle vehicle)
@@ -148,5 +156,6 @@ public class ContextUiManager : MonoBehaviour
         mainbuildingContextPanel.gameObject.SetActive(false);
         buildingContextPanel.gameObject.SetActive(false);
         tradeVehicleContextPanel.gameObject.SetActive(false);
+        canvas.enabled = false;
     }
 }

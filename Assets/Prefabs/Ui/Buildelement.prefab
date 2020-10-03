@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paletteName: UI
-  colorlevel: 3
+  level: 1
 --- !u!1 &6615324915002170934
 GameObject:
   m_ObjectHideFlags: 0

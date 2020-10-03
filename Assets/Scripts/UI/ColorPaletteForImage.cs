@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ public class ColorPaletteForImage : MonoBehaviour
 {
     [SerializeField] string paletteName = "UI";
     Colorpalette palette;
-    [Range(0, 19)] [SerializeField] int colorlevel = 0;
+    [Range(0,5)][SerializeField] int level = 0;
     Image image;
     Graphic graphic;
 
@@ -15,19 +16,18 @@ public class ColorPaletteForImage : MonoBehaviour
     {
         if (graphic == null || palette == null)
             Reset();
-        if (colorlevel > palette.colors.Length - 1)
-            colorlevel = 0;
-        else if (colorlevel < 0)
-            colorlevel = palette.colors.Length - 1;
+        if (level > palette.levelMapping.Length - 1)
+            level = 0;
+        if (level < 0)
+            level = palette.levelMapping.Length - 1;
 
-        Color newColor = palette.colors[colorlevel];
+        Color newColor = palette.colors[palette.levelMapping[level]];
         newColor.a = graphic.color.a;
         graphic.color = newColor;
     }
 
     private void Reset()
     {
-
         graphic = GetComponent<Graphic>();
         GetPalette();
     }
@@ -38,6 +38,8 @@ public class ColorPaletteForImage : MonoBehaviour
         if (pal == null) return;
         palette = pal;
     }
+
+    
 }
 
 

@@ -51,7 +51,7 @@ public class PlacementController : MonoBehaviour
             if (currMousePos != Vector3.zero)//Utilfunction returns Vector3.zero when mouse is not over Ground
                 mousePos = currMousePos;
             MoveCurrentObjectToMouse();
-            UpdateGridPosition();
+            //UpdateGridPosition();
             CheckInput();
         }
     }
@@ -145,7 +145,7 @@ public class PlacementController : MonoBehaviour
 
     public void NewPlaceableObject(GameObject placeable)
     {
-
+        
         //Turn on placement Grid and set Color to White
         ConfigureGrid(true);
 
@@ -155,12 +155,14 @@ public class PlacementController : MonoBehaviour
         {
             Destroy(placeableObject);
         }
+
         placeableObject = Instantiate(placeable);
         placeableObject.GetComponent<Building>().enabled = false;
         placeableObject.AddComponent<Buildcheck>();
         placeableObject.GetComponent<BoxCollider>().isTrigger = true;
         isPlacing = true;
         UiManager.instance.CloseAll();
+        
     }
 
     private void ConfigureGrid(bool isStart)
@@ -172,11 +174,12 @@ public class PlacementController : MonoBehaviour
             gridMaterial.SetVector("MainBuildPos", posRange);
 
             toggleGrid(1);
-            UpdateGridColor(Color.white);
+            
 
         }
         else
         {
+            UpdateGridColor(Color.red);
             toggleGrid(0);
         }
     }

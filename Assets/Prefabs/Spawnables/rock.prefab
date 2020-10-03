@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7795310438200320416}
   - component: {fileID: 8372141781672264815}
   - component: {fileID: 6684242916795103489}
+  - component: {fileID: -8358861664818078836}
   m_Layer: 0
   m_Name: rock
   m_TagString: RockResource
@@ -130,6 +131,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.012, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &-8358861664818078836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321040318454111042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 152b9fa9b856f7c4a86277ca13048a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 0
 --- !u!1 &5362012909820060158
 GameObject:
   m_ObjectHideFlags: 0

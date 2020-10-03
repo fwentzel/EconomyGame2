@@ -38,7 +38,7 @@ public class UiManager : MonoBehaviour
         input.Menus.Scoreboard.started += _ => OpenMenu(scoreboardPanel.gameObject);
         input.Menus.Scoreboard.canceled += _ => CloseAll();
         input.Menus.Menu.performed += _ => OpenMenu(menuPanel.gameObject);
-        input.Menus.Enable();
+        
     }
 
     private void SetupUiElements()

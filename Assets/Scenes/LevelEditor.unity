@@ -5425,9 +5425,9 @@ MonoBehaviour:
   dimenionsInput: {fileID: 1782513649}
   dimensions: {x: 50, y: 50}
   brushSize: 3
-  colorToHeightMapping: {fileID: 11400000, guid: 4d9e147b66da029468bedb854e153b49,
+  colorToHeightMapping: {fileID: 11400000, guid: f3e623a27bc49c74fb7cc90c45dd89b2,
     type: 2}
-  colorToObjectMapping: {fileID: 11400000, guid: 26df46e61a8da424b8b9d5271313f155,
+  colorToObjectMapping: {fileID: 11400000, guid: 5f988c5a172adf243963fb601093e19e,
     type: 2}
   paintColor: {r: 0.62059253, g: 0.6226415, b: 0, a: 1}
 --- !u!114 &1872019356
