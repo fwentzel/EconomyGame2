@@ -15,8 +15,8 @@ public class BuildUiElement : MonoBehaviour
 
     private void Awake()
     {
-        rawImage = transform.GetChild(1).GetComponent<RawImage>();
-        buildCostText = transform.GetChild(0).GetComponent<TMP_Text>();
+        rawImage = transform.Find("Image").GetComponent<RawImage>();
+        buildCostText = transform.Find("Levelcost").GetComponent<TMP_Text>();
     }
     public void Init(GameObject buildingPrefab)
     {

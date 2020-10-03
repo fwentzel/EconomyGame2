@@ -5,5 +5,9 @@ public class Colorpalette : ScriptableObject
 {
     public Color[] colors;
     public int[] levelMapping;
+
+    private void OnValidate() {
+        ColorPaletteForImage.RefreshAll();
+    }
     
 }

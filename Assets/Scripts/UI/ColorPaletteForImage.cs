@@ -12,6 +12,7 @@ public class ColorPaletteForImage : MonoBehaviour
     Image image;
     Graphic graphic;
 
+
     void OnValidate()
     {
         if (graphic == null || palette == null)
@@ -37,6 +38,12 @@ public class ColorPaletteForImage : MonoBehaviour
         Colorpalette pal = AssetDatabase.LoadAssetAtPath($"Assets/Scriptable Objects/Colorpalette/{paletteName}.asset", typeof(Colorpalette)) as Colorpalette;
         if (pal == null) return;
         palette = pal;
+    }
+    public static void RefreshAll(){
+        foreach (var item in FindObjectsOfType<ColorPaletteForImage>())
+        {
+            item.OnValidate();
+        }
     }
 
     
