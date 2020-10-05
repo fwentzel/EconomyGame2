@@ -65,7 +65,7 @@ public class House : Building
         for (int i = 0; i < amount; i++)
         {
             Citizen citizen =Instantiate(CitizenManager.instance.citizenPrefab,new Vector3(0,0,0),Quaternion.identity).GetComponent<Citizen>();
-            citizen.Init(team, this, 1f, resourceManager.mainbuilding.defaultFoodPerDayPerCitizen);
+            citizen.Init(team, this, 1f, 1f);
             ChangeCitizenAmount(1, citizen);
         }
     }

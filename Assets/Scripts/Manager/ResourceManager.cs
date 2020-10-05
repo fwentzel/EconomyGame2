@@ -13,12 +13,11 @@ public class ResourceManager : MonoBehaviour
     public Curve foodRatioToLoyaltyChange;
     public event Action OnResourceChange = delegate { };
     public bool isLoyaltyDecreasing = false;
+    public List<Citizen> citizens = new List<Citizen>();
     public int foodChange { get; private set; }
     public bool canTakeCitizen { get; private set; }
-    public List<Citizen> citizens = new List<Citizen>();
-
-    [SerializeField] int cooldown = 5;
-    int lastInteraction = -1;
+    public float meanTaxesMultiplier {get;private set;}= 0;
+     public float  meanFoodMultiplier {get;private set;}= 0;
 
     private void Awake()
     {
@@ -32,6 +31,7 @@ public class ResourceManager : MonoBehaviour
     private void Start()
     {
         GameManager.instance.OnCalculateIntervall += CalculateNextDay;
+        // CalculateLoyalty();//TODO so you dont start with 0 loyalty
     }
 
     private void CalculateNextDay()
@@ -52,7 +52,7 @@ public class ResourceManager : MonoBehaviour
     private void CheckCanTakeCitizen()
     {
         int newCitizenAmount = resourceAmount[resource.citizens] + 1;
-        canTakeCitizen = resourceAmount[resource.food] > mainbuilding.defaultFoodPerDayPerCitizen * newCitizenAmount
+        canTakeCitizen = resourceAmount[resource.food] > mainbuilding.foodPerDayPerCitizen * newCitizenAmount
                             && newCitizenAmount < mainbuilding.maxCitizens;
     }
 
@@ -68,22 +68,23 @@ public class ResourceManager : MonoBehaviour
 
     private void CalculateGold()
     {
-        float totalMultiplier = 0;
+         meanTaxesMultiplier = 0;
         for (int i = 0; i < citizens.Count; i++)
         {
-            totalMultiplier += citizens[i].taxesMultiplier;
+            meanTaxesMultiplier += citizens[i].taxesMultiplier;
         }
-        resourceAmount[resource.gold] += Mathf.RoundToInt(totalMultiplier * mainbuilding.Taxes);
+        resourceAmount[resource.gold] += Mathf.RoundToInt(meanTaxesMultiplier * mainbuilding.Taxes);
     }
 
     private void CalculateFood()
     {
-        int amount = 0;
+       meanFoodMultiplier=0;
         for (int i = 0; i < citizens.Count; i++)
         {
-            amount += citizens[i].foodPerDay;
+            meanFoodMultiplier += citizens[i].foodMultiplier;
         }
-        foodChange = CalculateFoodGenerated() - amount;
+
+        foodChange =(int) (CalculateFoodGenerated() - (meanFoodMultiplier*mainbuilding.foodPerDayPerCitizen));
 
         int newAmount = resourceAmount[resource.food] + foodChange;
         resourceAmount[resource.food] = newAmount > 0 ? newAmount : 0;
@@ -117,21 +118,15 @@ public class ResourceManager : MonoBehaviour
 
     private void CalculateLoyalty()
     {
-        int newLoyalty = resourceAmount[resource.loyalty];
-        int oldLoyalty = newLoyalty;
-        int citizens = resourceAmount[resource.citizens];
+        int loyalty =0;
+        for (int i = 0; i < citizens.Count; i++)
+        {
+            loyalty += citizens[i].happiness;
+        }
+        loyalty /=citizens.Count;
 
-        //taxes in Range (0,20). taxes= 10 results in neutral loyaltychange
-        newLoyalty += ((mainbuilding.maxTaxes / 2) - mainbuilding.Taxes) / 2;
-
-
-        if (newLoyalty > 100)
-            newLoyalty = 100;
-        if (newLoyalty <= 0)
-            newLoyalty = 0;
-
-        resourceAmount[resource.loyalty] = newLoyalty;
-        isLoyaltyDecreasing = newLoyalty < oldLoyalty;
+        isLoyaltyDecreasing = loyalty < resourceAmount[resource.loyalty];
+        resourceAmount[resource.loyalty] = loyalty;
     }
 
     public void ChangeRessourceAmount(resource res, int amount)

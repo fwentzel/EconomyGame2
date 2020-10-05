@@ -6,7 +6,7 @@ using UnityEngine;
 public class Mainbuilding : Building
 {
 	private int taxes = 10;
-	public int defaultFoodPerDayPerCitizen = 2;
+	public int foodPerDayPerCitizen = 2;
 	[SerializeField]
 	public List<Building> buildings { get; private set; }
 	public Dictionary<Type, GameObject> possibleBuildings;

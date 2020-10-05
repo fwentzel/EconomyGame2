@@ -9,10 +9,8 @@ public class UiActionHandler : MonoBehaviour
 
         if (tradeVehicle != null)
         {
-            buttonCD.SetUp(tradeVehicle.holdUpDuration);
-            buttonCD.OnCDFinished += delegate () { ContextUiManager.instance.UpdateContextUi(tradeVehicle); };
+            buttonCD.SetUp(tradeVehicle.holdUpDuration, () => ContextUiManager.instance.UpdateContextUi(tradeVehicle));
             tradeVehicle.HoldUp();
-
         }
     }
     public static void DestroySelected()
@@ -42,10 +40,20 @@ public class UiActionHandler : MonoBehaviour
         Mainbuilding mainbuilding = SelectionManager.instance.selectedObject.GetComponent<Mainbuilding>();
         if (mainbuilding != null)
         {
-            ContextUiManager.instance.UpdateContextUi(mainbuilding);
+            ContextUiManager.instance.UpdateContextUi(mainbuilding);//TODO muss sein, da sonst value von citizenTake nicht aktualisiert wird.
             if (!ContextUiManager.instance.isSameTeam)//Slider Method shouldhnt be called TODO 
                 return;
             mainbuilding.Taxes = (int)value;
+            ContextUiManager.instance.UpdateContextUi(mainbuilding);
+        }
+    }
+    public static void ChangeFood(float value)
+    {
+        Mainbuilding mainbuilding = SelectionManager.instance.selectedObject.GetComponent<Mainbuilding>();
+        if (mainbuilding != null)
+        {
+            mainbuilding.foodPerDayPerCitizen = (int)value;
+            ContextUiManager.instance.UpdateContextUi(mainbuilding);
         }
     }
 
@@ -55,8 +63,8 @@ public class UiActionHandler : MonoBehaviour
         Mainbuilding mainbuilding = SelectionManager.instance.selectedObject.GetComponent<Mainbuilding>();
         if (mainbuilding != null)
         {
-            CitizenManager.instance.TakeOverCitizen(mainbuilding.resourceManager, ResourceUiManager.instance.activeResourceMan, (int)ContextUiManager.instance.mainbuildingContextUiSlider.value);
-            ContextUiManager.instance.mainbuildingContextUiConfirmButton.GetComponent<ButtonCD>().SetUp(5);
+            CitizenManager.instance.TakeOverCitizen(mainbuilding.resourceManager, ResourceUiManager.instance.activeResourceMan, (int)ContextUiManager.instance.mainbuildingContextUiTaxesSlider.value);
+            ContextUiManager.instance.mainbuildingContextUiConfirmButton.GetComponent<ButtonCD>().SetUp(5, () => ContextUiManager.instance.UpdateContextUi(mainbuilding));
             ContextUiManager.instance.UpdateContextUi(mainbuilding);
         }
 

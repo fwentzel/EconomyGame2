@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class ButtonCD : MonoBehaviour
 {
-    public event Action OnCDFinished = delegate { };
-
+    Action action;
     // Start is called before the first frame update
     float cd = 5;
 
@@ -26,13 +25,14 @@ public class ButtonCD : MonoBehaviour
         mask.fillAmount = 0;
         enabled=false;
     }
-    public void SetUp(float cd)
+    public void SetUp(float cd, Action action)
     {
         this.cd = cd;
         button.interactable = false;
         t0 = Time.time;
         amount = 1;
         enabled=true;
+        this.action=action;
     }
 
     private void Update()
@@ -45,8 +45,7 @@ public class ButtonCD : MonoBehaviour
         if (amount <= 0)
         {
             mask.fillAmount = 0;
-            button.interactable = true;
-            OnCDFinished?.Invoke();
+            action?.Invoke();
             enabled = false;
         }
     }

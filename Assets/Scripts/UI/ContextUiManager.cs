@@ -19,7 +19,8 @@ public class ContextUiManager : MonoBehaviour
     Transform mainbuildingContextPanel = null;
     TMP_Text mainbuildingContextUiText;
     TMP_Text mainbuildingContextUiSliderText;
-    public Slider mainbuildingContextUiSlider { get; private set; }
+    public Slider mainbuildingContextUiTaxesSlider { get; private set; }
+    public Slider mainbuildingContextUiFoodSlider { get; private set; }
     public Button mainbuildingContextUiConfirmButton { get; private set; }
     TMP_Text mainBuildingContextUiFoodText;
 
@@ -73,8 +74,9 @@ public class ContextUiManager : MonoBehaviour
 
         mainbuildingContextUiText = mainbuildingContextPanel.Find("ContextText").GetComponent<TMP_Text>();
         mainbuildingContextUiSliderText = mainbuildingContextPanel.Find("TaxesText").GetComponent<TMP_Text>();
-        mainbuildingContextUiSlider = mainbuildingContextPanel.GetComponentInChildren<Slider>();
-        mainBuildingContextUiFoodText = mainbuildingContextPanel.Find("FoodPerCitizenText").GetComponent<TMP_Text>();
+        mainbuildingContextUiTaxesSlider = mainbuildingContextPanel.Find("TaxSlider").GetComponent<Slider>();
+        mainBuildingContextUiFoodText = mainbuildingContextPanel.Find("FoodText ").GetComponent<TMP_Text>();
+        mainbuildingContextUiFoodSlider = mainbuildingContextPanel.Find("FoodSlider").GetComponent<Slider>();
         mainbuildingContextUiConfirmButton = mainbuildingContextPanel.GetComponentInChildren<Button>();
 
         tradeVehicleStopButton = tradeVehicleContextPanel.Find("CDButton").GetComponent<Button>(); ;
@@ -118,7 +120,9 @@ public class ContextUiManager : MonoBehaviour
         {
             Mainbuilding mb = building as Mainbuilding;
             isSameTeam = GameManager.instance.localPlayer.team == mb.team;
-            mainbuildingContextUiSlider.value = isSameTeam ? mb.Taxes : 0;
+            mainbuildingContextUiTaxesSlider.value = isSameTeam ? mb.Taxes : 0;
+            mainBuildingContextUiFoodText.gameObject.SetActive(isSameTeam);
+            mainbuildingContextUiFoodSlider.gameObject.SetActive(isSameTeam);
             mainbuildingContextPanel.gameObject.SetActive(true);
             UpdateContextUi(mb);
         }
@@ -140,17 +144,17 @@ public class ContextUiManager : MonoBehaviour
     public void UpdateContextUi(Mainbuilding mainbuilding)
     {
         mainbuildingContextUiText.text = mainbuilding.GetStats();
-        mainBuildingContextUiFoodText.text = $"default {mainbuilding.defaultFoodPerDayPerCitizen} food per citizen per day";
+        mainBuildingContextUiFoodText.text = $"{mainbuilding.foodPerDayPerCitizen} Food per day per citizen";
 
 
-        int freeSpace = ResourceUiManager.instance.activeResourceMan.mainbuilding.maxCitizens-ResourceUiManager.instance.activeResourceMan.GetAmount(resource.citizens) ;
+        int freeSpace = ResourceUiManager.instance.activeResourceMan.mainbuilding.maxCitizens - ResourceUiManager.instance.activeResourceMan.GetAmount(resource.citizens);
 
         //can only buy up half of city
-        mainbuildingContextUiSlider.maxValue = isSameTeam ? mainbuilding.maxTaxes : Math.Min(freeSpace,  mainbuilding.resourceManager.GetAmount(resource.citizens)/2);
-        mainbuildingContextUiSliderText.text = isSameTeam ? $"Base Tax: {mainbuilding.Taxes}/{mainbuilding.maxTaxes}" : $"take {mainbuildingContextUiSlider.value}/{mainbuildingContextUiSlider.maxValue} citizens";
+        mainbuildingContextUiTaxesSlider.maxValue = isSameTeam ? mainbuilding.maxTaxes : Math.Min(freeSpace, mainbuilding.resourceManager.GetAmount(resource.citizens) / 2);
+        mainbuildingContextUiSliderText.text = isSameTeam ? $"Tax: {mainbuilding.Taxes}/{mainbuilding.maxTaxes}" : $"take {mainbuildingContextUiTaxesSlider.value}/{mainbuildingContextUiTaxesSlider.maxValue} citizens";
 
         mainbuildingContextUiConfirmButton.gameObject.SetActive(!isSameTeam);
-        mainbuildingContextUiConfirmButton.interactable = mainbuildingContextUiSlider.value<=freeSpace;
+        mainbuildingContextUiConfirmButton.interactable = mainbuildingContextUiTaxesSlider.value>0;
 
     }
 
