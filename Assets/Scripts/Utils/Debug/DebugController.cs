@@ -55,7 +55,6 @@ public class DebugController : MonoBehaviour
         MESSAGE,
         HELP
     };
-
     }
 
     private void Start()
@@ -123,11 +122,11 @@ public class DebugController : MonoBehaviour
                     int toAmount = 0;
                     int fromAmount =0;
                     tradeType type= tradeType.ship;
-                    int team=1;
+                    int team=2;
 
                     if (properties.Length == 7)
                     {
-                        //all values there
+                        //all values filled in
                         int.TryParse(properties[1], out team);
                         resource.TryParse(properties[2], out resTo);
                         resource.TryParse(properties[4], out resFrom);

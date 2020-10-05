@@ -18,15 +18,17 @@ public class BuildingAi : BaseAi
     public override Type Tick()
     {
         gold = resourceManager.GetAmount(resource.gold);
-        resourceManager.CalculateFoodChange();
-        if (resourceManager.foodChange <= 0 || resourceManager.isLoyaltyDecreasing)
+        int foodChange = resourceManager.CalculateFoodGenerated() - resourceManager.GetAmount(resource.citizens)* mainbuilding.defaultFoodPerDayPerCitizen;
+       
+        if (resourceManager.foodChange <= -5 || resourceManager.isLoyaltyDecreasing)
         {
             UpgradeOrBuild(typeof(Farm));
             
         }
-        if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team].Count == 0
+        
+        if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team.teamID].Count == 0
         && resourceManager.foodChange > 0 
-        || resourceManager.GetAmount(resource.food) > (resourceManager.GetAmount(resource.citizens)*mainbuilding.foodUsePerDayPerCitizen)*2)//double the food that is needed for ctizens
+        || resourceManager.GetAmount(resource.food) > (resourceManager.GetAmount(resource.citizens)*mainbuilding.defaultFoodPerDayPerCitizen)*2)//double the food that is needed for ctizens
         {
             //Act and Build 
             UpgradeOrBuild(typeof(House));

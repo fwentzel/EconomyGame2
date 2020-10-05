@@ -39,7 +39,7 @@ public class BuildUiElement : MonoBehaviour
     {
         bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= buildCost;
         if (disableWhenFreeCitizens)
-            interactable &= CitizenManager.instance.freeCitizensPerTeam[activeRM.mainbuilding.team].Count == 0;
+            interactable &= CitizenManager.instance.freeCitizensPerTeam[activeRM.mainbuilding.team.teamID].Count == 0;
 
 
         button.interactable = interactable;

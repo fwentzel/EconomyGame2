@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
 
 	public Mainbuilding mainbuilding;
-	public int team { get; private set; }
+	public Team team { get; private set; }
 	public bool isAi = false;
 
 	//private void Start()

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Mainbuilding : Building
 {
 	private int taxes = 10;
-	public int foodUsePerDayPerCitizen = 2;
+	public int defaultFoodPerDayPerCitizen = 2;
 	[SerializeField]
 	public List<Building> buildings { get; private set; }
 	public Dictionary<Type, GameObject> possibleBuildings;
@@ -83,6 +83,10 @@ public class Mainbuilding : Building
 	public override string GetStats()
 	{
 		return "Mainbuilding";
+	}
+
+	public override bool IsSelectable(){
+		return true;
 	}
 
 }

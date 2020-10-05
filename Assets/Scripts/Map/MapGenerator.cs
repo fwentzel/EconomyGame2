@@ -254,7 +254,7 @@ public class MapGenerator : MonoBehaviour
 
                                 //TODO SAME CODE AS IN MAINBUILDING
                                 Building building = obj.GetComponent<Building>();
-                                building.team = team.teamID;
+                                building.team = team;
                                 building.SetLevelMesh();
 
                                 if (building is Harbour)

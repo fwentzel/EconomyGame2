@@ -28,7 +28,6 @@ public class TaxesAi : BaseAi
 			return typeof(BuildingAi);
 		}
 
-		mainbuilding.Taxes = resAmount(resource.loyalty)/10;
 		return typeof(BuildingAi);
 		
 	}

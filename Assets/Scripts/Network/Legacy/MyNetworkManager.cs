@@ -38,11 +38,11 @@ public class MyNetworkManager : MonoBehaviour
 	{
 		connectedPlayers++;
 		//First Assign Ai Players so Ready Command doesnt get sent before all Players are generated
+		SpawnPlayer(true);
 		if (connectedPlayers == maxHumanPlayers)
 		{
 			FillPlayersWithAi();
 		}
-		SpawnPlayer(true);
 
 	}
 
@@ -58,11 +58,8 @@ public class MyNetworkManager : MonoBehaviour
 		}
 		else
 		{
-
 			playerComponent.isAi = true;
 		}
-
-
 		players.Add(playerComponent);
 		if (players.Count == maxConnections)
 		{

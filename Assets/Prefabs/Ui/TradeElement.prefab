@@ -309,7 +309,6 @@ GameObject:
   - component: {fileID: 9162022399958745364}
   - component: {fileID: 9162022399958745366}
   - component: {fileID: 3770351213235731903}
-  - component: {fileID: 7451150730753899383}
   m_Layer: 5
   m_Name: TradeElement
   m_TagString: Untagged
@@ -372,19 +371,6 @@ MonoBehaviour:
   tradeTypeText: {fileID: 152440901}
   acceptButton: {fileID: 5379798214962013464}
   takenDisabledColor: {r: 0.7607844, g: 0.21176472, b: 0.08627451, a: 1}
---- !u!114 &7451150730753899383
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9162022399958745365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
 --- !u!1 &9162022400359946950
 GameObject:
   m_ObjectHideFlags: 0
@@ -1143,17 +1129,17 @@ PrefabInstance:
     - target: {fileID: 6333346630109324464, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.26666668
+      value: 0.44705886
       objectReference: {fileID: 0}
     - target: {fileID: 6333346630109324464, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.7411765
+      value: 0.5058824
       objectReference: {fileID: 0}
     - target: {fileID: 6333346630109324464, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.19607845
+      value: 0.5803922
       objectReference: {fileID: 0}
     - target: {fileID: 6333346630109324464, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}

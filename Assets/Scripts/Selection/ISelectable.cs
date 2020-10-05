@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface ISelectable
 {
-     int GetTeam();
+     bool IsSelectable();
 } 
 

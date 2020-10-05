@@ -41,7 +41,7 @@ public class CitysMeanResource : MonoBehaviour
 
         for (int i = 0; i < resourceManagers.Length; i++)
         {
-            resourceManagers[players[i].team - 1] = players[i].mainbuilding.resourceManager;
+            resourceManagers[players[i].team.teamID - 1] = players[i].mainbuilding.resourceManager;
         }
         UpdateCityResourceMean();
     }

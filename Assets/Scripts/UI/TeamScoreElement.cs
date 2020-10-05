@@ -61,11 +61,11 @@ public class TeamScoreElement : MonoBehaviour
                     float newVal = i % 2 == 0 ? 125 : 150;
                     //convert to colorspace 0-1
                     newVal /= 255;
-                    Color color = new Color(newVal, newVal, newVal, 255);
+                    Color color = rem.mainbuilding.team.color;
                     foreach (Image image in GetComponentsInChildren<Image>())
                     {
-                        bool isLocalPlayersTeam = GameManager.instance.localPlayer.mainbuilding == rem.mainbuilding;
-                        image.color = isLocalPlayersTeam ? Color.white : color;
+                        
+                        image.color =  color;
                     }
                     break;
                 }
@@ -83,12 +83,7 @@ public class TeamScoreElement : MonoBehaviour
             {
                 image.color=color;
             }
-              newVal =220/ 255f;
-             color = new Color(newVal, newVal, newVal, 255);
-             foreach (TMP_Text text in GetComponentsInChildren<TMP_Text>())
-            {
-               text.color=color;
-            }
+            
             GameManager.instance.OnCalculateIntervall += UpdateMean;
             UpdateMean();
         }
@@ -102,7 +97,7 @@ public class TeamScoreElement : MonoBehaviour
         citizensText.text = rem.GetAmount(resource.citizens).ToString();
         foodText.text = rem.GetAmount(resource.food).ToString();
         stoneText.text = rem.GetAmount(resource.stone).ToString();
-        teamText.text = rem.mainbuilding.team.ToString();
+        teamText.text = rem.mainbuilding.team.teamName;
 
         if (rem.mainbuilding.gameOver)
         {

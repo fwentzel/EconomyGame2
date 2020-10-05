@@ -8,7 +8,7 @@ public class Building : MonoBehaviour, ISelectable
 {
 
     public ResourceManager resourceManager;
-    public int team = -1;
+    public Team team = null;
     public RenderTexture renderTexture;
 
     [SerializeField] Mesh[] meshlevels = null;
@@ -114,8 +114,8 @@ public class Building : MonoBehaviour, ISelectable
         return resourceManager.GetAmount(resource.gold) >= levelCost && level < maxLevel;
     }
 
-    public int GetTeam()
+    public virtual bool IsSelectable()
     {
-        return team;
+        return team == GameManager.instance.localPlayer.team;
     }
 }

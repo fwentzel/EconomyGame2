@@ -3,19 +3,19 @@ using UnityEngine.EventSystems;
 
 public class UiActionHandler : MonoBehaviour
 {
-    public void HoldUpSelected(ButtonCD buttonCD)
+    public static void HoldUpSelected(ButtonCD buttonCD)
     {
         TradeVehicle tradeVehicle = SelectionManager.instance.selectedObject.GetComponent<TradeVehicle>();
 
         if (tradeVehicle != null)
         {
             buttonCD.SetUp(tradeVehicle.holdUpDuration);
-            buttonCD.OnCDFinished+= delegate(){ContextUiManager.instance.UpdateContextUi(tradeVehicle);};
-            StartCoroutine(tradeVehicle.HoldUpCoroutine());
+            buttonCD.OnCDFinished += delegate () { ContextUiManager.instance.UpdateContextUi(tradeVehicle); };
+            tradeVehicle.HoldUp();
 
         }
     }
-    public void DestroySelected()
+    public static void DestroySelected()
     {
         Building buildingToDestroy = SelectionManager.instance.selectedObject.GetComponent<Building>();
         if (buildingToDestroy != null)
@@ -26,7 +26,7 @@ public class UiActionHandler : MonoBehaviour
         }
     }
 
-    public void LevelUpSelected()
+    public static void LevelUpSelected()
     {
         Building buildingToLevelUp = SelectionManager.instance.selectedObject.GetComponent<Building>();
         if (buildingToLevelUp != null)
@@ -36,28 +36,45 @@ public class UiActionHandler : MonoBehaviour
         }
     }
 
-    public void ChangeTaxes(float value)
+    public static void ChangeTaxes(float value)
     {
+
         Mainbuilding mainbuilding = SelectionManager.instance.selectedObject.GetComponent<Mainbuilding>();
         if (mainbuilding != null)
         {
-            mainbuilding.Taxes = (int)value;
             ContextUiManager.instance.UpdateContextUi(mainbuilding);
+            if (!ContextUiManager.instance.isSameTeam)//Slider Method shouldhnt be called TODO 
+                return;
+            mainbuilding.Taxes = (int)value;
         }
     }
 
-    public void ExitApplication()
+    public static void TakeCitizens()
+    {
+
+        Mainbuilding mainbuilding = SelectionManager.instance.selectedObject.GetComponent<Mainbuilding>();
+        if (mainbuilding != null)
+        {
+            CitizenManager.instance.TakeOverCitizen(mainbuilding.resourceManager, ResourceUiManager.instance.activeResourceMan, (int)ContextUiManager.instance.mainbuildingContextUiSlider.value);
+            ContextUiManager.instance.mainbuildingContextUiConfirmButton.GetComponent<ButtonCD>().SetUp(5);
+            ContextUiManager.instance.UpdateContextUi(mainbuilding);
+        }
+
+
+    }
+
+    public static void ExitApplication()
     {
         print("QUIT!");
         Application.Quit();
     }
 
-    public void Disconnect()
+    public static void Disconnect()
     {
         print("Disconnected!");
     }
 
-    public void BackToMain()
+    public static void BackToMain()
     {
         UiManager.instance.OpenMenu(null);
     }

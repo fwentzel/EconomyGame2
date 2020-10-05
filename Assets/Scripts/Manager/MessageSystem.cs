@@ -31,13 +31,13 @@ public class MessageSystem : MonoBehaviour
     private void Start()
     {
         messagePanel.SetActive(false);
-        input=InputMasterManager.instance.inputMaster;
+        input = InputMasterManager.instance.inputMaster;
     }
 
     private void Update()
     {
-        
-        if (input.Menus.enabled&& Keyboard.current.enterKey.wasReleasedThisFrame)
+
+        if (input.Menus.enabled && Keyboard.current.enterKey.wasReleasedThisFrame)
         {
             // Message("BRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
             showChat();
@@ -76,19 +76,21 @@ public class MessageSystem : MonoBehaviour
         chatText = newChatMessage.GetComponentInChildren<TMP_Text>();
         // message = "[" + GameManager.instance.dayIndex + "] " + message;
         chatText.text = message;
-        chatText.color = color == default ? Color.black : color;
+        if (color != default)
+            chatText.color = color;
         showChat();
         //chatText.ForceMeshUpdate();
         // chatText.GetTextInfo(message);
-        RectTransform rectTransform=newChatMessage.GetComponent<RectTransform>();
+        RectTransform rectTransform = newChatMessage.GetComponent<RectTransform>();
         StartCoroutine(ResizeMessage(rectTransform));
-       
+
     }
-    IEnumerator ResizeMessage(RectTransform rectTransform){
+    IEnumerator ResizeMessage(RectTransform rectTransform)
+    {
 
         yield return 0;
-        
-        rectTransform.sizeDelta=new Vector2(rectTransform.sizeDelta.x,chatText.preferredHeight);
+
+        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, chatText.preferredHeight);
 
     }
 }
