@@ -44,7 +44,6 @@ public class CitizenManager : MonoBehaviour
             tradedCitizens.AddRange(house.SetFreeCitizens(leftOver));
 
             leftOver =amount- tradedCitizens.Count ;
-            print("LEFTOVER: " + leftOver);
             if (leftOver <= 0)
             {
                 break;
@@ -55,8 +54,6 @@ public class CitizenManager : MonoBehaviour
         {
             house = building as House;
             tradedCitizens = house.ReceiveCitizens(tradedCitizens);
-
-            print("New citizensLength: " + tradedCitizens.Count);
             if (tradedCitizens.Count == 0)
             {
                 break;

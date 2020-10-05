@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-public class Citizen 
-{
+public class Citizen :MonoBehaviour{
+
     public Team team;
     public float taxesMultiplier;
     public int foodPerDay;
     public House house;
+    public int happiness=50;
 
-    public Citizen(Team team,House house, float taxesMultiplier, int foodPerDay)
+    public void Init(Team team,House house, float taxesMultiplier, int foodPerDay)
     {
         this.team = team;
         this.house=house;
         this.taxesMultiplier = taxesMultiplier;
         this.foodPerDay = foodPerDay;
     }
+
+}
+    
 
 
 
@@ -41,4 +45,3 @@ public class Citizen
     // 		agent.SetDestination(finalPosition);
     // 	}
     // }
-}

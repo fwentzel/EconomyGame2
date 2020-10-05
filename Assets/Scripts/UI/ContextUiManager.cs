@@ -116,7 +116,7 @@ public class ContextUiManager : MonoBehaviour
     {
         if (building is Mainbuilding)
         {
-            Mainbuilding mb=building as Mainbuilding;
+            Mainbuilding mb = building as Mainbuilding;
             isSameTeam = GameManager.instance.localPlayer.team == mb.team;
             mainbuildingContextUiSlider.value = isSameTeam ? mb.Taxes : 0;
             mainbuildingContextPanel.gameObject.SetActive(true);
@@ -143,11 +143,14 @@ public class ContextUiManager : MonoBehaviour
         mainBuildingContextUiFoodText.text = $"default {mainbuilding.defaultFoodPerDayPerCitizen} food per citizen per day";
 
 
-        int citizenAmount = mainbuilding.resourceManager.GetAmount(resource.citizens);
-        mainbuildingContextUiSlider.maxValue = isSameTeam ? mainbuilding.maxTaxes : citizenAmount;
-        mainbuildingContextUiConfirmButton.gameObject.SetActive(!isSameTeam);
-        mainbuildingContextUiSliderText.text = isSameTeam ? $"Base Tax: {mainbuilding.Taxes}/{mainbuilding.maxTaxes}" : $"take {mainbuildingContextUiSlider.value}/{citizenAmount} citizens";
+        int freeSpace = ResourceUiManager.instance.activeResourceMan.mainbuilding.maxCitizens-ResourceUiManager.instance.activeResourceMan.GetAmount(resource.citizens) ;
 
+        //can only buy up half of city
+        mainbuildingContextUiSlider.maxValue = isSameTeam ? mainbuilding.maxTaxes : Math.Min(freeSpace,  mainbuilding.resourceManager.GetAmount(resource.citizens)/2);
+        mainbuildingContextUiSliderText.text = isSameTeam ? $"Base Tax: {mainbuilding.Taxes}/{mainbuilding.maxTaxes}" : $"take {mainbuildingContextUiSlider.value}/{mainbuildingContextUiSlider.maxValue} citizens";
+
+        mainbuildingContextUiConfirmButton.gameObject.SetActive(!isSameTeam);
+        mainbuildingContextUiConfirmButton.interactable = mainbuildingContextUiSlider.value<=freeSpace;
 
     }
 
