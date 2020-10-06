@@ -27,7 +27,7 @@ MonoBehaviour:
       type: 3}
   - name: Harbour
     value: 160
-    placeable: {fileID: 2367563268605596646, guid: 742199b3aafbf12458324edc5c21b0cb,
+    placeable: {fileID: 8521476323181846518, guid: 2566d5b3d11ca394cad1fae9bba1f9a6,
       type: 3}
   - name: Rocks
     value: 51

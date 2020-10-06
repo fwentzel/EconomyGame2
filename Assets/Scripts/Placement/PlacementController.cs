@@ -32,7 +32,7 @@ public class PlacementController : MonoBehaviour
         mouse = Mouse.current;
     }
 
-    public void SetupGridParameter()
+    public void Start()
     {
         MapGenerator mapGen = FindObjectOfType<MapGenerator>();
         xSize = mapGen.xSize;
@@ -145,8 +145,6 @@ public class PlacementController : MonoBehaviour
 
     public void NewPlaceableObject(GameObject placeable)
     {
-
-
         //Instantiate new object to place and add necessary components. Make sure Collider is Trigger for OnTriggerEnter()
         //TODO take from pool?
         if (placeableObject != null)

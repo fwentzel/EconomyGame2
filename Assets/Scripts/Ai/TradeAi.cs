@@ -14,9 +14,10 @@ public class TradeAi : BaseAi
 	{
 		foreach (Trade trade in TradeManager.instance.tradeToElementMapping.Keys)
 		{
-			//Trade is no longer available or Tradecooldown still active, so move on to next one
+			//Trade is no longer available or Tradecooldown still active or cant take Trade since no harbour for ship, so move on to next one
 			if (TradeManager.instance.tradeToElementMapping[trade].accepted ||
-			TradeManager.instance.tradeCooldowns[resourceManager] > Time.time)
+			TradeManager.instance.tradeCooldowns[resourceManager] > Time.time||
+			(trade.type==tradeType.ship && mainbuilding.buildings.Find(t=>t.GetType()==typeof(Harbour))==null))
 				continue;
 			
 			

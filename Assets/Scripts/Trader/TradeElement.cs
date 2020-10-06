@@ -1,117 +1,99 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; 
+using TMPro;
 public class TradeElement : MonoBehaviour
 {
-	[SerializeField] Image toTraderImage = null;
-	[SerializeField] TMP_Text toTraderAmountText = null;
+    [SerializeField] Image toTraderImage = null;
+    [SerializeField] TMP_Text toTraderAmountText = null;
 
-	[SerializeField] Image fromTraderImage = null;
-	[SerializeField] TMP_Text fromTraderAmountText = null;
+    [SerializeField] Image fromTraderImage = null;
+    [SerializeField] TMP_Text fromTraderAmountText = null;
 
-	[SerializeField] TMP_Text titleText = null;
+    [SerializeField] TMP_Text titleText = null;
 
-	[SerializeField] TMP_Text tradeTypeText = null;
+    [SerializeField] TMP_Text tradeTypeText = null;
 
-	[SerializeField] Button acceptButton = null;
-	[SerializeField] Color takenDisabledColor= Color.red;
+    [SerializeField] Button acceptButton = null;
+    [SerializeField] Color takenDisabledColor = Color.red;
 
-	public ButtonCD buttonCD {get;private set;}
-	public bool accepted { get; private set; } = false;
-	public bool isOnCd { get; private set; } = false;
+    public ButtonCD buttonCD { get; private set; }
+    public bool accepted { get; private set; } = false;
 
-	Trade trade;
-	int amount;
-	float cd = 0;
-	ResourceManager localRM;
-	Color normalColor;
+    Trade trade;
+    int amount;
+    float cd = 0;
+    ResourceManager localResourceManager;
+    Color normalColor;
 
-	private void Awake()
-	{
-		acceptButton.onClick.AddListener(delegate () { TradeAccepted(); });
-		buttonCD=acceptButton.GetComponent<ButtonCD>();
-		normalColor=acceptButton.image.color;
-		
-	}
-	private void Start() {
-		Setup();
-	}
+    private void Awake()
+    {
+        acceptButton.onClick.AddListener(delegate () { TradeAccepted(); });
+        buttonCD = acceptButton.GetComponent<ButtonCD>();
+        normalColor = acceptButton.image.color;
 
-	private void Setup()
-	{
-		print("setup called");
-		localRM = ResourceUiManager.instance.activeResourceMan;
-		localRM.OnResourceChange += checkInteractable;
-		
-		checkInteractable();
-	}
+    }
+    private void Start()
+    {
+        localResourceManager = ResourceUiManager.instance.activeResourceMan;
+        localResourceManager.OnResourceChange += checkInteractable;
+        checkInteractable();
+    }
 
-	private void Update()
-	{
-		if (isOnCd)
-		{
-			float t0 =  cd - TradeManager.instance.tradeCooldown;
-			float amount = (Time.time - t0) / TradeManager.instance.tradeCooldown;
-			acceptButton.image.fillAmount = amount;
+    internal void Init(Trade trade)
+    {
+        toTraderImage.sprite = trade.toTrader.sprite;
+        toTraderAmountText.text = trade.toTraderAmount.ToString();
 
-			if (amount >= 1)
-			{
-				isOnCd = false;
-				acceptButton.image.fillAmount = 1;
-				checkInteractable();
-			}
-		}
-	}
+        fromTraderImage.sprite = trade.fromTrader.sprite;
+        fromTraderAmountText.text = trade.fromTraderAmount.ToString();
 
-	internal void Init(Trade trade)
-	{
-		toTraderImage.sprite = trade.toTrader.sprite;
-		toTraderAmountText.text = trade.toTraderAmount.ToString();
+        titleText.text = "TRADE";
 
-		fromTraderImage.sprite = trade.fromTrader.sprite;
-		fromTraderAmountText.text = trade.fromTraderAmount.ToString();
+        tradeTypeText.text = trade.type.ToString();
+        this.trade = trade;
 
-		titleText.text = "TRADE";
+        EnableElement();
+    }
 
-		tradeTypeText.text = trade.type.ToString();
-		this.trade = trade;
+    public void checkInteractable()
+    {
+        bool interactable = localResourceManager.GetAmount(trade.toTrader.resource) > trade.toTraderAmount;
+        interactable =  accepted == false;
+        // && TradeManager.instance.tradeCooldowns[localResourceManager] <= Time.time;
+        acceptButton.interactable = interactable;
 
-		EnableElement();
-	}
+        if (trade.type == tradeType.ship && localResourceManager.mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
+        {
+            //Player doesnt have harbour, so cant take Trade.
+            acceptButton.interactable = false;
 
-	public void checkInteractable()
-	{
-		bool interactable = localRM.GetAmount(trade.toTrader.resource) > trade.toTraderAmount
-							&& accepted == false
-							&& TradeManager.instance.tradeCooldowns[localRM] <= Time.time;
-		acceptButton.interactable = interactable;
-	}
+        }
+    }
 
 
-	public void DisableElement()
-	{
-		accepted = true;
-		acceptButton.image.color=takenDisabledColor;
-	}
+    public void DisableElement()
+    {
+        accepted = true;
+        acceptButton.image.color = takenDisabledColor;
+    }
 
-	public void EnableElement()
-	{
-		accepted = false;
-		acceptButton.image.color=normalColor;
-	}
+    public void EnableElement()
+    {
+        accepted = false;
+        acceptButton.image.color = normalColor;
+    }
 
-	public void TradeAccepted()
-	{
-		MessageSystem.instance.Message("you accepted following Trade: "+ trade.ToString());
-		ResourceManager rm = GameManager.instance.localPlayer.mainbuilding.resourceManager;
-		TradeManager.instance.AcceptTrade(trade, rm);
+    public void TradeAccepted()
+    {
+        MessageSystem.instance.Message("you accepted following Trade: " + trade.ToString());
+        TradeManager.instance.AcceptTrade(trade, GameManager.instance.localPlayer.mainbuilding.resourceManager);
 
-		foreach (TradeElement elem in TradeManager.instance.tradeElements)
-		{
-			elem.buttonCD.SetUp(TradeManager.instance.tradeCooldown,()=>checkInteractable());
-		}
-	}
+        foreach (TradeElement elem in TradeManager.instance.tradeElements)
+        {
+            elem.buttonCD.SetUp(TradeManager.instance.tradeCooldown, () => elem.checkInteractable());
+        }
+    }
 
 }
 

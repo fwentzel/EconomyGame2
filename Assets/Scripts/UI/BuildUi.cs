@@ -15,9 +15,7 @@ public class BuildUi : MonoBehaviour
 		else
 			Destroy(this);
 	}
-	public GameObject[] GetPrefabs(){
-		return prefabs;
-	}
+	
 	public void GenerateBuildMenu()
 	{
 		Transform parent = transform.Find("BuildPanel");

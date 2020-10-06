@@ -259,6 +259,7 @@ public class MapGenerator : MonoBehaviour
 
                                 if (building is Harbour)
                                 {
+                                    obj.transform.rotation = Quaternion.Euler(0, 0, 0);
                                     if (mapTexture.GetPixel(x, z + 1).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, 90);

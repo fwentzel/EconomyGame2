@@ -10,7 +10,7 @@ public class StateMachine : MonoBehaviour
 	public event Action<BaseAi> OnStateChanged;
 	private void Awake()
 	{
-		//InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
+		InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
 	}
 
 	private void StateMachineUpdate()

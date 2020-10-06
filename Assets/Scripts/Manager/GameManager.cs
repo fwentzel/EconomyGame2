@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         RpcSetupMainBuildingPlayer();
-        PlacementController.instance.SetupGridParameter();
+        // PlacementController.instance.SetupGridParameter();
         TradeManager.instance.StartTradeOffer();
         BuildUi.instance.GenerateBuildMenu();
 
