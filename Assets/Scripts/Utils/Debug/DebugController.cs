@@ -15,6 +15,7 @@ public class DebugController : MonoBehaviour
     public static DebugCommand<string> MESSAGE;
     public static DebugCommand<Trade, ResourceManager> TRADE;
     public static DebugCommand ADD_ALL;
+    public static DebugCommand GAME_OVER;
 
     public List<object> commandList;
 
@@ -27,6 +28,10 @@ public class DebugController : MonoBehaviour
         MESSAGE = new DebugCommand<string>("msg", "Send specified Message", "msg <message>", (x) =>
        {
            MessageSystem.instance.Message(x);
+       });
+        GAME_OVER = new DebugCommand("go", "Set Player game over", "go", () =>
+       {
+           GameManager.instance.setPlayerGameOver(GameManager.instance.localPlayer.mainbuilding);
        });
 
         ADD_RES = new DebugCommand<resource, int>("add_res", "Add specified res amount. Possible resources: food, loyalty, gold, citizens, stone ", "add_res <resource><amount>", (x, y) =>
@@ -53,6 +58,7 @@ public class DebugController : MonoBehaviour
         ADD_ALL,
         ADD_RES,
         MESSAGE,
+        GAME_OVER,
         HELP
     };
     }

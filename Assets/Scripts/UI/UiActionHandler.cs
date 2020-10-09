@@ -79,7 +79,8 @@ public class UiActionHandler : MonoBehaviour
 
     public static void Disconnect()
     {
-        print("Disconnected!");
+        print("Back to Mainmenu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
     }
 
     public static void BackToMain()

@@ -10,7 +10,7 @@ public class GameTimer : MonoBehaviour
     public bool isRunning = false;
 
     Color bgColor;
-    Color fgColor ;
+    Color fgColor;
 
     Image backgroundImage;
     bool foregroundIsWhite = true;
@@ -19,18 +19,22 @@ public class GameTimer : MonoBehaviour
         timerImage = GetComponent<Image>();
         backgroundImage = transform.parent.GetChild(0).GetComponent<Image>();
         bgColor = backgroundImage.color;
-        fgColor  = timerImage.color;
+        fgColor = timerImage.color;
+    }
+    private void Start()
+    {
+        GameManager.instance.OnGameStart += StartTimer;
+        GameManager.instance.OnGameEnd += () => isRunning = false;
     }
 
-    public void StartTimer(float dayLength)
+    public void StartTimer()
     {
-        this.dayLength = dayLength;
+        this.dayLength = GameManager.instance.calcResourceIntervall;
         isRunning = true;
     }
 
     void Update()
     {
-        //TODO verhindern, dass Position überschrieben wird.
         if (isRunning)
         {//Reduce fill amount 
             fillAmount += 1.0f / dayLength * Time.deltaTime;

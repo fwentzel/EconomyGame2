@@ -21,8 +21,6 @@ public class TradeElement : MonoBehaviour
     public bool accepted { get; private set; } = false;
 
     Trade trade;
-    int amount;
-    float cd = 0;
     ResourceManager localResourceManager;
     Color normalColor;
 

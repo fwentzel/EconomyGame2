@@ -9,11 +9,13 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public event Action OnCalculateIntervall = delegate { };
     public event Action OnGameStart = delegate { };
+    public event Action OnGameEnd = delegate { };
     public int dayIndex = 0;
     public int calcResourceIntervall = 5;
 
     public Player[] players;
     public Player localPlayer;
+    public bool didPlayerWin { get; private set; } = false;
 
     int gameOverPlayers = 0;
 
@@ -49,12 +51,26 @@ public class GameManager : MonoBehaviour
         {
             if (player.mainbuilding == mb)
             {
-                gameOverPlayers++;
-                if (gameOverPlayers == players.Length - 1)//TODO, unsicher
-                { 
-                    MessageSystem.instance.Message("GAME IS OVER!",Color.green);
+                if (!player.isAi)
+                {
+                    MessageSystem.instance.Message("YOU LOST!", Color.red);
+
+                    OnGameEnd?.Invoke();
                     CancelInvoke();
                 }
+                else
+                {
+                    gameOverPlayers++;
+                    if (gameOverPlayers == players.Length - 1)//TODO, unsicher
+                    {
+                        MessageSystem.instance.Message("YOU WIN!", Color.green);
+                        didPlayerWin = true;
+                        OnGameEnd?.Invoke();
+                        CancelInvoke();
+                    }
+                }
+
+
             }
         }
     }
@@ -67,7 +83,7 @@ public class GameManager : MonoBehaviour
 
             mainbuildings[i].SetupMainBuilding(players[i].isAi);
             players[i].SetMainBuilding(mainbuildings[i]);
-             FindObjectOfType<GameTimer>().isRunning=false;
+            FindObjectOfType<GameTimer>().isRunning = false;
 
 
         }
@@ -80,7 +96,6 @@ public class GameManager : MonoBehaviour
         OnGameStart?.Invoke();
         InvokeRepeating("InvokeCalculateResource", calcResourceIntervall, calcResourceIntervall);
         ResourceUiManager.instance.UpdateRessourceUI();
-        FindObjectOfType<GameTimer>().StartTimer(calcResourceIntervall);
     }
 
     private void InvokeCalculateResource()

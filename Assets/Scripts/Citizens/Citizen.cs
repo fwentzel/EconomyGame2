@@ -30,17 +30,22 @@ public class Citizen : MonoBehaviour
 
     private void UpdateHappiness()
     {
-        // if (taxesMultiplier > house.resourceManager.meanTaxesMultiplier)
-        //     happiness -= 1;
-        // else if (taxesMultiplier < house.resourceManager.meanTaxesMultiplier)
-        //     happiness += 1;
-        // if (foodMultiplier > house.resourceManager.meanFoodMultiplier)
-        //     happiness += 1;
-        // else if (foodMultiplier < house.resourceManager.meanFoodMultiplier)
-        //     happiness -= 1;
+        if (taxesMultiplier > house.resourceManager.meanTaxesMultiplier)
+            happiness -= 1;
+        else if (taxesMultiplier < house.resourceManager.meanTaxesMultiplier)
+            happiness += 1;
+        if (foodMultiplier > house.resourceManager.meanFoodMultiplier)
+            happiness += 1;
+        else if (foodMultiplier < house.resourceManager.meanFoodMultiplier)
+            happiness -= 1;
 
+        if(mainbuilding.resourceManager.GetAmount(resource.food)==0){
+            happiness-=5;
+        }
+        //Main building settings
         happiness += Mathf.FloorToInt(((mainbuilding.maxTaxes / 2) - mainbuilding.Taxes) / 3f);
         happiness += ( mainbuilding.foodPerDayPerCitizen-2) * 2;
+
         if (happiness < lookNewCityThreshold)
         {
             //Look for new City

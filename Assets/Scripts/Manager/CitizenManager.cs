@@ -50,6 +50,12 @@ public class CitizenManager : MonoBehaviour
             }
         }
 
+        foreach (Citizen citizen in tradedCitizens)
+        {
+            citizen.foodMultiplier = 1.5f;
+            citizen.taxesMultiplier = .5f;
+        }
+
         foreach (Building building in to.mainbuilding.buildings.FindAll(t => t.GetType() == typeof(House)))
         {
             house = building as House;
