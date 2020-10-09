@@ -80,22 +80,16 @@ public class GameManager : MonoBehaviour
         Mainbuilding[] mainbuildings = FindObjectsOfType<Mainbuilding>();
         for (int i = 0; i < players.Length; i++)
         {
-
             mainbuildings[i].SetupMainBuilding(players[i].isAi);
             players[i].SetMainBuilding(mainbuildings[i]);
-            FindObjectOfType<GameTimer>().isRunning = false;
-
-
         }
-        CitysMeanResource.instance.PopulateResourceManagers(mainbuildings.Length);
     }
 
     void RpcStartInvokeCalcIntervall()
     {
-        InputMasterManager.instance.inputMaster.Menus.Enable();
+        
         OnGameStart?.Invoke();
         InvokeRepeating("InvokeCalculateResource", calcResourceIntervall, calcResourceIntervall);
-        ResourceUiManager.instance.UpdateRessourceUI();
     }
 
     private void InvokeCalculateResource()
@@ -107,10 +101,6 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         RpcSetupMainBuildingPlayer();
-        // PlacementController.instance.SetupGridParameter();
-        TradeManager.instance.StartTradeOffer();
-        BuildUi.instance.GenerateBuildMenu();
-
         RpcStartInvokeCalcIntervall();
     }
 

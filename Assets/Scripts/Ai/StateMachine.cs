@@ -8,9 +8,9 @@ public class StateMachine : MonoBehaviour
 	public Dictionary<Type, BaseAi> availableStates;
 	public BaseAi currentState;
 	public event Action<BaseAi> OnStateChanged;
-	private void Awake()
-	{
-		InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
+
+	private void Start() {
+		GameManager.instance.OnGameStart+=()=>InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
 	}
 
 	private void StateMachineUpdate()

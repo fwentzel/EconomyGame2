@@ -18,7 +18,7 @@ public class Building : MonoBehaviour, ISelectable
 
     public int level { get; private set; } = 1;
     public bool canLevelUp { get; private set; } = false;
-    public bool IgnoreMaxPlacementRange { get; protected set; } = false;
+    public bool UseMaxPlacementRange { get; protected set; } = true;
 
     int maxLevel;
 
@@ -46,7 +46,7 @@ public class Building : MonoBehaviour, ISelectable
             TriggerBonusLevel();
 
         resourceManager.ChangeRessourceAmount(resource.gold, -levelCost);
-        VFXManager.instance.PlayEffect(VFXManager.instance.levelUpEffect, transform.position);
+        VFXManager.PlayEffect(transform.position);
         SetLevelMesh();
         levelCost = (int)(levelCost * 1.5f);
         CheckCanLevelUp();

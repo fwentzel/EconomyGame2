@@ -10,16 +10,15 @@ public class TradeManager : MonoBehaviour
 
     public event Action<int> OnGenerateNewTrades = delegate { };
 
+    [SerializeField] Resource[] tradingResources = null;
+    [SerializeField] GameObject tradeUiPanel = null;
+    public TradeTypeToPrefab[] tradeTypePrefabMap = default;
     public static TradeManager instance { get; private set; }
     public Dictionary<Trade, TradeElement> tradeToElementMapping { get; private set; }
-    public Dictionary<ResourceManager, float> tradeCooldowns { get; private set; }
     public int tradeCooldown { get; private set; } = 3;
     public TradeElement[] tradeElements { get; private set; } = new TradeElement[6];
 
-    [SerializeField] Resource[] tradingResources = null;
-    [SerializeField] GameObject tradeUiPanel = null;
 
-    public TradeTypeToPrefab[] tradeTypePrefabMap = default;
 
     public List<TradeVehicle> tradeVehicles { get; private set; } = new List<TradeVehicle>();
 
@@ -41,21 +40,18 @@ public class TradeManager : MonoBehaviour
             Destroy(this);
         generator = FindObjectOfType<MapGenerator>();
         tradeToElementMapping = new Dictionary<Trade, TradeElement>();
-        tradeCooldowns = new Dictionary<ResourceManager, float>();
         randomTradeValues = new int[maxTrades, synchronizedValues];
     }
 
     private void Start()
     {
         GameManager.instance.OnGameStart += Setup;
+        GameManager.instance.OnGameStart += StartTradeOffer;
     }
 
     void Setup(){
-        foreach (ResourceManager resourceManger in CitysMeanResource.instance.resourceManagers)
-        {
-            tradeCooldowns.Add(resourceManger, Time.time);
-        }
         int i = 0;
+        //TODO ABhängigkeit weg
         foreach (TradeElement tradeElement in tradeUiPanel.transform.GetComponentsInChildren<TradeElement>())
         {
             tradeElements[i] = tradeElement;
@@ -140,7 +136,6 @@ public class TradeManager : MonoBehaviour
         if (isDebug) return;
 
         tradeToElementMapping[trade].DisableElement();
-        tradeCooldowns[rm] = Time.time + tradeCooldown;
 
         acceptedTrades++;
         if (acceptedTrades == 4)

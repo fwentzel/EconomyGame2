@@ -12,7 +12,7 @@ public class CitizenManager : MonoBehaviour
     public Dictionary<int, List<Citizen>> freeCitizensPerTeam { get; private set; } = new Dictionary<int, List<Citizen>>();
     List<Citizen> citizens = new List<Citizen>();
 
-    private void Awake()
+    private void Awake() 
     {
         //singleton Check
         if (instance == null)

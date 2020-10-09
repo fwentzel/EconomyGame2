@@ -15,7 +15,9 @@ public class BuildUi : MonoBehaviour
 		else
 			Destroy(this);
 	}
-	
+	private void Start() {
+		GameManager.instance.OnGameStart += GenerateBuildMenu;
+	}
 	public void GenerateBuildMenu()
 	{
 		Transform parent = transform.Find("BuildPanel");

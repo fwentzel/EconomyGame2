@@ -219,22 +219,15 @@ public class MapGenerator : MonoBehaviour
                     {
                         if (objectMapping.placeable != null)
                         {
-                            //ALSO USED IN PLACEMENTCONTROLLER
-                            //float newY = vertices[i].y +
-                            //			 vertices[i + 1].y +
-                            //			 vertices[xSize + i + 1].y +
-                            //			 vertices[xSize + i].y;
-                            //newY /= 4;
                             float newY = vertices[i].y;
                             newY = 0;
-                            //instantiate given prefab and set Position at coordinsates + gridspacing/2 offset and vertexheigth
 
 # if(UNITY_EDITOR)
                             GameObject obj = PrefabUtility.InstantiatePrefab(objectMapping.placeable, transform) as GameObject;
 #else
                             GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
 #endif
-                            obj.transform.position = new Vector3(x + gridSpacing / 2.0f, newY, z + gridSpacing / 2.0f);
+                            obj.transform.position = new Vector3(x , newY, z);
 
                             //obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
@@ -247,7 +240,7 @@ public class MapGenerator : MonoBehaviour
                                 ResourceObject resourceObject = obj.GetComponent<ResourceObject>();
                                 if (resourceObject != null)
                                 {
-                                    resourceObject.team = team.teamID;
+                                    resourceObject.team = team;
                                     resourceObject.OnBuild();
                                     continue;
                                 }

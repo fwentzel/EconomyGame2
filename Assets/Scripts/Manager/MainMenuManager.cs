@@ -19,6 +19,6 @@ public class MainMenuManager : MonoBehaviour
 	}
 
 	public void StartGame(){
-		SceneManager.LoadScene("Level");
+		SceneManager.LoadSceneAsync("Level");
 	}
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResourceObject : MonoBehaviour
 {
-    public int team;
+    public Team team;
 
     public virtual void OnBuild(){}
 }

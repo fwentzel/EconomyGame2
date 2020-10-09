@@ -26,10 +26,15 @@ public class ResourceUiManager : MonoBehaviour
         defaultTextColor = res.resourceStartValues.First().Key.uiText.color;
     }
 
+    private void Start()
+    {
+        GameManager.instance.OnGameStart += UpdateRessourceUI;
+    }
+
     private void SetupResourceUi()
     {
         Transform resourceUiParent = transform.Find("CityResourcePanel");
-        foreach (Resource resource in  res.resourceStartValues.Keys)
+        foreach (Resource resource in res.resourceStartValues.Keys)
         {
             GameObject obj = Instantiate(resourceUiPrefab, resourceUiParent);
             resource.Setup(obj);

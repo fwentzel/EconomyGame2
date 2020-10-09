@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -31,6 +30,7 @@ public class CitysMeanResource : MonoBehaviour
     private void Start()
     {
         GameManager.instance.OnCalculateIntervall += UpdateCityResourceMean;
+        GameManager.instance.OnGameStart +=()=> PopulateResourceManagers(GameManager.instance.players.Length);
     }
 
 

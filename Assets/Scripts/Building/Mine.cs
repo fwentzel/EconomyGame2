@@ -3,12 +3,13 @@
 public class Mine : Building
 {
     public int unitsPerIntervall;
-    
+
     private Collider[] overlapResults = new Collider[5];
 
- private void Awake() {
-    IgnoreMaxPlacementRange=true;
- }
+    private void Awake()
+    {
+        UseMaxPlacementRange = false;
+    }
     public override void OnBuild(bool subtractResource = true)
     {
         resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
@@ -44,14 +45,14 @@ public class Mine : Building
             ResourceObject obj = other.GetComponent<ResourceObject>();
             if (obj != null)
             {
-                if (obj.CompareTag("RockResource"))
+                if (obj.CompareTag("RockResource") && obj.team == team)
                 {
-
                     //check if a Mine is already there
                     int numFound = Physics.OverlapBoxNonAlloc(transform.position, Vector3.one * .5f, overlapResults);
                     for (int i = 0; i < numFound; i++)
                     {
                         if (overlapResults[i].gameObject == this.gameObject) continue;
+                        //If Building is there, return false
                         if (overlapResults[i].tag.Equals("Placeable"))
                         {
                             PlacementController.instance.SetCanBuild(false);
@@ -59,8 +60,8 @@ public class Mine : Building
                         }
 
                     }
-					//if no mine is present, set can build to true
-					PlacementController.instance.SetCanBuild(true);
+                    //if no mine is present, set can build to true
+                    PlacementController.instance.SetCanBuild(true);
                 }
                 else
                 {

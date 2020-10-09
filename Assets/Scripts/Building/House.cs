@@ -56,7 +56,7 @@ public class House : Building
         GenerateNewCitizens(1);
         capacity += 2;
         resourceManager.mainbuilding.maxCitizens += 2;
-        ResourceUiManager.instance.UpdateRessourceUI(resource.citizens);
+        //ResourceUiManager.instance.UpdateRessourceUI(resource.citizens);
 
     }
 

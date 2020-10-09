@@ -12,7 +12,11 @@ public class BuildingAi : BaseAi
     public BuildingAi(AiMaster master) : base(master)
     {
         GetSpecificsFromBuilding();
+        if(PlacementController.instance!=null)
         GetAvailableBuildSpots(1, PlacementController.instance.maxPlacementRange);
+        else{
+             GetAvailableBuildSpots(1, 6);
+        }
     }
 
     public override Type Tick()

@@ -4,6 +4,8 @@ using UnityEngine;
 public class TradeAi : BaseAi
 {
 	float safePercentOfResource = .1f;
+	float nextAction =0f;
+	float tradeCD=30;
 
 	public TradeAi(float safePercentOfResource,AiMaster master) : base(master)
 	{
@@ -16,7 +18,7 @@ public class TradeAi : BaseAi
 		{
 			//Trade is no longer available or Tradecooldown still active or cant take Trade since no harbour for ship, so move on to next one
 			if (TradeManager.instance.tradeToElementMapping[trade].accepted ||
-			TradeManager.instance.tradeCooldowns[resourceManager] > Time.time||
+			Time.time>nextAction||
 			(trade.type==tradeType.ship && mainbuilding.buildings.Find(t=>t.GetType()==typeof(Harbour))==null))
 				continue;
 			
@@ -26,6 +28,7 @@ public class TradeAi : BaseAi
 			if (percentOfResource < safePercentOfResource)
 			{
 				TradeManager.instance.AcceptTrade(trade, resourceManager);
+				nextAction =Time.time+tradeCD;
 			}
 		}
 		return typeof(TaxesAi);
