@@ -5,7 +5,6 @@ public abstract class BaseAi
 {
 	public Mainbuilding mainbuilding;
 	public ResourceManager resourceManager;
-
 	AiMaster master;
 
 	public BaseAi(AiMaster master)

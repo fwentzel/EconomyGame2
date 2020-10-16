@@ -39,9 +39,12 @@ public class TradeVehicle : MonoBehaviour,ISelectable
 		yield return new WaitForSeconds(holdUpDuration);
 		agent.isStopped  = false;
 	}
+	public void HoldUp(){
+		StartCoroutine(HoldUpCoroutine());
+	}
 
-    public int GetTeam()
+    public bool IsSelectable()
     {
-        return rm.mainbuilding.team;
+        return rm.mainbuilding.team != GameManager.instance.localPlayer.team;
     }
 }

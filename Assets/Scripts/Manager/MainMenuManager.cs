@@ -17,4 +17,8 @@ public class MainMenuManager : MonoBehaviour
 		print("QUIT!");
 		Application.Quit();
 	}
+
+	public void StartGame(){
+		SceneManager.LoadSceneAsync("Level");
+	}
 }

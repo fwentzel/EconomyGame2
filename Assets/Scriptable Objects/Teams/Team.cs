@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "ScriptableObj/Teams")]
 public class Team : ScriptableObject
 {
 	public int teamID;
-	public Color teamcolor;
+	public Color color;
+	public string teamName=> teamID.ToString();
 }

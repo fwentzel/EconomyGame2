@@ -219,42 +219,40 @@ public class MapGenerator : MonoBehaviour
                     {
                         if (objectMapping.placeable != null)
                         {
-                            //ALSO USED IN PLACEMENTCONTROLLER
-                            //float newY = vertices[i].y +
-                            //			 vertices[i + 1].y +
-                            //			 vertices[xSize + i + 1].y +
-                            //			 vertices[xSize + i].y;
-                            //newY /= 4;
                             float newY = vertices[i].y;
                             newY = 0;
-                            //instantiate given prefab and set Position at coordinsates + gridspacing/2 offset and vertexheigth
 
 # if(UNITY_EDITOR)
                             GameObject obj = PrefabUtility.InstantiatePrefab(objectMapping.placeable, transform) as GameObject;
 #else
                             GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
 #endif
-                            obj.transform.position = new Vector3(x + gridSpacing / 2.0f, newY, z + gridSpacing / 2.0f);
+                            obj.transform.position = new Vector3(x , newY, z);
 
                             //obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
                             int teamColorValue = mapTextureColor.r;
 
-                            if (teamColorValue > 0 && teamColorValue <= teams.Length)//everything bigger is an object without a team like forests or rocks
+                            if (teamColorValue > 0 && teamColorValue <= teams.Length)//everything bigger 
                             {
                                 //set building Team equal to team at index [blue Channel value (1,4)]
                                 Team team = teams[teamColorValue - 1];
+                                ResourceObject resourceObject = obj.GetComponent<ResourceObject>();
+                                if (resourceObject != null)
+                                {
+                                    resourceObject.team = team;
+                                    resourceObject.OnBuild();
+                                    continue;
+                                }
 
                                 //TODO SAME CODE AS IN MAINBUILDING
                                 Building building = obj.GetComponent<Building>();
-                                building.team = team.teamID;
+                                building.team = team;
                                 building.SetLevelMesh();
-
 
                                 if (building is Harbour)
                                 {
-
-
+                                    obj.transform.rotation = Quaternion.Euler(0, 0, 0);
                                     if (mapTexture.GetPixel(x, z + 1).b == waterColorValue)
                                     {
                                         obj.transform.RotateAround(obj.transform.position, Vector3.up, 90);
@@ -278,12 +276,6 @@ public class MapGenerator : MonoBehaviour
                                 }
                             }
 
-                            //Trees random transform
-                            Forest forest = obj.GetComponent<Forest>();
-                            if (forest != null)
-                            {
-                                forest.OnBuild();
-                            }
 
                         }
                     }

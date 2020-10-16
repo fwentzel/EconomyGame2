@@ -14,6 +14,8 @@ public class DebugController : MonoBehaviour
     public static DebugCommand HELP;
     public static DebugCommand<string> MESSAGE;
     public static DebugCommand<Trade, ResourceManager> TRADE;
+    public static DebugCommand ADD_ALL;
+    public static DebugCommand GAME_OVER;
 
     public List<object> commandList;
 
@@ -26,6 +28,10 @@ public class DebugController : MonoBehaviour
         MESSAGE = new DebugCommand<string>("msg", "Send specified Message", "msg <message>", (x) =>
        {
            MessageSystem.instance.Message(x);
+       });
+        GAME_OVER = new DebugCommand("go", "Set Player game over", "go", () =>
+       {
+           GameManager.instance.setPlayerGameOver(GameManager.instance.localPlayer.mainbuilding);
        });
 
         ADD_RES = new DebugCommand<resource, int>("add_res", "Add specified res amount. Possible resources: food, loyalty, gold, citizens, stone ", "add_res <resource><amount>", (x, y) =>
@@ -40,13 +46,21 @@ public class DebugController : MonoBehaviour
          });
         HELP = new DebugCommand("help", "show help and description of all available commands", "help", () => showHelp = true);
 
+        ADD_ALL = new DebugCommand("add_all", "add some amount to all resources", "add_all", () => {
+            ResourceUiManager.instance.activeResourceMan.ChangeRessourceAmount(resource.gold,500);
+            ResourceUiManager.instance.activeResourceMan.ChangeRessourceAmount(resource.food,500);
+            ResourceUiManager.instance.activeResourceMan.ChangeRessourceAmount(resource.stone,500);
+
+        });
+
         commandList = new List<object>{
         TRADE,
+        ADD_ALL,
         ADD_RES,
         MESSAGE,
+        GAME_OVER,
         HELP
     };
-
     }
 
     private void Start()
@@ -109,25 +123,37 @@ public class DebugController : MonoBehaviour
                 }
                 else if (commandList[i] is DebugCommand<Trade, ResourceManager> commandTrade)
                 {
-                    resource _resource;
-                    tradeType tradeType;
-                    int amount;
+                    resource resTo = resource.gold;
+                    resource resFrom=resource.gold;
+                    int toAmount = 0;
+                    int fromAmount =0;
+                    tradeType type= tradeType.ship;
+                    int team=2;
 
-                    resource resTo = resource.TryParse(properties[2], out _resource) ? _resource : resource.gold;
-                    resource resFrom = resource.TryParse(properties[4], out _resource) ? _resource : resource.gold;
+                    if (properties.Length == 7)
+                    {
+                        //all values filled in
+                        int.TryParse(properties[1], out team);
+                        resource.TryParse(properties[2], out resTo);
+                        resource.TryParse(properties[4], out resFrom);
+                        int.TryParse(properties[3], out toAmount);
+                        int.TryParse(properties[5], out fromAmount);
+                        tradeType.TryParse(properties[6], out type) ;
+                    }
+                    
+
                     Trade newTrade = new Trade
                     {
                         toTrader = TradeManager.instance.GetTradingResource(resTo),
-                        toTraderAmount = int.TryParse(properties[3], out amount) ? amount : 0,
+                        toTraderAmount = toAmount,
 
                         fromTrader = TradeManager.instance.GetTradingResource(resFrom),
-                        fromTraderAmount = int.TryParse(properties[5], out amount) ? amount : 0,
+                        fromTraderAmount = fromAmount,
                         // type = tradeType.ship
-                        type = tradeType.TryParse(properties[6], out tradeType) ? tradeType : tradeType.ship
-
+                        type = type
                     };
 
-                    ResourceManager resourceManager = CityResourceLookup.instance.resourceManagers[(int.TryParse(properties[5], out amount) ? amount : 1) - 1];
+                    ResourceManager resourceManager = CitysMeanResource.instance.resourceManagers[team- 1];
                     if (resourceManager == null)
                         resourceManager = ResourceUiManager.instance.activeResourceMan;
 
@@ -169,6 +195,6 @@ public class DebugController : MonoBehaviour
         GUI.SetNextControlName("MyTextField");
         input = GUI.TextField(new Rect(10f, y + 5f, Screen.width - 20f, 20f), input);
         GUI.FocusControl("MyTextField");
-        
+
     }
 }

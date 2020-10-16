@@ -25,7 +25,7 @@
 
     protected override void TriggerBonusLevel()
     {
-        unitsPerIntervall *= 2;
+        unitsPerIntervall +=(unitsPerIntervall/2);
     }
 
     public override string GetStats()

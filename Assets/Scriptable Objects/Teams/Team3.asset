@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Team3
   m_EditorClassIdentifier: 
   teamID: 3
-  teamcolor: {r: 0.9553981, g: 1, b: 0, a: 0}
+  color: {r: 0.54901963, g: 0.4784314, b: 0.90196085, a: 1}

@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "ScriptableObj/ColorToHeightMapping")]
 public class ColorToHeightMapping : ScriptableObject
 {
 	//serves as variable for curves used in eg loyaltychange calculation

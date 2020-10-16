@@ -10,6 +10,7 @@ public class UiManager : MonoBehaviour
     Transform settingsPanel;
     Transform traderPanel;
     Transform menuPanel;
+    Transform endgamePanel;
     Transform scoreboardPanel;
     GameObject newTradesTimerParent;
     TMP_Text newTradesInText;
@@ -25,8 +26,8 @@ public class UiManager : MonoBehaviour
             Destroy(this);
 
         SetupUiElements();
-
         CloseAll();
+
 
         TradeManager.instance.OnGenerateNewTrades += (int arrivalIn) => StartCoroutine(StartNewTradeTimerCoroutine(arrivalIn));
     }
@@ -38,12 +39,13 @@ public class UiManager : MonoBehaviour
         input.Menus.Scoreboard.started += _ => OpenMenu(scoreboardPanel.gameObject);
         input.Menus.Scoreboard.canceled += _ => CloseAll();
         input.Menus.Menu.performed += _ => OpenMenu(menuPanel.gameObject);
-        input.Menus.Enable();
+        GameManager.instance.OnGameEnd += () => OpenMenu(endgamePanel.gameObject);
     }
 
     private void SetupUiElements()
     {
         menuPanel = transform.Find("MenuPanel");
+        endgamePanel = transform.Find("EndgamePanel");
         settingsPanel = transform.Find("SettingsPanel");
         scoreboardPanel = transform.Find("ScoreboardPanel");
         traderPanel = transform.Find("TraderPanel");
@@ -61,7 +63,10 @@ public class UiManager : MonoBehaviour
         bool wasActive = menuToOpen.activeSelf;
         CloseAll();
         if (wasActive == false)
+        {
             menuToOpen.SetActive(true);
+        }
+
     }
 
     public void CloseAll()
@@ -70,6 +75,7 @@ public class UiManager : MonoBehaviour
         settingsPanel.gameObject.SetActive(false);
         menuPanel.gameObject.SetActive(false);
         scoreboardPanel.gameObject.SetActive(false);
+        endgamePanel.gameObject.SetActive(false);
     }
 
     private IEnumerator StartNewTradeTimerCoroutine(int arrivalIn)

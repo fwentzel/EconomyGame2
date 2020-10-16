@@ -2,67 +2,79 @@
 
 public class Mine : Building
 {
-	public int unitsPerIntervall;
-	private Collider[] overlapResults = new Collider[5];
+    public int unitsPerIntervall;
 
-	private void Awake()
-	{
-		PlacementController.instance.SetCanBuild(false);
-	}
-	public override void OnBuild(bool subtractResource = true)
-	{
-		resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
-		base.OnBuild(subtractResource);
-	}
+    private Collider[] overlapResults = new Collider[5];
 
-	public override void DestroyBuilding()
-	{
-		resourceManager.ChangeRessourceAmount(resource.stone, -unitsPerIntervall);
-		base.DestroyBuilding();
-	}
-	protected override void OnLevelUp()
-	{
-		base.OnLevelUp();
-		resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
-		unitsPerIntervall*=2;
-	}
-	protected override void TriggerBonusLevel()
-	{
-		unitsPerIntervall *= 2;
-	}
-	public override string GetStats()
-	{
-		return $"Mine\nLevel {level}\nGenerates {unitsPerIntervall} Stone";
-	}
+    private void Awake()
+    {
+        UseMaxPlacementRange = false;
+    }
+    public override void OnBuild(bool subtractResource = true)
+    {
+        resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
+        base.OnBuild(subtractResource);
+    }
 
-	public override void CheckCanBuild(Collider other, bool onEnter)
-	{
-		if(other==null)return;
-		
-		if (onEnter)
-		{
-			if (other.tag.Equals("RockResource"))
-			{
-				int numFound = Physics.OverlapBoxNonAlloc(transform.position, Vector3.one * .5f, overlapResults);
-				for (int i = 0; i < numFound; i++)
-				{
-					if (overlapResults[i].gameObject == this.gameObject) continue;
-					if (overlapResults[i].tag.Equals("Placeable"))
-					{
-						PlacementController.instance.SetCanBuild(false);
-						return;
-					}
-				}
-				bool b=Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, transform.position) <= PlacementController.instance.maxPlacementRange;
-				PlacementController.instance.SetCanBuild(b);
-			}
-		}
-		else
-		{
-			if (other.tag.Equals("RockResource"))
-			{
-				PlacementController.instance.SetCanBuild(false);
-			}
-		}
-	}
+    public override void DestroyBuilding()
+    {
+        resourceManager.ChangeRessourceAmount(resource.stone, -unitsPerIntervall);
+        base.DestroyBuilding();
+    }
+    protected override void OnLevelUp()
+    {
+        base.OnLevelUp();
+        resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
+        unitsPerIntervall *= 2;
+    }
+    protected override void TriggerBonusLevel()
+    {
+        unitsPerIntervall *= 2;
+    }
+    public override string GetStats()
+    {
+        return $"Mine\nLevel {level}\nGenerates {unitsPerIntervall} Stone";
+    }
+
+    public override void CheckCanBuild(Collider other, bool onEnter)
+    {
+        if (other == null) return;
+
+        if (onEnter)
+        {
+            ResourceObject obj = other.GetComponent<ResourceObject>();
+            if (obj != null)
+            {
+                if (obj.CompareTag("RockResource") && obj.team == team)
+                {
+                    //check if a Mine is already there
+                    int numFound = Physics.OverlapBoxNonAlloc(transform.position, Vector3.one * .5f, overlapResults);
+                    for (int i = 0; i < numFound; i++)
+                    {
+                        if (overlapResults[i].gameObject == this.gameObject) continue;
+                        //If Building is there, return false
+                        if (overlapResults[i].tag.Equals("Placeable"))
+                        {
+                            PlacementController.instance.SetCanBuild(false);
+                            return;
+                        }
+
+                    }
+                    //if no mine is present, set can build to true
+                    PlacementController.instance.SetCanBuild(true);
+                }
+                else
+                {
+                    PlacementController.instance.SetCanBuild(false);
+                }
+            }
+        }
+        else
+        {
+            if (other.CompareTag("RockResource"))
+            {
+                PlacementController.instance.SetCanBuild(false);
+            }
+        }
+    }
 }

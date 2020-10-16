@@ -5,21 +5,14 @@ using UnityEngine.VFX;
 
 public class VFXManager : MonoBehaviour
 {
-	public static VFXManager instance { get; private set; }
-	public GameObject levelUpEffect;
-	private void Awake()
-	{
-		//singleton Check
-		if (instance == null)
-			instance = this;
-		else
-			Destroy(this);
-	}
+	public static GameObject levelUpEffect;
 
-	public void PlayEffect(GameObject effectPrefab, Vector3 pos)
+
+	public static void PlayEffect( Vector3 pos)
 	{
+		if(levelUpEffect== null) return;
 		//TODO Pooling=
-		GameObject newEffect = Instantiate(effectPrefab, new Vector3(pos.x, effectPrefab.transform.position.y, pos.z), Quaternion.identity);
+		GameObject newEffect = Instantiate(levelUpEffect, new Vector3(pos.x, levelUpEffect.transform.position.y, pos.z), Quaternion.identity);
 		Destroy(newEffect, 4);
 		
 	}

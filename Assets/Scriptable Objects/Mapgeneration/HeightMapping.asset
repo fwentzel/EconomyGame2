@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68441d72cf5d6044990018cf2e8ea70e, type: 3}
-  m_Name: ColToHeight
+  m_Script: {fileID: 11500000, guid: e7cb575b1970b6d46967c0888fc27984, type: 3}
+  m_Name: HeightMapping
   m_EditorClassIdentifier: 
   colorHeightMappings:
   - name: Water

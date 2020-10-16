@@ -5,7 +5,7 @@ using UnityEngine;
 public class WindManager:MonoBehaviour
 {
 
-    [SerializeField] Material material;
+    [SerializeField] Material material= null;
     private void Start()
     {
         //GameManager.instance.OnCalculateIntervall += ChangeWindDir;

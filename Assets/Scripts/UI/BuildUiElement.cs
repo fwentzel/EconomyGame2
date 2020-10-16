@@ -15,8 +15,8 @@ public class BuildUiElement : MonoBehaviour
 
     private void Awake()
     {
-        rawImage = transform.GetChild(1).GetComponent<RawImage>();
-        buildCostText = transform.GetChild(0).GetComponent<TMP_Text>();
+        rawImage = transform.Find("Image").GetComponent<RawImage>();
+        buildCostText = transform.Find("Levelcost").GetComponent<TMP_Text>();
     }
     public void Init(GameObject buildingPrefab)
     {
@@ -39,7 +39,7 @@ public class BuildUiElement : MonoBehaviour
     {
         bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= buildCost;
         if (disableWhenFreeCitizens)
-            interactable &= CitizenManager.instance.freeCitizensPerTeam[activeRM.mainbuilding.team].Count == 0;
+            interactable &= CitizenManager.instance.freeCitizensPerTeam[activeRM.mainbuilding.team.teamID].Count == 0;
 
 
         button.interactable = interactable;

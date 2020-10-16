@@ -3,7 +3,7 @@ using UnityEngine;
 public class InputMasterManager : MonoBehaviour
 {
     public static InputMasterManager instance { get; private set; }
-    public Inputmaster inputMaster { get; private set; } 
+    public Inputmaster inputMaster { get; private set; }
 
     private void Awake()
     {
@@ -12,6 +12,11 @@ public class InputMasterManager : MonoBehaviour
         else
             Destroy(this);
 
-        inputMaster= new Inputmaster();
+        inputMaster = new Inputmaster();
+    }
+
+    private void Start()
+    {
+        GameManager.instance.OnGameStart += () => inputMaster.Menus.Enable();
     }
 }

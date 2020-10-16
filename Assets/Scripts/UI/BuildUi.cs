@@ -15,8 +15,8 @@ public class BuildUi : MonoBehaviour
 		else
 			Destroy(this);
 	}
-	public GameObject[] GetPrefabs(){
-		return prefabs;
+	private void Start() {
+		GameManager.instance.OnGameStart += GenerateBuildMenu;
 	}
 	public void GenerateBuildMenu()
 	{

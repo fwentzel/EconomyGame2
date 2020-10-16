@@ -34,49 +34,84 @@ public class TeamScoreElement : MonoBehaviour
     }
     private void setResourceManager()
     {
-        if (CityResourceLookup.instance == null)
+        if (CitysMeanResource.instance == null)
             return;
         Transform parent = transform.parent;
-        ResourceManager[] resourceManagers = CityResourceLookup.instance.resourceManagers;
-        if (resourceManagers.Length > parent.childCount - 1)
+        ResourceManager[] resourceManagers = CitysMeanResource.instance.resourceManagers;
+
+        bool isMeanElement = false;
+        if (resourceManagers.Length > parent.childCount - 2)//-2 for Mean element and Header
         {//-1 to account for header
             Instantiate(this, parent);
         }
-
-        for (int i = 0; i < resourceManagers.Length; i++)
+        else
         {
-            //+1 to account for Header Child
-            if (parent.GetChild(i + 1) == this.transform)
-            {
-                rem = resourceManagers[i];
-                float newVal = i % 2 == 0 ? 125 : 150;
-                //convert to colorspace 0-1
-                newVal /= 255;
-                Color color = new Color(newVal, newVal, newVal, 255);
-                foreach (Image image in GetComponentsInChildren<Image>())
-                {
-                    bool isLocalPlayersTeam = GameManager.instance.localPlayer.mainbuilding == rem.mainbuilding;
-                    image.color = isLocalPlayersTeam ? Color.white : color;
-                }
-                break;
-            }
+            isMeanElement = true;
+            teamText.text = "Mean";
         }
-        GameManager.instance.OnCalculateIntervall += UpdateScore;
-        UpdateScore();
+
+        if (!isMeanElement)
+        {
+            for (int i = 0; i < resourceManagers.Length; i++)
+            {
+                //+1 to account for Header Child
+                if (parent.GetChild(i + 1) == this.transform)
+                {
+                    rem = resourceManagers[i];
+                    float newVal = i % 2 == 0 ? 125 : 150;
+                    //convert to colorspace 0-1
+                    newVal /= 255;
+                    Color color = rem.mainbuilding.team.color;
+                    foreach (Image image in GetComponentsInChildren<Image>())
+                    {
+                        
+                        image.color =  color;
+                    }
+                    break;
+                }
+            }
+            GameManager.instance.OnCalculateIntervall += UpdateScore;
+            UpdateScore();
+        }
+        else
+        {
+            
+            //convert to colorspace 0-1
+           float newVal =50/ 255f;
+            Color color = new Color(newVal, newVal, newVal, 255);
+            foreach (Image image in GetComponentsInChildren<Image>())
+            {
+                image.color=color;
+            }
+            
+            GameManager.instance.OnCalculateIntervall += UpdateMean;
+            UpdateMean();
+        }
+
     }
 
-    public void UpdateScore()
+    void UpdateScore()
     {
         goldText.text = rem.GetAmount(resource.gold).ToString();
         loyaltyText.text = rem.GetAmount(resource.loyalty).ToString();
         citizensText.text = rem.GetAmount(resource.citizens).ToString();
         foodText.text = rem.GetAmount(resource.food).ToString();
         stoneText.text = rem.GetAmount(resource.stone).ToString();
-        teamText.text = rem.mainbuilding.team.ToString();
-        if(rem.mainbuilding.gameOver){
+        teamText.text = rem.mainbuilding.team.teamName;
+
+        if (rem.mainbuilding.gameOver)
+        {
             SetTeamGameOver();
             return;
         }
+    }
+    void UpdateMean()
+    {
+        goldText.text = CitysMeanResource.instance.resourseMeanDict[resource.gold].ToString();
+        loyaltyText.text = CitysMeanResource.instance.resourseMeanDict[resource.loyalty].ToString();
+        citizensText.text = CitysMeanResource.instance.resourseMeanDict[resource.citizens].ToString();
+        foodText.text = CitysMeanResource.instance.resourseMeanDict[resource.food].ToString();
+        stoneText.text = CitysMeanResource.instance.resourseMeanDict[resource.stone].ToString();
     }
 
     public void SetTeamGameOver()

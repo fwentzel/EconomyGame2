@@ -30,7 +30,7 @@ public class LevelEditor : MonoBehaviour
 
     [SerializeField] Color paintColor;
 
-    string mapPath => "Assets/Textures/Maps/";
+    string mapPath = "Assets/Textures/Maps/";
     private void Awake()
     {
         dimenionsInput.text = $"{dimensions.x},{dimensions.y}";
@@ -119,14 +119,8 @@ public class LevelEditor : MonoBehaviour
                 paintColor.g = item.value / 255f;
                 paintColor.b = 0;
                 inputmode = inputmodes.single;
-
-                if (item.value < 100)//OBJECTS
-                {
-                    paintColor.r = 0;
-
-                    inputmode = item.name == "Forest" ? inputmodes.brush : inputmodes.single;
-                }
-                else if (paintColor.r == 0)
+                inputmode = item.name == "Forest" ? inputmodes.brush : inputmodes.single;
+                if (paintColor.r == 0)
                 {
                     paintColor.r = 1/255f;//set defualt value for team
                 }

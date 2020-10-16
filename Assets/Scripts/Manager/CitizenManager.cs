@@ -12,7 +12,7 @@ public class CitizenManager : MonoBehaviour
     public Dictionary<int, List<Citizen>> freeCitizensPerTeam { get; private set; } = new Dictionary<int, List<Citizen>>();
     List<Citizen> citizens = new List<Citizen>();
 
-    private void Awake()
+    private void Awake() 
     {
         //singleton Check
         if (instance == null)
@@ -33,67 +33,41 @@ public class CitizenManager : MonoBehaviour
         }
     }
 
-    internal void TakeCitizen(ResourceManager resourceManager)
+    public void TakeOverCitizen(ResourceManager from, ResourceManager to, int amount)
     {
-        //TODO HÄSSLICH doppelt und dreifach meinbuildung team und RemoveAt
-        if (citizens.Count <= 0 || resourceManager.GetAmount(resource.citizens) == resourceManager.mainbuilding.maxCitizens)
-            return;
-        Citizen citizen = null;
-        //Prioritze Free citizens from this mainbuilding
-        if (freeCitizensPerTeam[resourceManager.mainbuilding.team].Count > 0)
+        List<Citizen> tradedCitizens = new List<Citizen>();
+        int leftOver = amount;
+        House house = null;
+        foreach (Building building in from.mainbuilding.buildings.FindAll(t => t.GetType() == typeof(House)))
         {
-            citizen = freeCitizensPerTeam[resourceManager.mainbuilding.team][0];
-            freeCitizensPerTeam[resourceManager.mainbuilding.team].RemoveAt(0);
-        }
-        else
-        {
-            for (int i = 1; i <= freeCitizensPerTeam.Count; i++)
+            house = building as House;
+            tradedCitizens.AddRange(house.SetFreeCitizens(leftOver));
+
+            leftOver =amount- tradedCitizens.Count ;
+            if (leftOver <= 0)
             {
-                if (freeCitizensPerTeam[i].Count > 0)
-                {
-                    citizen = freeCitizensPerTeam[i][0];
-                    freeCitizensPerTeam[i].RemoveAt(0);
-                    break;
-                }
+                break;
             }
         }
 
-        string message = string.Format("Team {0} took up a citizen from team {1}!", resourceManager.mainbuilding.team, citizen.team);
-        MessageSystem.instance.Message(message, Color.green);
-        
-        citizens.Remove(citizen);
-        
-        Destroy(citizen.gameObject);
-
-        foreach (House house in resourceManager.mainbuilding.buildings.FindAll(x => x.GetType() == typeof(House)))
+        foreach (Citizen citizen in tradedCitizens)
         {
-            if (house.currentAmount < house.capacity)
+            citizen.foodMultiplier = 1.5f;
+            citizen.taxesMultiplier = .5f;
+        }
+
+        foreach (Building building in to.mainbuilding.buildings.FindAll(t => t.GetType() == typeof(House)))
+        {
+            house = building as House;
+            tradedCitizens = house.ReceiveCitizens(tradedCitizens);
+            if (tradedCitizens.Count == 0)
             {
-                house.ChangeCitizenAmount(1);
                 break;
             }
         }
     }
 
-    internal void LooseCitizen(ResourceManager resourceManager)
-    {
-        string message = string.Format("Team {0} lost a citizen!", resourceManager.mainbuilding.team);
-        MessageSystem.instance.Message(message);
 
-        foreach (House house in resourceManager.mainbuilding.buildings.FindAll(x => x.GetType() == typeof(House)))
-        {
-            if (house.currentAmount > 0)
-            {
-                house.ChangeCitizenAmount(-1);
-                break;
-            }
-        }
 
-        GameObject citizen = Instantiate(citizenPrefab, resourceManager.transform.position, Quaternion.identity);
-        Citizen citizenComponent = citizen.GetComponent<Citizen>();
-        citizen.GetComponent<Citizen>().team = resourceManager.mainbuilding.team;
-        
-        citizens.Add(citizenComponent);
-        freeCitizensPerTeam[resourceManager.mainbuilding.team].Add(citizenComponent);
-    }
+
 }
