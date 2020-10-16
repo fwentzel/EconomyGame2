@@ -913,7 +913,7 @@ GameObject:
   - component: {fileID: 77186521}
   - component: {fileID: 77186523}
   - component: {fileID: 77186522}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ContextText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1950,6 +1950,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.6231
       objectReference: {fileID: 0}
+    - target: {fileID: 1806693974055127373, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1846457271681304765, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
       propertyPath: m_Color.a
@@ -1961,6 +1966,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: a1bda28f797f71c4db09f6a0d4af4759,
         type: 3}
+    - target: {fileID: 1957050008754168593, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2297503760575769517, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1991,6 +2001,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CDButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4129517002903848014, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6333346630109324464, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
@@ -6359,7 +6374,7 @@ GameObject:
   - component: {fileID: 316128328}
   - component: {fileID: 316128330}
   - component: {fileID: 316128329}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6619,7 +6634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 335391901}
   - component: {fileID: 335391902}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: TaxSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7263,7 +7278,7 @@ GameObject:
   - component: {fileID: 381030317}
   - component: {fileID: 381030319}
   - component: {fileID: 381030318}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9217,7 +9232,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.000000034411467, y: 0}
   m_AnchorMax: {x: 0.9988615, y: 1.0000004}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: -0.000030517578}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &465411804
@@ -10488,7 +10503,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 490427142}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: MainBuildingContextPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11023,7 +11038,7 @@ GameObject:
   - component: {fileID: 523831767}
   - component: {fileID: 523831769}
   - component: {fileID: 523831768}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ContextText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15135,7 +15150,7 @@ GameObject:
   - component: {fileID: 687764431}
   - component: {fileID: 687764433}
   - component: {fileID: 687764432}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: LevelCostText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15844,7 +15859,7 @@ GameObject:
   - component: {fileID: 712594118}
   - component: {fileID: 712594120}
   - component: {fileID: 712594119}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19166,7 +19181,7 @@ GameObject:
   - component: {fileID: 870323414}
   - component: {fileID: 870323413}
   - component: {fileID: 870323412}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: DestroyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20498,7 +20513,7 @@ GameObject:
   - component: {fileID: 926628492}
   - component: {fileID: 926628491}
   - component: {fileID: 926628490}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: LevelUpButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21008,7 +21023,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 956750352}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Handle Slide Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21422,7 +21437,7 @@ GameObject:
   - component: {fileID: 978410156}
   - component: {fileID: 978410158}
   - component: {fileID: 978410157}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ContextText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21763,7 +21778,7 @@ GameObject:
   - component: {fileID: 1010144761}
   - component: {fileID: 1010144763}
   - component: {fileID: 1010144762}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: 'FoodText '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22942,7 +22957,7 @@ GameObject:
   - component: {fileID: 1051350266}
   - component: {fileID: 1051350268}
   - component: {fileID: 1051350267}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: TaxesText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24146,7 +24161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1126901629}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: BuildingContextPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24184,7 +24199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1127626580}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24864,7 +24879,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 349671548}
   m_HandleRect: {fileID: 349671547}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -26815,7 +26830,7 @@ GameObject:
   - component: {fileID: 1306004083}
   - component: {fileID: 1306004085}
   - component: {fileID: 1306004084}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27698,7 +27713,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1353609891}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30462,7 +30477,7 @@ GameObject:
   - component: {fileID: 1472592645}
   - component: {fileID: 1472592647}
   - component: {fileID: 1472592646}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: CostText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31293,6 +31308,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.6230999
       objectReference: {fileID: 0}
+    - target: {fileID: 1806693974055127373, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1846457271681304765, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
       propertyPath: m_Color.a
@@ -31318,6 +31338,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.b
       value: 0.2509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957050008754168593, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2297503760575769517, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
@@ -31409,6 +31434,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CDButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4129517002903848014, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6333346630109324464, guid: 1c1ae5a97e7b73d49938e73b8164bbf3,
         type: 3}
@@ -33770,7 +33800,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1617459003}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: TraderVehicleContextPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33809,7 +33839,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1617739407}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Handle Slide Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37207,7 +37237,7 @@ GameObject:
   - component: {fileID: 1825949457}
   - component: {fileID: 1825949459}
   - component: {fileID: 1825949458}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37792,7 +37822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1855851039}
   - component: {fileID: 1855851040}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: FoodSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42411,7 +42441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
+  m_IgnoreReversedGraphics: 0
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
@@ -42485,7 +42515,7 @@ GameObject:
   - component: {fileID: 2060110146}
   - component: {fileID: 2060110148}
   - component: {fileID: 2060110147}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43184,7 +43214,7 @@ GameObject:
   - component: {fileID: 2096869457}
   - component: {fileID: 2096869459}
   - component: {fileID: 2096869458}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}

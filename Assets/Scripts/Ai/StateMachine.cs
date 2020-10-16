@@ -5,33 +5,39 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
-	public Dictionary<Type, BaseAi> availableStates;
-	public BaseAi currentState;
-	public event Action<BaseAi> OnStateChanged;
+    public Dictionary<Type, BaseAi> availableStates;
+    public BaseAi currentState;
+    public event Action<BaseAi> OnStateChanged;
 
-	private void Start() {
-		GameManager.instance.OnGameStart+=()=>InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
-	}
+    private void Awake()
+    {
+        if (GameManager.instance == null)
+        {
+            Debug.LogError("GAME MAMANGER NOT INSTANTIATED! Statemachine will not be started!");
+            return;
+        }
+        GameManager.instance.OnGameStart += () => InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
+    }
 
-	private void StateMachineUpdate()
-	{
-		if (currentState == null)
-		{
-			currentState = availableStates[typeof(BuildingAi)];
-		}
-		var nextState = currentState.Tick();
+    private void StateMachineUpdate()
+    {
+        if (currentState == null)
+        {
+            currentState = availableStates[typeof(BuildingAi)];
+        }
+        var nextState = currentState.Tick();
 
-		if (nextState != null && nextState != currentState.GetType())
-		{
-			SwitchToNewState(nextState);
-		}
-	}
+        if (nextState != null && nextState != currentState.GetType())
+        {
+            SwitchToNewState(nextState);
+        }
+    }
 
-	private void SwitchToNewState(Type nextState)
-	{
-		//TODO only for debugging when removing different states
-		currentState =availableStates.ContainsKey(nextState)?availableStates[nextState]: availableStates.ElementAt(UnityEngine.Random.Range(0,availableStates.Count)).Value;
-		
-		OnStateChanged?.Invoke(currentState);
-	}
+    private void SwitchToNewState(Type nextState)
+    {
+        //TODO only for debugging when removing different states
+        currentState = availableStates.ContainsKey(nextState) ? availableStates[nextState] : availableStates.ElementAt(UnityEngine.Random.Range(0, availableStates.Count)).Value;
+
+        OnStateChanged?.Invoke(currentState);
+    }
 }

@@ -56,10 +56,7 @@ public class TradeElement : MonoBehaviour
 
     public void checkInteractable()
     {
-        bool interactable = localResourceManager.GetAmount(trade.toTrader.resource) > trade.toTraderAmount;
-        interactable =  accepted == false;
-        // && TradeManager.instance.tradeCooldowns[localResourceManager] <= Time.time;
-        acceptButton.interactable = interactable;
+        acceptButton.interactable = accepted == false && localResourceManager.GetAmount(trade.toTrader.resource) > trade.toTraderAmount;
 
         if (trade.type == tradeType.ship && localResourceManager.mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
         {
@@ -74,12 +71,15 @@ public class TradeElement : MonoBehaviour
     {
         accepted = true;
         acceptButton.image.color = takenDisabledColor;
+        checkInteractable();
     }
 
     public void EnableElement()
     {
         accepted = false;
         acceptButton.image.color = normalColor;
+        if (localResourceManager != null)
+            checkInteractable();
     }
 
     public void TradeAccepted()
