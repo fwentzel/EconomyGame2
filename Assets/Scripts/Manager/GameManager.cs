@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public event Action OnCalculateIntervall = delegate { };
-    public event Action OnGameStart = delegate { };
+   public event Action OnGameStart = delegate { };
     public event Action OnGameEnd = delegate { };
     public int dayIndex = 0;
     public int calcResourceIntervall = 5;

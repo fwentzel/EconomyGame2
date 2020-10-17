@@ -12,7 +12,7 @@ public class Citizen : MonoBehaviour
     public House house;
     Mainbuilding mainbuilding;
     public int happiness = 70;
-    public int lookNewCityThreshold = 10;
+    public int lookNewCityThreshold = 20;
 
     public void Init(Team team, House house, float taxesMultiplier, float foodMultiplier)
     {
