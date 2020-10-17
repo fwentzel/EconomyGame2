@@ -10,5 +10,6 @@ public class EndgamePanel : MonoBehaviour
         TMP_Text text = transform.Find("Title").GetComponent<TMP_Text>();
         text.text = GameManager.instance.didPlayerWin ? "YOU WIN!" : "GAME OVER";
         text.color = GameManager.instance.didPlayerWin ? winColor : looseColor;
+        InputMasterManager.instance.inputMaster.Disable();
     }
 }

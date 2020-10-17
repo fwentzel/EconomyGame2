@@ -15,20 +15,6 @@ public class House : Building
         base.OnBuild(subtractResource);
     }
 
-    public void ChangeCitizenAmount(int amount, Citizen citizen)
-    {
-        if (amount > 0)
-        {
-            citizens.Add(citizen);
-            resourceManager.ReceiveCitizen(citizen);
-        }
-        else
-        {
-            citizens.Remove(citizen);
-            resourceManager.LooseCitizen(citizen);
-        }
-        currentAmount += amount;
-    }
 
     public override void DestroyBuilding()
     {
@@ -65,9 +51,23 @@ public class House : Building
         for (int i = 0; i < amount; i++)
         {
             Citizen citizen =Instantiate(CitizenManager.instance.citizenPrefab,new Vector3(0,0,0),Quaternion.identity).GetComponent<Citizen>();
-            citizen.Init(team, this, 1f, 1f);
+            citizen.Init(this, 1f, 1f);
             ChangeCitizenAmount(1, citizen);
         }
+    }
+    public void ChangeCitizenAmount(int amount, Citizen citizen)
+    {
+        if (amount > 0)
+        {
+            citizens.Add(citizen);
+            resourceManager.ReceiveCitizen(citizen);
+        }
+        else
+        {
+            citizens.Remove(citizen);
+            resourceManager.LooseCitizen(citizen);
+        }
+        currentAmount += amount;
     }
 
     public List<Citizen> SetFreeCitizens(int amount)
@@ -87,6 +87,7 @@ public class House : Building
         }
         return citizensSetFree;
     }
+  
 
     public List<Citizen> ReceiveCitizens(List<Citizen> newCitizens)
     {
@@ -97,6 +98,7 @@ public class House : Building
                 break;
             Citizen citizen = newCitizens[0];
             ChangeCitizenAmount(1, citizen);
+            citizen.Init(this);
         }
         if (i < newCitizens.Count)
             newCitizens = newCitizens.GetRange(i, newCitizens.Count-i);

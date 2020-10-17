@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class ResourceManager : MonoBehaviour
 {
     public ResourceStartvalue resourceStartvalue;
-    Dictionary<resource, int> resourceAmount;
+    Dictionary<resource, int> amountOf;
 
     public Mainbuilding mainbuilding;
     public Curve foodRatioToLoyaltyChange;
@@ -16,15 +16,15 @@ public class ResourceManager : MonoBehaviour
     public List<Citizen> citizens = new List<Citizen>();
     public int foodChange { get; private set; }
     public bool canTakeCitizen { get; private set; }
-    public float meanTaxesMultiplier {get;private set;}= 0;
-     public float  meanFoodMultiplier {get;private set;}= 0;
+    public float meanTaxesMultiplier { get; private set; } = 0;
+    public float meanFoodMultiplier { get; private set; } = 0;
 
     private void Awake()
     {
-        resourceAmount = new Dictionary<resource, int>();
+        amountOf = new Dictionary<resource, int>();
         foreach (var item in resourceStartvalue.resourceStartValues)
         {
-            resourceAmount[item.Key.resource] = item.Value;
+            amountOf[item.Key.resource] = item.Value;
         }
     }
 
@@ -43,7 +43,6 @@ public class ResourceManager : MonoBehaviour
         CalculateFood();
         CalculateStone();
         CalculateLoyalty();
-        // CitizenManagement();
         CheckCanTakeCitizen();
         CheckGameOver();
         OnResourceChange?.Invoke();
@@ -51,14 +50,14 @@ public class ResourceManager : MonoBehaviour
 
     private void CheckCanTakeCitizen()
     {
-        int newCitizenAmount = resourceAmount[resource.citizens] + 1;
-        canTakeCitizen = resourceAmount[resource.food] > mainbuilding.foodPerDayPerCitizen * newCitizenAmount
+        int newCitizenAmount = amountOf[resource.citizens] + 1;
+        canTakeCitizen = amountOf[resource.food] > mainbuilding.foodPerDayPerCitizen * newCitizenAmount
                             && newCitizenAmount < mainbuilding.maxCitizens;
     }
 
     private void CheckGameOver()
     {
-        if (resourceAmount[resource.citizens] <= 0)
+        if (amountOf[resource.citizens] <= 0)
         {
             MessageSystem.instance.Message(string.Format("TEAM {0} IS ABANDONDED BY ITS CITIZENS...", mainbuilding.team), Color.red);
             //print("GAME OVER FOR PLAYER " + mainbuilding.team);
@@ -68,26 +67,26 @@ public class ResourceManager : MonoBehaviour
 
     private void CalculateGold()
     {
-         meanTaxesMultiplier = 0;
+        meanTaxesMultiplier = 0;
         for (int i = 0; i < citizens.Count; i++)
         {
             meanTaxesMultiplier += citizens[i].taxesMultiplier;
         }
-        resourceAmount[resource.gold] += Mathf.RoundToInt(meanTaxesMultiplier * mainbuilding.Taxes);
+        amountOf[resource.gold] += Mathf.RoundToInt(meanTaxesMultiplier * mainbuilding.Taxes);
     }
 
     private void CalculateFood()
     {
-       meanFoodMultiplier=0;
+        meanFoodMultiplier = 0;
         for (int i = 0; i < citizens.Count; i++)
         {
             meanFoodMultiplier += citizens[i].foodMultiplier;
         }
 
-        foodChange =(int) (CalculateFoodGenerated() - (meanFoodMultiplier*mainbuilding.foodPerDayPerCitizen));
+        foodChange = (int)(CalculateFoodGenerated() - (meanFoodMultiplier * mainbuilding.foodPerDayPerCitizen));
 
-        int newAmount = resourceAmount[resource.food] + foodChange;
-        resourceAmount[resource.food] = newAmount > 0 ? newAmount : 0;
+        int newAmount = amountOf[resource.food] + foodChange;
+        amountOf[resource.food] = newAmount > 0 ? newAmount : 0;
     }
 
     public int CalculateFoodGenerated()
@@ -113,25 +112,25 @@ public class ResourceManager : MonoBehaviour
                 generatedAmount += mine.unitsPerIntervall;
             }
         }
-        resourceAmount[resource.stone] += generatedAmount;
+        amountOf[resource.stone] += generatedAmount;
     }
 
     private void CalculateLoyalty()
     {
-        int loyalty =0;
+        int loyalty = 0;
         for (int i = 0; i < citizens.Count; i++)
         {
             loyalty += citizens[i].happiness;
         }
-        loyalty /=citizens.Count;
+        loyalty /= citizens.Count;
 
-        isLoyaltyDecreasing = loyalty < resourceAmount[resource.loyalty];
-        resourceAmount[resource.loyalty] = loyalty;
+        isLoyaltyDecreasing = loyalty < amountOf[resource.loyalty];
+        amountOf[resource.loyalty] = loyalty;
     }
 
     public void ChangeRessourceAmount(resource res, int amount)
     {
-        resourceAmount[res] += amount;
+        amountOf[res] += amount;
         OnResourceChange();
     }
 
@@ -145,13 +144,15 @@ public class ResourceManager : MonoBehaviour
     {
         ChangeRessourceAmount(resource.citizens, -1);
         citizens.Remove(citizen);
+        if (citizens.Count <= 0 && !mainbuilding.gameOver)
+        {
+            GameManager.instance.setPlayerGameOver(mainbuilding);
+        }
     }
-
-
 
     internal int GetAmount(resource resource)
     {
-        return resourceAmount[resource];
+        return amountOf[resource];
     }
 
     internal String GetAmountUI(resource resource)
@@ -159,7 +160,7 @@ public class ResourceManager : MonoBehaviour
         if (resource == resource.citizens)
             return GetAmount(resource) + "/" + mainbuilding.maxCitizens;
 
-        return resourceAmount[resource].ToString();
+        return amountOf[resource].ToString();
     }
 }
 public enum resource

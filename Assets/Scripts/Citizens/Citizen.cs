@@ -14,12 +14,19 @@ public class Citizen : MonoBehaviour
     public int happiness = 70;
     public int lookNewCityThreshold = 20;
 
-    public void Init(Team team, House house, float taxesMultiplier, float foodMultiplier)
+    public void Init(House house, float taxesMultiplier, float foodMultiplier)
     {
-        this.team = team;
         this.house = house;
         this.taxesMultiplier = taxesMultiplier;
         this.foodMultiplier = foodMultiplier;
+        team = house.team;
+        mainbuilding = house.resourceManager.mainbuilding;
+        happiness = mainbuilding.resourceManager.GetAmount(resource.loyalty);
+    }
+    public void Init(House house)
+    {
+        this.house = house;
+        team = house.team;
         mainbuilding = house.resourceManager.mainbuilding;
         happiness = mainbuilding.resourceManager.GetAmount(resource.loyalty);
     }
@@ -39,19 +46,21 @@ public class Citizen : MonoBehaviour
         else if (foodMultiplier < house.resourceManager.meanFoodMultiplier)
             happiness -= 1;
 
-        if(mainbuilding.resourceManager.GetAmount(resource.food)==0){
-            happiness-=5;
+        if (mainbuilding.resourceManager.GetAmount(resource.food) == 0)
+        {
+            happiness -= 5;
         }
         //Main building settings
         happiness += Mathf.FloorToInt(((mainbuilding.maxTaxes / 2) - mainbuilding.Taxes) / 3f);
-        happiness += ( mainbuilding.foodPerDayPerCitizen-2) * 2;
+        happiness += (mainbuilding.foodPerDayPerCitizen - 2) * 2;
+
+        happiness = Mathf.Clamp(happiness, 0, 100);
 
         if (happiness < lookNewCityThreshold)
         {
             //Look for new City
-            print("I AM UNHAPYY! ");
+            CitizenManager.instance.FindNewHome(this);
         }
-        happiness = Mathf.Clamp(happiness, 0, 100);
     }
 }
 
