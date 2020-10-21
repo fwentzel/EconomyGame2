@@ -6,7 +6,7 @@ public class Foot : TradeVehicle
 {
     bool landed = false;
     public float fallSpeed = 1;
-   
+
 
     public override void SetUp(ResourceManager resourceManager, Trade trade)
     {
@@ -14,9 +14,15 @@ public class Foot : TradeVehicle
     }
     private void Start()
     {
-        Vector2 offsetDir = new Vector2(Random.Range(-1, 1),Random.Range(-1, 1));
-        offsetDir*=(PlacementController.instance.maxPlacementRange + 1)*offsetDir;
-        transform.position = new Vector3(rm.transform.position.x + offsetDir.x, transform.position.y, rm.transform.position.z +offsetDir.y);
+        Vector2 offsetDir = Vector2.zero;
+
+        while (offsetDir == Vector2.zero)
+        {
+            offsetDir = new Vector2(Random.Range(-1, 2), Random.Range(-1, 2));
+        }
+
+        offsetDir = (PlacementController.instance.maxPlacementRange + 1) * offsetDir;
+        transform.position = new Vector3(rm.transform.position.x + offsetDir.x, transform.position.y, rm.transform.position.z + offsetDir.y);
     }
 
     private void FixedUpdate()
@@ -52,7 +58,7 @@ public class Foot : TradeVehicle
             Vector3 pos = transform.position;
             transform.position = new Vector3(pos.x, 0.5f, pos.z);
             landed = true;
-            agent=GetComponent<NavMeshAgent>();
+            agent = GetComponent<NavMeshAgent>();
             agent.enabled = true;
         }
     }
