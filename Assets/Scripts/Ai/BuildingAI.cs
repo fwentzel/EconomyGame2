@@ -12,31 +12,40 @@ public class BuildingAi : BaseAi
     public BuildingAi(AiMaster master) : base(master)
     {
         GetSpecificsFromBuilding();
-        if(PlacementController.instance!=null)
-        GetAvailableBuildSpots(1, PlacementController.instance.maxPlacementRange);
-        else{
-             GetAvailableBuildSpots(1, 6);
+        if (PlacementController.instance != null)
+            GetAvailableBuildSpots(1, PlacementController.instance.maxPlacementRange);
+        else
+        {
+            GetAvailableBuildSpots(1, 6);
         }
     }
 
     public override Type Tick()
     {
         gold = resourceManager.GetAmount(resource.gold);
-        int foodChange = resourceManager.CalculateFoodGenerated() - resourceManager.GetAmount(resource.citizens)* mainbuilding.foodPerDayPerCitizen;
-       
+        int foodChange = resourceManager.CalculateFoodGenerated() - resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen;
+
         if (resourceManager.foodChange <= -5 || resourceManager.isLoyaltyDecreasing)
         {
             UpgradeOrBuild(typeof(Farm));
-            
+            return typeof(TradeAi);
+
         }
-        
+
         if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team.teamID].Count == 0
-        && (resourceManager.foodChange >= 0 
-        || resourceManager.GetAmount(resource.food) > (resourceManager.GetAmount(resource.citizens)*mainbuilding.foodPerDayPerCitizen)*2))//double the food that is needed for ctizens
+        && (resourceManager.foodChange >= 0
+        || resourceManager.GetAmount(resource.food) > (resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen) * 2))//double the food that is needed for ctizens
         {
             //Act and Build 
             UpgradeOrBuild(typeof(House));
+            return typeof(TradeAi);
         }
+
+        UpgradeOrBuild(typeof(Harbour));
+
+        UpgradeOrBuild(typeof(Mine));
+
+
 
         return typeof(TradeAi);
     }
@@ -76,8 +85,9 @@ public class BuildingAi : BaseAi
     {
         buildingList = new Dictionary<Type, List<Building>>() {
             {typeof(House),new List<Building>() },
-            {typeof(Harbour),new List<Building>() },
-            {typeof(Farm),new List<Building>() }
+            {typeof(Farm),new List<Building>() },
+            {typeof(Mine),new List<Building>() },
+            {typeof(Harbour),new List<Building>() }
         };
 
         foreach (Building building in mainbuilding.buildings)
@@ -103,7 +113,7 @@ public class BuildingAi : BaseAi
 
         //Didnt Level up, so we need a new one
         Vector3 pos = GetAvailablePosition();
-        if(pos!=Vector3.zero)//if equal, no space left
+        if (pos != Vector3.zero)//if equal, no space left
             PlaceBuilding(type, pos);
     }
 
@@ -116,7 +126,8 @@ public class BuildingAi : BaseAi
 
     private Vector3 GetAvailablePosition()
     {
-        if (availableBuildSpots.Count == 0){
+        if (availableBuildSpots.Count == 0)
+        {
             Debug.Log("AI CANT BUILD ANYMORE");
             return Vector3.zero;
             // GetAvailableBuildSpots(previousEnd, previousEnd + 1);

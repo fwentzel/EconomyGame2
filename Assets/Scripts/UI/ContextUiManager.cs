@@ -120,11 +120,12 @@ public class ContextUiManager : MonoBehaviour
         {
             Mainbuilding mb = building as Mainbuilding;
             isSameTeam = GameManager.instance.localPlayer.team == mb.team;
-            mainbuildingContextUiTaxesSlider.value = isSameTeam ? mb.Taxes : 0;
             mainBuildingContextUiFoodText.gameObject.SetActive(isSameTeam);
             mainbuildingContextUiFoodSlider.gameObject.SetActive(isSameTeam);
             mainbuildingContextPanel.gameObject.SetActive(true);
             UpdateContextUi(mb);
+            //AFter update bevause slider value wouldnt update 
+            mainbuildingContextUiTaxesSlider.value=isSameTeam ? mb.Taxes : 0;
         }
         else
         {
@@ -145,7 +146,6 @@ public class ContextUiManager : MonoBehaviour
     {
         mainbuildingContextUiText.text = mainbuilding.GetStats();
         mainBuildingContextUiFoodText.text = $"{mainbuilding.foodPerDayPerCitizen} Food per day per citizen";
-
 
         int freeSpace = ResourceUiManager.instance.activeResourceMan.mainbuilding.maxCitizens - ResourceUiManager.instance.activeResourceMan.GetAmount(resource.citizens);
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   colorHeightMappings:
   - name: Water
     value: 255
-    vertexHight: -2
+    vertexHight: -5
   - name: Mountain
     value: 100
-    vertexHight: 1
+    vertexHight: 5
