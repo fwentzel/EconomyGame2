@@ -23,14 +23,13 @@ public class BuildingAi : BaseAi
     public override Type Tick()
     {
         gold = resourceManager.GetAmount(resource.gold);
-        int foodChange = resourceManager.CalculateFoodGenerated() - resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen;
+        // int foodChange = resourceManager.CalculateFoodGenerated() - resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen;
 
-        if (resourceManager.foodChange <= -5 || resourceManager.isLoyaltyDecreasing)
-        {
-            UpgradeOrBuild(typeof(Farm));
-            return typeof(TradeAi);
-
-        }
+        // if (resourceManager.foodChange <= -5 || resourceManager.isLoyaltyDecreasing)
+        // {
+        //     UpgradeOrBuild(typeof(Farm));
+        //     return typeof(TradeAi);
+        // }
 
         if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team.teamID].Count == 0
         && (resourceManager.foodChange >= 0
@@ -40,13 +39,20 @@ public class BuildingAi : BaseAi
             UpgradeOrBuild(typeof(House));
             return typeof(TradeAi);
         }
+        if (mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
+        {
+            //Build Harbour if none is Built yet
+            UpgradeOrBuild(typeof(Harbour));
+            return typeof(TradeAi);
+        }
 
-        UpgradeOrBuild(typeof(Harbour));
 
-        UpgradeOrBuild(typeof(Mine));
-
-
-
+        ResourceObject rock = Array.Find<ResourceObject>(PlacementController.instance.resourceObjects, r => r.team == mainbuilding.team && !r.occupied); ;
+        if (rock != null)
+        {
+            UpgradeOrBuild(typeof(Mine));
+            return typeof(TradeAi);
+        }
         return typeof(TradeAi);
     }
 
@@ -96,8 +102,6 @@ public class BuildingAi : BaseAi
         }
     }
 
-
-
     private void UpgradeOrBuild(Type type)
     {
         //Try Levelling Up
@@ -111,8 +115,9 @@ public class BuildingAi : BaseAi
         if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
             return;
 
+
         //Didnt Level up, so we need a new one
-        Vector3 pos = GetAvailablePosition();
+        Vector3 pos = GetPosition();
         if (pos != Vector3.zero)//if equal, no space left
             PlaceBuilding(type, pos);
     }
@@ -121,10 +126,8 @@ public class BuildingAi : BaseAi
     {
         Building addedBuilding = mainbuilding.AddBuilding(type, pos);
         buildingList[type].Add(addedBuilding);
-
     }
-
-    private Vector3 GetAvailablePosition()
+    private Vector3 GetPosition()
     {
         if (availableBuildSpots.Count == 0)
         {
@@ -132,10 +135,16 @@ public class BuildingAi : BaseAi
             return Vector3.zero;
             // GetAvailableBuildSpots(previousEnd, previousEnd + 1);
         }
-
         int index = 0;
         Vector3 pos = new Vector3(availableBuildSpots[index].x, PlacementController.instance.GetMeanHeightSurrounding(availableBuildSpots[index]), availableBuildSpots[index].y);
         availableBuildSpots.RemoveAt(index);
         return pos;
     }
+    // private Vector3 GetAvailablePosition(Building building)
+    // {
+
+
+        
+
+    // }
 }

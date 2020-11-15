@@ -100,6 +100,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        dayIndex++;
         RpcSetupMainBuildingPlayer();
         RpcStartInvokeCalcIntervall();
     }

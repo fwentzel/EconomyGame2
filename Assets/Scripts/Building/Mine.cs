@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using System;
 public class Mine : Building
 {
     public int unitsPerIntervall;
@@ -10,8 +10,13 @@ public class Mine : Building
     {
         UseMaxPlacementRange = false;
     }
+
     public override void OnBuild(bool subtractResource = true)
     {
+
+        ResourceObject rock = Array.Find<ResourceObject>(PlacementController.instance.resourceObjects, rocks => rocks.transform.position == transform.position);
+        if (rock != null) rock.occupied = true;
+
         resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
         base.OnBuild(subtractResource);
     }
@@ -21,6 +26,15 @@ public class Mine : Building
         resourceManager.ChangeRessourceAmount(resource.stone, -unitsPerIntervall);
         base.DestroyBuilding();
     }
+
+    // protected override void SetupPossiblePlacements()
+    // {
+    //     ResourceObject[] rocks = Array.FindAll<ResourceObject>(PlacementController.instance.resourceObjects, rock => rock.CompareTag("RockResource") && rock.team == team);
+    //     foreach (ResourceObject rock in rocks)
+    //     {
+    //         possiblePlacements[team].Add(new Vector2(rock.transform.position.x, rock.transform.position.z));
+    //     }
+    // }
     protected override void OnLevelUp()
     {
         base.OnLevelUp();
@@ -40,41 +54,15 @@ public class Mine : Building
     {
         if (other == null) return;
 
-        if (onEnter)
-        {
-            ResourceObject obj = other.GetComponent<ResourceObject>();
-            if (obj != null)
-            {
-                if (obj.CompareTag("RockResource") && obj.team == team)
-                {
-                    //check if a Mine is already there
-                    int numFound = Physics.OverlapBoxNonAlloc(transform.position, Vector3.one * .5f, overlapResults);
-                    for (int i = 0; i < numFound; i++)
-                    {
-                        if (overlapResults[i].gameObject == this.gameObject) continue;
-                        //If Building is there, return false
-                        if (overlapResults[i].tag.Equals("Placeable"))
-                        {
-                            PlacementController.instance.SetCanBuild(false);
-                            return;
-                        }
+        if (onEnter&&possibleDefaultPlacements[team].Contains(new Vector2(transform.position.x, transform.position.z)))
+        {       
+            ResourceObject resourceObject=other.GetComponent<ResourceObject>();
+            PlacementController.instance.SetCanBuild(resourceObject!=null&&!resourceObject.occupied);
+        }
+        else{
+            PlacementController.instance.SetCanBuild(false);
+        }
 
-                    }
-                    //if no mine is present, set can build to true
-                    PlacementController.instance.SetCanBuild(true);
-                }
-                else
-                {
-                    PlacementController.instance.SetCanBuild(false);
-                }
-            }
-        }
-        else
-        {
-            if (other.CompareTag("RockResource"))
-            {
-                PlacementController.instance.SetCanBuild(false);
-            }
-        }
+
     }
 }

@@ -16,11 +16,13 @@ public class Buildcheck : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Ground"))
+        if (other.CompareTag("Ground"))
         {
-            isInCollider = true;
+            return;
         }
+        isInCollider = true;
         building.CheckCanBuild(other, true);
+
 
     }
     private void OnTriggerExit(Collider other)

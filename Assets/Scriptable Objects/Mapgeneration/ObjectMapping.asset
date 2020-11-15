@@ -29,6 +29,10 @@ MonoBehaviour:
     value: 160
     placeable: {fileID: 8521476323181846518, guid: 2566d5b3d11ca394cad1fae9bba1f9a6,
       type: 3}
+  - name: Mine
+    value: 130
+    placeable: {fileID: 46484845376281238, guid: 3bfa1363f6b70044bb7c409e50e61bfc,
+      type: 3}
   - name: Rocks
     value: 51
     placeable: {fileID: 2321040318454111042, guid: b7124683c6494c14f86741df886c17f2,

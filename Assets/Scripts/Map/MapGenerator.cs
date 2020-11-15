@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using System;
 
 [RequireComponent(typeof(MeshFilter))]
 public class MapGenerator : MonoBehaviour
@@ -44,7 +45,6 @@ public class MapGenerator : MonoBehaviour
     private void Awake()
     {
         SetDimension();
-
 #if !UNITY_EDITOR
         SetupMap();
 #endif
@@ -227,7 +227,7 @@ public class MapGenerator : MonoBehaviour
 #else
                             GameObject obj = Instantiate(objectMapping.placeable, transform) as GameObject;
 #endif
-                            obj.transform.position = new Vector3(x , newY, z);
+                            obj.transform.position = new Vector3(x, newY, z);
 
                             //obj.transform.rotation = GetRotationFromNormalSurface(obj);
 
@@ -273,6 +273,19 @@ public class MapGenerator : MonoBehaviour
 
                                     }
                                     obj.transform.position += Vector3.right;
+                                }
+
+                                if (building is Mine)
+                                {
+                                    //
+                                    ColorToObject co = Array.Find(colorToObjectMapping.colorObjectMappings, t => t.name == "Rock");
+#if (UNITY_EDITOR)
+                                    GameObject rock = PrefabUtility.InstantiatePrefab(objectMapping.placeable, transform) as GameObject;
+#else
+                                    GameObject rock = Instantiate(objectMapping.placeable, transform) as GameObject;
+#endif
+                                    rock.transform.position = obj.transform.position;
+                                    rock.GetComponent<ResourceObject>().occupied = true;
                                 }
                             }
 

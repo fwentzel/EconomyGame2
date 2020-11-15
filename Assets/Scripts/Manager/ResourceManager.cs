@@ -92,11 +92,11 @@ public class ResourceManager : MonoBehaviour
     public int CalculateFoodGenerated()
     {
         int generatedAmount = 0;
+        
         foreach (Building building in mainbuilding.buildings.FindAll(t => t.GetType() == typeof(Farm)))
         {
             Farm farm = building as Farm;
             generatedAmount += farm.unitsPerIntervall;
-
         }
         return generatedAmount;
     }
@@ -104,6 +104,8 @@ public class ResourceManager : MonoBehaviour
     private void CalculateStone()
     {
         int generatedAmount = 0;
+
+        
         foreach (Building building in mainbuilding.buildings)
         {
             Mine mine;

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using System;
+using System.Collections.Generic;
 
 public class Building : MonoBehaviour, ISelectable
 {
+    protected static Dictionary<Team, List<Vector2>> possibleDefaultPlacements;
 
     public ResourceManager resourceManager;
     public Team team = null;
@@ -25,8 +24,49 @@ public class Building : MonoBehaviour, ISelectable
     private void Awake()
     {
         SetLevelMesh();
-        
+
     }
+    private void Start()
+    {
+        //not initialized yet
+        if (possibleDefaultPlacements == null)
+            possibleDefaultPlacements = new Dictionary<Team, List<Vector2>>();
+
+        if (!possibleDefaultPlacements.ContainsKey(team))
+        {
+            possibleDefaultPlacements[team]=new List<Vector2>();
+            if (GameManager.instance.dayIndex == 0)//Game not started
+            {
+                GameManager.instance.OnGameStart += SetupPossiblePlacements;
+            }
+            else
+            {
+                //Game running, callback wont be called
+                SetupPossiblePlacements();
+            }
+
+        }
+    }
+
+    protected virtual void SetupPossiblePlacements()
+    {
+        MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
+        for (int x = 0; x < mapGenerator.xSize; x++)
+        {
+            for (int z = 0; z < mapGenerator.zSize; z++)
+            {
+                Vector2 pos = new Vector2(x, z);
+                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h == 0) &&
+                Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, new Vector3(x,0,z)) <= PlacementController.instance.maxPlacementRange)
+                {
+                    possibleDefaultPlacements[team].Add(new Vector2(x, z));
+                }
+            }
+        }
+    }
+
+
+
     public String GetLevelCostString()
     {
         return level == maxLevel ? "MAX" : levelCost.ToString();
@@ -65,6 +105,9 @@ public class Building : MonoBehaviour, ISelectable
         }
     }
 
+    public static List<Vector2> GetPossibleBuildSpots(Team t){
+        return possibleDefaultPlacements[t];
+    }
     public virtual void OnBuild(bool subtractResource = true)
     {
         if (subtractResource)
@@ -92,10 +135,9 @@ public class Building : MonoBehaviour, ISelectable
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, transform.position) <= PlacementController.instance.maxPlacementRange);
+            PlacementController.instance.SetCanBuild(possibleDefaultPlacements[team].Contains(new Vector2(transform.position.x, transform.position.z)));
             return;
         }
-        if (other.CompareTag("Ground")) return;
 
         //entered a collieder, so disable build
         if (onEnter)
