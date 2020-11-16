@@ -71,17 +71,26 @@ public class Mainbuilding : Building
     }
 
     //Ai version
-    public Building AddBuilding(Type buildingType, Vector3 pos)
+    public Building AddBuilding(Type buildingType)
     {
-        if (pos == Vector3.zero)
-            pos = transform.position + new Vector3(2, 0, 2);
-        //TODO SAME CODE AS IN MAPGENERATOR	
-        Building building = Instantiate(possibleBuildings[buildingType], pos, Quaternion.identity).GetComponent<Building>();
-        building.transform.rotation = MapGenerator.GetRotationFromNormalSurface(building.gameObject);
-        building.GetComponent<Building>().SetLevelMesh();
+        Building building = Instantiate(possibleBuildings[buildingType]).GetComponent<Building>();
+        List<Vector2> spots = building.GetPossibleBuildSpots(team);
 
-        AddBuilding(building);
-        return building;
+        foreach (Vector2 spot in spots)
+        {
+            building.transform.position = new Vector3(spot.x, 0, spot.y);
+            if (buildings.Find(b => b.transform.position.x == spot.x && b.transform.position.z == spot.y) == null)
+            {//couldnt find Building at this Position
+                building.transform.rotation = MapGenerator.GetRotationFromNormalSurface(building.gameObject);
+                building.GetComponent<Building>().SetLevelMesh();
+
+                AddBuilding(building);
+                return building;
+            }
+        }
+        //Didnt find free spot
+        Destroy(building.gameObject);
+        return null;
     }
 
 

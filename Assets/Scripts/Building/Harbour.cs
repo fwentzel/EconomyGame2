@@ -5,7 +5,6 @@ using System;
 
 public class Harbour : Building
 {
-    protected static new Dictionary<Team, List<Vector2>> possibleDefaultPlacements;
     public override void OnBuild(bool subtractResource = true)
     {
         if (PlacementController.instance == null) return;//Only occurs during mapgeneration
@@ -30,39 +29,10 @@ public class Harbour : Building
     private void Awake()
     {
         UseMaxPlacementRange = false;
-        //not initialized yet
-        if (possibleDefaultPlacements == null)
-            possibleDefaultPlacements = new Dictionary<Team, List<Vector2>>();
-
-        if (!possibleDefaultPlacements.ContainsKey(team))
-        {
-            possibleDefaultPlacements[team] = new List<Vector2>();
-            if (GameManager.instance.dayIndex == 0)//Game not started
-            {
-                GameManager.instance.OnGameStart += SetupPossiblePlacements;
-            }
-            else
-            {
-                //Game running, callback wont be called
-                SetupPossiblePlacements();
-            }
-
-        }
     }
-
-    //TODO bei anderen Placements nicht komplett Start anpassen
-    private void Start()
+    protected override void SetupPossiblePlacements(Team t)
     {
-
-    }
-
-    public static new List<Vector2> GetPossibleBuildSpots(Team t)
-    {
-        return possibleDefaultPlacements[t];
-    }
-
-    protected override void SetupPossiblePlacements()
-    {
+        Harbour[] harbours = FindObjectsOfType<Harbour>();
         MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
         for (int x = 0; x < mapGenerator.xSize; x++)
         {
@@ -71,7 +41,16 @@ public class Harbour : Building
                 Vector2 pos = new Vector2(x, z);
                 if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < 0))
                 {
-                    possibleDefaultPlacements[team].Add(new Vector2(x, z));
+                    // bool foundHarbourOnSpot = false;
+                    // for (int i = 0; i < harbours.Length; i++)
+                    // {
+                    //     if (harbours[i].transform.position.x == x && harbours[i].transform.position.z == z)
+                    //     {
+                    //         foundHarbourOnSpot = true;
+                    //     }
+                    // }
+                    // if(!foundHarbourOnSpot)
+                        possibleDefaultPlacements.Add(new Vector2(x, z));
                 }
             }
         }
@@ -84,13 +63,7 @@ public class Harbour : Building
         //only distance check
         if (other == null)
         {
-            //TODO HACKYYYYYYY
-            if (!possibleDefaultPlacements.ContainsKey(team))
-            {
-                possibleDefaultPlacements[team] = new List<Vector2>();
-                SetupPossiblePlacements();
-            }
-            PlacementController.instance.SetCanBuild(possibleDefaultPlacements[team].Contains(new Vector2(transform.position.x, transform.position.z)));
+            PlacementController.instance.SetCanBuild(possibleDefaultPlacements.Contains(new Vector2(transform.position.x, transform.position.z)));
             return;
         }
 

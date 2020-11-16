@@ -13,6 +13,7 @@ public class DebugController : MonoBehaviour
     public static DebugCommand<resource, int> ADD_RES;
     public static DebugCommand HELP;
     public static DebugCommand<string> MESSAGE;
+    public static DebugCommand<int> TIME_SCALE;
     public static DebugCommand<Trade, ResourceManager> TRADE;
     public static DebugCommand ADD_ALL;
     public static DebugCommand GAME_OVER;
@@ -28,6 +29,11 @@ public class DebugController : MonoBehaviour
         MESSAGE = new DebugCommand<string>("msg", "Send specified Message", "msg <message>", (x) =>
        {
            MessageSystem.instance.Message(x);
+       });
+       TIME_SCALE = new DebugCommand<int>("ts", "Set time scale", "ts <multiplier>", (x) =>
+       {
+           
+           Time.timeScale=x;
        });
         GAME_OVER = new DebugCommand("go", "Set Player game over", "go", () =>
        {
@@ -58,6 +64,7 @@ public class DebugController : MonoBehaviour
         ADD_ALL,
         ADD_RES,
         MESSAGE,
+        TIME_SCALE,
         GAME_OVER,
         HELP
     };
@@ -111,6 +118,7 @@ public class DebugController : MonoBehaviour
                 {
                     commandString.Invoke(input);
                 }
+                
                 else if (commandList[i] is DebugCommand<resource, int> commandResInt)
                 {
                     resource _resource;

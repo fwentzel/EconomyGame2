@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
+
 public class Mine : Building
 {
     public int unitsPerIntervall;
 
     private Collider[] overlapResults = new Collider[5];
-
     private void Awake()
     {
         UseMaxPlacementRange = false;
@@ -14,7 +15,7 @@ public class Mine : Building
     public override void OnBuild(bool subtractResource = true)
     {
 
-        ResourceObject rock = Array.Find<ResourceObject>(PlacementController.instance.resourceObjects, rocks => rocks.transform.position == transform.position);
+        Rock rock = Array.Find<Rock>(PlacementController.instance.rocks, rocks => rocks.transform.position == transform.position);
         if (rock != null) rock.occupied = true;
 
         resourceManager.ChangeRessourceAmount(resource.stone, unitsPerIntervall);
@@ -26,15 +27,16 @@ public class Mine : Building
         resourceManager.ChangeRessourceAmount(resource.stone, -unitsPerIntervall);
         base.DestroyBuilding();
     }
+    protected override void SetupPossiblePlacements(Team t)
+    {
+        Rock[] rocks = Array.FindAll<Rock>(PlacementController.instance.rocks, rock => rock.team == t);
+        foreach (Rock rock in rocks)
+        {
+            possibleDefaultPlacements.Add(new Vector2(rock.transform.position.x, rock.transform.position.z));
+        }
 
-    // protected override void SetupPossiblePlacements()
-    // {
-    //     ResourceObject[] rocks = Array.FindAll<ResourceObject>(PlacementController.instance.resourceObjects, rock => rock.CompareTag("RockResource") && rock.team == team);
-    //     foreach (ResourceObject rock in rocks)
-    //     {
-    //         possiblePlacements[team].Add(new Vector2(rock.transform.position.x, rock.transform.position.z));
-    //     }
-    // }
+
+    }
     protected override void OnLevelUp()
     {
         base.OnLevelUp();
@@ -54,12 +56,13 @@ public class Mine : Building
     {
         if (other == null) return;
 
-        if (onEnter&&possibleDefaultPlacements[team].Contains(new Vector2(transform.position.x, transform.position.z)))
-        {       
-            ResourceObject resourceObject=other.GetComponent<ResourceObject>();
-            PlacementController.instance.SetCanBuild(resourceObject!=null&&!resourceObject.occupied);
+        if (onEnter && possibleDefaultPlacements.Contains(new Vector2(transform.position.x, transform.position.z)))
+        {
+            Rock rock = other.GetComponent<Rock>();
+            PlacementController.instance.SetCanBuild(rock != null && !rock.occupied);
         }
-        else{
+        else
+        {
             PlacementController.instance.SetCanBuild(false);
         }
 

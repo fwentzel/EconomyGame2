@@ -10,10 +10,10 @@ public class PlacementController : MonoBehaviour
     public bool isPlacing { get; private set; } = false;
     public int maxPlacementRange { get; private set; } = 4;
 
-    
-    public ResourceObject[] resourceObjects;
+    public bool canBuild { get; private set; } = true;
+
+    public Rock[] rocks;
     Material gridMaterial;
-    bool canBuild = true;
     GameObject placeableObject;
     Vector3 mousePos;
 
@@ -33,7 +33,7 @@ public class PlacementController : MonoBehaviour
             Destroy(gameObject);
         }
         mouse = Mouse.current;
-        resourceObjects = FindObjectsOfType<ResourceObject>();
+        rocks = FindObjectsOfType<Rock>();
 
     }
 
@@ -166,8 +166,10 @@ public class PlacementController : MonoBehaviour
         }
 
         placeableObject = Instantiate(placeable);
-        placeableObject.GetComponent<Building>().enabled = false;
-        placeableObject.GetComponent<Building>().team = GameManager.instance.localPlayer.mainbuilding.team;
+        Building building =placeableObject.GetComponent<Building>();
+       building.enabled = false;
+        building.team = GameManager.instance.localPlayer.mainbuilding.team;
+        building.GetPossibleBuildSpots(building.team);
         placeableObject.AddComponent<Buildcheck>();
         placeableObject.GetComponent<BoxCollider>().isTrigger = true;
         isPlacing = true;
