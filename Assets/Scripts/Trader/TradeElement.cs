@@ -31,14 +31,9 @@ public class TradeElement : MonoBehaviour
         normalColor = acceptButton.image.color;
 
     }
-    private void Start()
-    {
-        localResourceManager = ResourceUiManager.instance.activeResourceMan;
-        localResourceManager.OnResourceChange += checkInteractable;
-        checkInteractable();
-    }
 
-    internal void Init(Trade trade)
+
+    internal void Init(Trade trade, ResourceManager resourceManager)
     {
         toTraderImage.sprite = trade.toTrader.sprite;
         toTraderAmountText.text = trade.toTraderAmount.ToString();
@@ -51,16 +46,29 @@ public class TradeElement : MonoBehaviour
         tradeTypeText.text = trade.type.ToString();
         this.trade = trade;
 
+
+
+        if (localResourceManager != resourceManager)
+        {
+            if (localResourceManager != null)
+            {
+                localResourceManager.OnResourceChange -= checkInteractable;
+            }
+            localResourceManager = resourceManager;
+            localResourceManager.OnResourceChange += checkInteractable;
+        }
+
+
         EnableElement();
     }
 
     public void checkInteractable()
     {
-        acceptButton.interactable = accepted == false && localResourceManager.GetAmount(trade.toTrader.resource) > trade.toTraderAmount;
+        acceptButton.interactable = accepted == false && localResourceManager?.GetAmount(trade.toTrader.resource) > trade.toTraderAmount;
 
-        if (trade.type == tradeType.ship && localResourceManager.mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
+        if (trade.type == tradeType.ship && localResourceManager?.mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
         {
-            //Player doesnt have harbour, so cant take Trade.
+            //if Player doesnt have harbour override interactable
             acceptButton.interactable = false;
 
         }
@@ -78,8 +86,7 @@ public class TradeElement : MonoBehaviour
     {
         accepted = false;
         acceptButton.image.color = normalColor;
-        if (localResourceManager != null)
-            checkInteractable();
+        checkInteractable();
     }
 
     public void TradeAccepted()

@@ -57,7 +57,7 @@ BoxCollider:
   m_GameObject: {fileID: 4003468575060279391}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 0.6110587, z: 3.3174324}
   m_Center: {x: 0, y: 2.06, z: 1.1587162}
@@ -71,8 +71,8 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.52
-  m_Speed: 0.5
-  m_Acceleration: 5
+  m_Speed: 0.25
+  m_Acceleration: 1
   avoidancePriority: 50
   m_AngularSpeed: 30
   m_StoppingDistance: 0

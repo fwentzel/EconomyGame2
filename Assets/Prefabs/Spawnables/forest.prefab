@@ -46,7 +46,7 @@ BoxCollider:
   m_GameObject: {fileID: 5269855522899004666}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.24, z: 0}
@@ -73,7 +73,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5269855522899004666}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 1
   m_Extents: {x: 0.5, y: 0.5, z: 0.5}
@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21c7c22bae001d41b975e13741675c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: {fileID: 0}
 --- !u!1001 &3122640461829866991
 PrefabInstance:
   m_ObjectHideFlags: 0

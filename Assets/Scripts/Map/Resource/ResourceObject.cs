@@ -5,6 +5,7 @@ using UnityEngine;
 public class ResourceObject : MonoBehaviour
 {
     public Team team;
+    public bool occupied=false;
 
     public virtual void OnBuild(){}
 }

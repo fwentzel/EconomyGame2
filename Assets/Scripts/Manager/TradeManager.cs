@@ -46,7 +46,7 @@ public class TradeManager : MonoBehaviour
     private void Start()
     {
         GameManager.instance.OnGameStart += Setup;
-        GameManager.instance.OnGameStart += StartTradeOffer;
+        GameManager.instance.OnGameStart += ()=>StartCoroutine(AnnounceNewTradesCoroutine(1));
     }
 
     void Setup(){
@@ -60,10 +60,6 @@ public class TradeManager : MonoBehaviour
         }
     }
 
-    public void StartTradeOffer()
-    {
-        StartCoroutine(AnnounceNewTradesCoroutine(1));
-    }
 
     private void GenerateNewTrades(int amount)
     {
@@ -74,7 +70,7 @@ public class TradeManager : MonoBehaviour
             Trade newTrade = GenerateTrade(i);
 
             tradeToElementMapping[newTrade] = tradeElements[i];
-            tradeElements[i].Init(newTrade);
+            tradeElements[i].Init(newTrade,ResourceUiManager.instance?.activeResourceMan);
             tradeElements[i].gameObject.SetActive(true);
         }
         acceptedTrades = 0;
@@ -167,7 +163,7 @@ public class TradeManager : MonoBehaviour
 
     private IEnumerator AnnounceNewTradesCoroutine(int duration)
     {
-        MessageSystem.instance.Message("The Trader is about to offer something else!");
+        MessageSystem.instance?.Message("The Trader is about to offer something else!");
         OnGenerateNewTrades(duration);
         yield return new WaitForSeconds(duration);
 

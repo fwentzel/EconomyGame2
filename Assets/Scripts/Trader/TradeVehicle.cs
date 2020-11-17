@@ -19,7 +19,7 @@ public class TradeVehicle : MonoBehaviour,ISelectable
 	{
 		yield return new WaitForSeconds(timeBeforeUnload);
 		rm.ChangeRessourceAmount(trade.fromTrader.resource, trade.fromTraderAmount);
-		if (SelectionManager.instance.selectedObject == gameObject)
+		if (SelectionManager.instance?.selectedObject == gameObject)
 		{
 			SelectionManager.instance.Deselect();
 		}

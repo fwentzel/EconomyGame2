@@ -2,15 +2,18 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using System.Linq;
+using System.Collections.Generic;
+
 public class PlacementController : MonoBehaviour
 {
     [HideInInspector] public static PlacementController instance { get; private set; }
     public bool isPlacing { get; private set; } = false;
     public int maxPlacementRange { get; private set; } = 4;
-    public bool[,] harbourPlacements;
+
+    public bool canBuild { get; private set; } = true;
+
+    public Rock[] rocks;
     Material gridMaterial;
-    bool canBuild = true;
     GameObject placeableObject;
     Vector3 mousePos;
 
@@ -30,7 +33,8 @@ public class PlacementController : MonoBehaviour
             Destroy(gameObject);
         }
         mouse = Mouse.current;
-       
+        rocks = FindObjectsOfType<Rock>();
+
     }
 
     public void Start()
@@ -42,9 +46,9 @@ public class PlacementController : MonoBehaviour
         gridMaterial = mapGen.GetComponent<MeshRenderer>().material;
         gridSpacing = mapGen.gridSpacing;
         //gridPlacementOffset = (float)gridSpacing / 2;
-        harbourPlacements = new bool[mapGen.xSize, mapGen.zSize];
-        SetupHarbourPlacements();
-         UpdateGridColor(Color.red);
+
+
+        UpdateGridColor(Color.red);
     }
 
 
@@ -58,19 +62,6 @@ public class PlacementController : MonoBehaviour
             MoveCurrentObjectToMouse();
             UpdateGridPosition();
             CheckInput();
-        }
-    }
-
-
-    private void SetupHarbourPlacements()
-    {
-        for (int x = 0; x < harbourPlacements.GetLength(0); x++)
-        {
-            for (int z = 0; z < harbourPlacements.GetLength(1); z++)
-            {
-                Vector2 pos = new Vector2(x, z);
-                harbourPlacements[x, z] = CheckSurroundingTiles(pos, 0, h => h < 0);
-            }
         }
     }
 
@@ -175,26 +166,28 @@ public class PlacementController : MonoBehaviour
         }
 
         placeableObject = Instantiate(placeable);
-        placeableObject.GetComponent<Building>().enabled = false;
-        placeableObject.GetComponent<Building>().team=GameManager.instance.localPlayer.mainbuilding.team;
+        Building building = placeableObject.GetComponent<Building>();
+        building.enabled = false;
+        building.team = GameManager.instance.localPlayer.mainbuilding.team;
+        building.GetPossibleBuildSpots(GameManager.instance.localPlayer.mainbuilding.team);
         placeableObject.AddComponent<Buildcheck>();
         placeableObject.GetComponent<BoxCollider>().isTrigger = true;
         isPlacing = true;
         UiManager.instance.CloseAll();
 
-        
+
         ConfigureGrid();
     }
 
 
     private void ConfigureGrid()
     {
-            Vector3 pos = ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position;
-            Vector4 posRange = new Vector4(pos.x, pos.y, pos.z, maxPlacementRange + .5f);
-            gridMaterial.SetVector("MainBuildPos", posRange);
-            gridMaterial.SetInt("UseBuildingRange",placeableObject.GetComponent<Building>().UseMaxPlacementRange?1:0);
-            SetCanBuild(false);
-            toggleGrid(1);        
+        Vector3 pos = ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position;
+        Vector4 posRange = new Vector4(pos.x, pos.y, pos.z, maxPlacementRange + .5f);
+        gridMaterial.SetVector("MainBuildPos", posRange);
+        gridMaterial.SetInt("UseBuildingRange", placeableObject.GetComponent<Building>().UseMaxPlacementRange ? 1 : 0);
+        SetCanBuild(false);
+        toggleGrid(1);
     }
 
     private void toggleGrid(int activateGrid)

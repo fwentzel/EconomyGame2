@@ -17,6 +17,11 @@ public class InputMasterManager : MonoBehaviour
 
     private void Start()
     {
+        if(GameManager.instance!=null)
         GameManager.instance.OnGameStart += () => inputMaster.Menus.Enable();
+        else
+        {
+            inputMaster.Menus.Enable();
+        }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Building : MonoBehaviour, ISelectable
 {
-
     public ResourceManager resourceManager;
     public Team team = null;
     public RenderTexture renderTexture;
@@ -19,14 +17,42 @@ public class Building : MonoBehaviour, ISelectable
     public int level { get; private set; } = 1;
     public bool canLevelUp { get; private set; } = false;
     public bool UseMaxPlacementRange { get; protected set; } = true;
-
+    public List<Vector2> possiblePlacementsCache = new List<Vector2>();
     int maxLevel;
 
     private void Awake()
     {
         SetLevelMesh();
-        
     }
+
+    // private void OnDrawGizmos()
+    // {
+    //     Dictionary<Type,Color> colormapping= new Dictionary<Type, Color>{{typeof(Harbour),Color.blue}, {typeof(House),Color.red},{typeof(Farm),Color.yellow},{typeof(Mine),Color.black}};
+    //     if (PlacementSpotsManager.spots.ContainsKey(GetType()))
+    //     {
+    //         BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(),team);
+    //         if (info != null && info.possibleSpots.Count > 0)
+    //         {
+    //             foreach (var item in info.possibleSpots)
+    //             {
+    //                 Gizmos.color=colormapping[this.GetType()];
+    //                 Gizmos.DrawCube(new Vector3(item.x, 0, item.y), new Vector3(1, 1, 1));
+    //             }
+    //         }
+    //     }
+    // }
+    protected virtual void SetupPossiblePlacements(Team t)
+    {
+        Transform mainBuilding = Array.Find<ResourceManager>(CitysMeanResource.instance.resourceManagers, r => r.mainbuilding.team == t).transform;
+        Vector2 mainPos = new Vector2(mainBuilding.position.x, mainBuilding.position.z);
+        possiblePlacementsCache = possiblePlacementsCache.OrderBy(spot => Vector2.Distance(mainPos, spot)).ToList();
+
+        PlacementSpotsManager.spots[GetType()].Add(new BuildingPlacementInfo(t, possiblePlacementsCache));
+        possiblePlacementsCache = new List<Vector2>();
+    }
+
+
+
     public String GetLevelCostString()
     {
         return level == maxLevel ? "MAX" : levelCost.ToString();
@@ -65,12 +91,27 @@ public class Building : MonoBehaviour, ISelectable
         }
     }
 
+    public virtual void GetPossibleBuildSpots(Team t)
+    {
+        if (!PlacementSpotsManager.spots.ContainsKey(GetType()))
+        {
+            //Building not registered yet
+            PlacementSpotsManager.spots[GetType()] = new List<BuildingPlacementInfo>();
+        }
+        BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(),team);
+        if (info == null || info.possibleSpots.Count == 0)
+        {
+            SetupPossiblePlacements(t);
+        }
+    }
+
+
     public virtual void OnBuild(bool subtractResource = true)
     {
         if (subtractResource)
             resourceManager.ChangeRessourceAmount(resource.gold, -buildCost);
         levelCost = Mathf.RoundToInt(buildCost * 2.5f);
-        maxLevel = meshlevels.Length;
+        maxLevel = meshlevels.Length + 1;
 
     }
 
@@ -84,7 +125,7 @@ public class Building : MonoBehaviour, ISelectable
 
     public virtual string GetStats()
     {
-        return "Type: Building" + "\nTeam: " + team + "\nLevel: " + level;
+        return "Type: Building" + "\nTeam: " + team + "\nLevel: " + (level == maxLevel ? level.ToString() : "MAX");
     }
 
     public virtual void CheckCanBuild(Collider other, bool onEnter)
@@ -92,10 +133,9 @@ public class Building : MonoBehaviour, ISelectable
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(Vector3.Distance(ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position, transform.position) <= PlacementController.instance.maxPlacementRange);
+            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(),team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
             return;
         }
-        if (other.CompareTag("Ground")) return;
 
         //entered a collieder, so disable build
         if (onEnter)

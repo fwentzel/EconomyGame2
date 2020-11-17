@@ -22,24 +22,39 @@ public class Harbour : Building
         {
             transform.RotateAround(transform.position, Vector3.up, 180);
         }
-
         base.OnBuild();
-
     }
     private void Awake()
     {
         UseMaxPlacementRange = false;
     }
+    protected override void SetupPossiblePlacements(Team t)
+    {
+        MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
+        for (int x = 0; x < mapGenerator.xSize; x++)
+        {
+            for (int z = 0; z < mapGenerator.zSize; z++)
+            {
+                Vector2 pos = new Vector2(x, z);
+                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < 0))
+                {
+                    possiblePlacementsCache.Add(new Vector2(x, z));
+                }
+            }
+        }
+        base.SetupPossiblePlacements(t);
+    }
+
+
+    //TODO
     public override void CheckCanBuild(Collider other, bool onEnter)
     {
         //only distance check
         if (other == null)
         {
-            bool isNearWater = PlacementController.instance.harbourPlacements[(int)transform.position.x, (int)transform.position.z];
-            PlacementController.instance.SetCanBuild(isNearWater);
+            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(),team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
             return;
         }
-        if (other.CompareTag("Ground")) return;
 
         //entered a collieder, so disable build
         if (onEnter)
@@ -48,8 +63,12 @@ public class Harbour : Building
         }
         else
         {
-
+            //TODO
             PlacementController.instance.SetCanBuild(true);
         }
     }
+
+
+
+
 }

@@ -35,13 +35,9 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Keyboard.current.fKey.isPressed)
+        if (Keyboard.current.fKey.wasPressedThisFrame)
         {
-            Time.timeScale = 5;
-        }
-        else
-        {
-            Time.timeScale = 1;
+            Time.timeScale = Time.timeScale==5?1:5;
         }
     }
 
@@ -87,7 +83,7 @@ public class GameManager : MonoBehaviour
 
     void RpcStartInvokeCalcIntervall()
     {
-        
+
         OnGameStart?.Invoke();
         InvokeRepeating("InvokeCalculateResource", calcResourceIntervall, calcResourceIntervall);
     }
@@ -100,9 +96,12 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        dayIndex++;
         RpcSetupMainBuildingPlayer();
         RpcStartInvokeCalcIntervall();
     }
+
+ 
 
 
 }

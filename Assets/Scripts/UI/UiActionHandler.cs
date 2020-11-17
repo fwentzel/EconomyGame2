@@ -87,4 +87,8 @@ public class UiActionHandler : MonoBehaviour
     {
         UiManager.instance.OpenMenu(null);
     }
+    public static void Restart()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
 }
