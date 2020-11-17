@@ -16209,7 +16209,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.000000034411467, y: 0}
   m_AnchorMax: {x: 0.9988615, y: 1.0000004}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.000091552734}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &465411804
@@ -19450,8 +19450,8 @@ Camera:
   m_GameObject: {fileID: 523893994}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.2784314, g: 0.6392157, b: 0.24313727, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -19491,8 +19491,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 523893994}
-  m_LocalRotation: {x: 0.35417846, y: 0.2612991, z: -0.10374754, w: 0.8919176}
-  m_LocalPosition: {x: 15.938712, y: 20.679558, z: 37.07427}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 15.938712, y: 20.679558, z: 8.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -30598,6 +30598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bf0d753aab11b44fa3611fb0f7cc28e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  com: {fileID: 11400000, guid: 5f988c5a172adf243963fb601093e19e, type: 2}
 --- !u!4 &832045233 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4274579679366095240, guid: 3496802a0748d914485151785447d212,
@@ -43718,7 +43719,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 349671548}
   m_HandleRect: {fileID: 349671547}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

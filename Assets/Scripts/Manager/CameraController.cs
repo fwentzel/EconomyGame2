@@ -195,9 +195,9 @@ public class CameraController : MonoBehaviour
         //Physics.Raycast(ray, out _rayHit, 32, GroundLayer);
 
         // Don't allow the camera to leave the ground area
-        // position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
+        position.x = Mathf.Clamp(position.x, cameraBorder, mapXSize- cameraBorder);
         // position.y = Mathf.Clamp(position.y, cameraMinHeight, cameraMaxHeight);
-        // position.z = Mathf.Clamp(position.z, cameraBorder, mapZSize - cameraBorder);
+        position.z = Mathf.Clamp(position.z, -position.y/2, mapZSize - cameraBorder-position.y/2);
 
         //// Effects when camera hit the ground or the top surface
         //if (position.y <= _rayHit.point.y + cameraMinHeight + 1)
