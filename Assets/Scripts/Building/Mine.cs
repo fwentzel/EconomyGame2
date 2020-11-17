@@ -14,7 +14,6 @@ public class Mine : Building
 
     public override void OnBuild(bool subtractResource = true)
     {
-
         Rock rock = Array.Find<Rock>(PlacementController.instance.rocks, rocks => rocks.transform.position == transform.position);
         if (rock != null) rock.occupied = true;
 
@@ -32,8 +31,9 @@ public class Mine : Building
         Rock[] rocks = Array.FindAll<Rock>(PlacementController.instance.rocks, rock => rock.team == t);
         foreach (Rock rock in rocks)
         {
-            possibleDefaultPlacements.Add(new Vector2(rock.transform.position.x, rock.transform.position.z));
+            possiblePlacementsCache.Add(new Vector2(rock.transform.position.x, rock.transform.position.z));
         }
+        base.SetupPossiblePlacements(t);
 
 
     }
@@ -56,7 +56,7 @@ public class Mine : Building
     {
         if (other == null) return;
 
-        if (onEnter && possibleDefaultPlacements.Contains(new Vector2(transform.position.x, transform.position.z)))
+        if (onEnter &&Utils.GetBuildInfoForTeam(GetType(),team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)))
         {
             Rock rock = other.GetComponent<Rock>();
             PlacementController.instance.SetCanBuild(rock != null && !rock.occupied);

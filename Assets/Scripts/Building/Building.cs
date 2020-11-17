@@ -5,7 +5,6 @@ using System.Linq;
 
 public class Building : MonoBehaviour, ISelectable
 {
-    protected List<Vector2> possibleDefaultPlacements;
     public ResourceManager resourceManager;
     public Team team = null;
     public RenderTexture renderTexture;
@@ -18,7 +17,7 @@ public class Building : MonoBehaviour, ISelectable
     public int level { get; private set; } = 1;
     public bool canLevelUp { get; private set; } = false;
     public bool UseMaxPlacementRange { get; protected set; } = true;
-
+    public List<Vector2> possiblePlacementsCache = new List<Vector2>();
     int maxLevel;
 
     private void Awake()
@@ -26,26 +25,30 @@ public class Building : MonoBehaviour, ISelectable
         SetLevelMesh();
     }
 
+    // private void OnDrawGizmos()
+    // {
+    //     Dictionary<Type,Color> colormapping= new Dictionary<Type, Color>{{typeof(Harbour),Color.blue}, {typeof(House),Color.red},{typeof(Farm),Color.yellow},{typeof(Mine),Color.black}};
+    //     if (PlacementSpotsManager.spots.ContainsKey(GetType()))
+    //     {
+    //         BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(),team);
+    //         if (info != null && info.possibleSpots.Count > 0)
+    //         {
+    //             foreach (var item in info.possibleSpots)
+    //             {
+    //                 Gizmos.color=colormapping[this.GetType()];
+    //                 Gizmos.DrawCube(new Vector3(item.x, 0, item.y), new Vector3(1, 1, 1));
+    //             }
+    //         }
+    //     }
+    // }
     protected virtual void SetupPossiblePlacements(Team t)
     {
-        Vector3 tempMainPos = Array.Find(CitysMeanResource.instance.resourceManagers, resourceManager => resourceManager.mainbuilding.team == t).transform.position;
-        Vector3Int mainBuildingPos = new Vector3Int((int)tempMainPos.x, (int)tempMainPos.y, (int)tempMainPos.z);
-        int maxPlaceRange = PlacementController.instance.maxPlacementRange;
-        for (int x = mainBuildingPos.x - maxPlaceRange; x <= mainBuildingPos.x + maxPlaceRange; x++)
-        {
-            for (int z = mainBuildingPos.z - maxPlaceRange; z <= mainBuildingPos.x + maxPlaceRange; z++)
-            {
-                Vector2 pos = new Vector2(x, z);
-                float dist = Vector3.Distance(mainBuildingPos, new Vector3(x, 0, z));
-                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h == 0) && dist <= maxPlaceRange
-                )
-                {
-                    if (dist == 0)
-                        continue;
-                    possibleDefaultPlacements.Add(new Vector2(x, z));
-                }
-            }
-        }
+        Transform mainBuilding = Array.Find<ResourceManager>(CitysMeanResource.instance.resourceManagers, r => r.mainbuilding.team == t).transform;
+        Vector2 mainPos = new Vector2(mainBuilding.position.x, mainBuilding.position.z);
+        possiblePlacementsCache = possiblePlacementsCache.OrderBy(spot => Vector2.Distance(mainPos, spot)).ToList();
+
+        PlacementSpotsManager.spots[GetType()].Add(new BuildingPlacementInfo(t, possiblePlacementsCache));
+        possiblePlacementsCache = new List<Vector2>();
     }
 
 
@@ -88,19 +91,21 @@ public class Building : MonoBehaviour, ISelectable
         }
     }
 
-    public virtual List<Vector2> GetPossibleBuildSpots(Team t)
+    public virtual void GetPossibleBuildSpots(Team t)
     {
-        //not initialized yet
-        if (possibleDefaultPlacements == null)
-            possibleDefaultPlacements = new List<Vector2>();
-
-        SetupPossiblePlacements(t);
-        Transform mainBuilding = Array.Find<ResourceManager>(CitysMeanResource.instance.resourceManagers, r => r.mainbuilding.team == t).transform;
-        Vector2 mainPos = new Vector2(mainBuilding.position.x, mainBuilding.position.z);
-        possibleDefaultPlacements = possibleDefaultPlacements.OrderBy(spot => Vector2.Distance(mainPos, spot)).ToList();
-
-        return possibleDefaultPlacements;
+        if (!PlacementSpotsManager.spots.ContainsKey(GetType()))
+        {
+            //Building not registered yet
+            PlacementSpotsManager.spots[GetType()] = new List<BuildingPlacementInfo>();
+        }
+        BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(),team);
+        if (info == null || info.possibleSpots.Count == 0)
+        {
+            SetupPossiblePlacements(t);
+        }
     }
+
+
     public virtual void OnBuild(bool subtractResource = true)
     {
         if (subtractResource)
@@ -128,7 +133,7 @@ public class Building : MonoBehaviour, ISelectable
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(possibleDefaultPlacements.Contains(new Vector2(transform.position.x, transform.position.z)));
+            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(),team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
             return;
         }
 

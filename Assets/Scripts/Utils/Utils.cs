@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,4 +30,7 @@ public class Utils : MonoBehaviour
 		return null;
 	}
 
+	public static BuildingPlacementInfo GetBuildInfoForTeam(Type type,Team team){
+		return PlacementSpotsManager.spots[type].Find(spots => spots.team == team);
+	}
 }

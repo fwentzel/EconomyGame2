@@ -32,7 +32,6 @@ public class Harbour : Building
     }
     protected override void SetupPossiblePlacements(Team t)
     {
-        Harbour[] harbours = FindObjectsOfType<Harbour>();
         MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
         for (int x = 0; x < mapGenerator.xSize; x++)
         {
@@ -41,29 +40,22 @@ public class Harbour : Building
                 Vector2 pos = new Vector2(x, z);
                 if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < 0))
                 {
-                    // bool foundHarbourOnSpot = false;
-                    // for (int i = 0; i < harbours.Length; i++)
-                    // {
-                    //     if (harbours[i].transform.position.x == x && harbours[i].transform.position.z == z)
-                    //     {
-                    //         foundHarbourOnSpot = true;
-                    //     }
-                    // }
-                    // if(!foundHarbourOnSpot)
-                        possibleDefaultPlacements.Add(new Vector2(x, z));
+                    possiblePlacementsCache.Add(new Vector2(x, z));
                 }
             }
         }
+
+        base.SetupPossiblePlacements(t);
     }
+
 
     //TODO
     public override void CheckCanBuild(Collider other, bool onEnter)
     {
-
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(possibleDefaultPlacements.Contains(new Vector2(transform.position.x, transform.position.z)));
+            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(),team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
             return;
         }
 

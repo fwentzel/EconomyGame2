@@ -166,10 +166,10 @@ public class PlacementController : MonoBehaviour
         }
 
         placeableObject = Instantiate(placeable);
-        Building building =placeableObject.GetComponent<Building>();
-       building.enabled = false;
+        Building building = placeableObject.GetComponent<Building>();
+        building.enabled = false;
         building.team = GameManager.instance.localPlayer.mainbuilding.team;
-        building.GetPossibleBuildSpots(building.team);
+        building.GetPossibleBuildSpots(GameManager.instance.localPlayer.mainbuilding.team);
         placeableObject.AddComponent<Buildcheck>();
         placeableObject.GetComponent<BoxCollider>().isTrigger = true;
         isPlacing = true;

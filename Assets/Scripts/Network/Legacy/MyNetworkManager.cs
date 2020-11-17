@@ -30,15 +30,22 @@ public class MyNetworkManager : MonoBehaviour
     private void Start()
     {
         maxConnections = FindObjectsOfType<Mainbuilding>().Length;
-		if(isMainMenu)
-		{
-			FillPlayersWithAi();
-		}
-		else{
-
-        StartCoroutine(SimulateLoadingTime());
-		}
+        if (isMainMenu)
+        {
+            StartCoroutine(FillMainMenuAi());
+        }
+        else
+        {
+            StartCoroutine(SimulateLoadingTime());
+        }
     }
+
+    private IEnumerator FillMainMenuAi()
+    {
+        yield return new WaitForSeconds(.5f);
+        FillPlayersWithAi();
+    }
+
     IEnumerator SimulateLoadingTime()
     {
         yield return new WaitForSeconds(.5f);

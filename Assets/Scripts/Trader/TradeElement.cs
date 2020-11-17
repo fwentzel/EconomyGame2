@@ -64,9 +64,9 @@ public class TradeElement : MonoBehaviour
 
     public void checkInteractable()
     {
-        acceptButton.interactable = accepted == false && localResourceManager.GetAmount(trade.toTrader.resource) > trade.toTraderAmount;
+        acceptButton.interactable = accepted == false && localResourceManager?.GetAmount(trade.toTrader.resource) > trade.toTraderAmount;
 
-        if (trade.type == tradeType.ship && localResourceManager.mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
+        if (trade.type == tradeType.ship && localResourceManager?.mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
         {
             //if Player doesnt have harbour override interactable
             acceptButton.interactable = false;
