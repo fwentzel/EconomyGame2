@@ -30,6 +30,14 @@ public class Harbour : Building
     }
     protected override void SetupPossiblePlacements(Team t)
     {
+        if (PlacementSpotsManager.spots[GetType()].Count > 0)
+        {
+            //just copy previous spots, since they are identical
+            possiblePlacementsCache=PlacementSpotsManager.spots[GetType()][0].possibleSpots;
+             base.SetupPossiblePlacements(t);
+             return;
+        }
+        print("checkingHarour placements");
         MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
         for (int x = 0; x < mapGenerator.xSize; x++)
         {
@@ -52,7 +60,7 @@ public class Harbour : Building
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(),team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
+            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(), team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
             return;
         }
 

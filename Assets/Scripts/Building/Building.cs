@@ -98,7 +98,7 @@ public class Building : MonoBehaviour, ISelectable
             //Building not registered yet
             PlacementSpotsManager.spots[GetType()] = new List<BuildingPlacementInfo>();
         }
-        BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(),team);
+        BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(),t);
         if (info == null || info.possibleSpots.Count == 0)
         {
             SetupPossiblePlacements(t);
