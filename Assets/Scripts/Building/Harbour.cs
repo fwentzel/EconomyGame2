@@ -22,9 +22,7 @@ public class Harbour : Building
         {
             transform.RotateAround(transform.position, Vector3.up, 180);
         }
-
         base.OnBuild();
-
     }
     private void Awake()
     {
@@ -44,7 +42,6 @@ public class Harbour : Building
                 }
             }
         }
-
         base.SetupPossiblePlacements(t);
     }
 

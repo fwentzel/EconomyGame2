@@ -44,6 +44,7 @@ public class MapGenerator : MonoBehaviour
     }
     private void Awake()
     {
+        print("BUILDING MAP!");
         SetDimension();
 #if !UNITY_EDITOR
         SetupMap();

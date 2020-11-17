@@ -75,7 +75,7 @@ public class Mainbuilding : Building
     {
         Building building = Instantiate(possibleBuildings[buildingType]).GetComponent<Building>();
         building.GetPossibleBuildSpots(team);
-        List<Vector2> spots = PlacementSpotsManager.spots[buildingType].Find(info => info.team == team).possibleSpots;
+        List<Vector2> spots = Utils.GetBuildInfoForTeam(buildingType,team).possibleSpots;
 
         foreach (Vector2 spot in spots)
         {

@@ -71,7 +71,6 @@ public class MyNetworkManager : MonoBehaviour
         {
             if (GameManager.instance.localPlayer == null)
                 GameManager.instance.localPlayer = playerComponent;
-            //NetworkServer.AddPlayerForConnection(conn, player);
         }
         else
         {
