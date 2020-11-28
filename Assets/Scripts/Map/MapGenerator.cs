@@ -310,7 +310,7 @@ public class MapGenerator : MonoBehaviour
     private void BuildWaterMesh()
     {
         GameObject waterObj = new GameObject("Water", typeof(MeshFilter), typeof(MeshRenderer));
-        waterObj.transform.position = new Vector3(xSize / 2, 0, zSize / 2);
+        waterObj.transform.position = new Vector3((xSize / 2)+.5f, 0, (zSize / 2)+.5f);
         waterObj.transform.parent = transform;
         waterMesh = new Mesh();
         waterObj.GetComponent<MeshFilter>().sharedMesh = waterMesh;

@@ -148,6 +148,7 @@ public class ResourceManager : MonoBehaviour
         citizens.Remove(citizen);
         if (citizens.Count <= 0 && !mainbuilding.gameOver)
         {
+            
             GameManager.instance.setPlayerGameOver(mainbuilding);
         }
     }

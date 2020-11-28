@@ -28,10 +28,6 @@ public class GameManager : MonoBehaviour
             instance = this;
         else
             Destroy(this);
-
-
-
-
     }
     private void Update()
     {

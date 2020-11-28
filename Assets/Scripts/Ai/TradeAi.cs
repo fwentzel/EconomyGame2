@@ -1,15 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
+
 public class TradeAi : BaseAi
 {
-    float safePercentOfResource = .1f;
     float nextAction = 0f;
     float tradeCD = 30;
 
-    public TradeAi(float safePercentOfResource, AiMaster master) : base(master)
+    public TradeAi(AiMaster master) : base(master)
     {
-        this.safePercentOfResource = safePercentOfResource;
     }
 
     public override Type Tick()
@@ -18,8 +17,8 @@ public class TradeAi : BaseAi
         {
             if (CanAcceptTrade(trade))
             { //Berechnen wie viel Prozent der Ressourcen für diesen Trade abgeben werden. unter einem Threshold kann bedenkenlos getraded werden
-                float percentOfResource = (float)trade.toTraderAmount / resourceManager.GetAmount(trade.toTrader.resource);
-                if (percentOfResource < safePercentOfResource)
+                int val = UnityEngine.Random.Range(0,10);
+                if (val < master.personality.trade)
                 {
                     TradeManager.instance.AcceptTrade(trade, resourceManager);
                     nextAction = Time.time + tradeCD;

@@ -1,28 +1,30 @@
 ﻿using System;
 using UnityEngine;
-
-public abstract class BaseAi 
+using Random = UnityEngine.Random;
+public abstract class BaseAi
 {
-	public Mainbuilding mainbuilding;
-	public ResourceManager resourceManager;
-	AiMaster master;
+    public Mainbuilding mainbuilding;
+    public ResourceManager resourceManager;
+    
+    public AiMaster master;
 
-	public BaseAi(AiMaster master)
-	{
-		this.master=master;
-		mainbuilding = master.mainbuilding;
-		resourceManager = mainbuilding.resourceManager;
-	}
+    public BaseAi(AiMaster master)
+    {
+        this.master = master;
+        mainbuilding = master.mainbuilding;
+        resourceManager = mainbuilding.resourceManager;
+        
+    }
 
-	public abstract Type Tick();
-	protected int resAmount(resource res)
-	{
-		return resourceManager.GetAmount(res);
-	}
+    public abstract Type Tick();
+    protected int resAmount(resource res)
+    {
+        return resourceManager.GetAmount(res);
+    }
 
-	protected void Log(string msg)
-	{																																			
-		if (GameManager.instance.showAiLog)
-			Debug.Log(mainbuilding.team + msg);
-	}
+    protected void Log(string msg)
+    {
+        if (GameManager.instance.showAiLog)
+            Debug.Log(mainbuilding.team + msg);
+    }
 }

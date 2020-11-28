@@ -7,6 +7,7 @@ public class BuildingAi : BaseAi
     Dictionary<Type, List<Building>> buildingList;
     int previousEnd;
     int gold;
+    bool builtHarbour = false;
 
     public BuildingAi(AiMaster master) : base(master)
     {
@@ -18,18 +19,12 @@ public class BuildingAi : BaseAi
     {
         gold = resourceManager.GetAmount(resource.gold);
 
-        if (mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
-        {
-            //Build Harbour if none is Built yet
-            UpgradeOrBuild(typeof(Harbour));
-            return typeof(TradeAi);
-        }
         int foodChange = resourceManager.CalculateFoodGenerated() - resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen;
 
         if (resourceManager.foodChange <= -5 || resourceManager.isLoyaltyDecreasing)
         {
-            UpgradeOrBuild(typeof(Farm));
-            return typeof(TradeAi);
+            if (UpgradeOrBuild(typeof(Farm)))
+                return typeof(TradeAi);
         }
 
         if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team.teamID].Count == 0
@@ -37,14 +32,25 @@ public class BuildingAi : BaseAi
         || resourceManager.GetAmount(resource.food) > (resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen) * 2))//double the food that is needed for ctizens
         {
             //Act and Build 
-            UpgradeOrBuild(typeof(House));
-            return typeof(TradeAi);
+            if (UpgradeOrBuild(typeof(House)))
+                return typeof(TradeAi);
         }
+
+        if (!builtHarbour)
+        {
+            //Build Harbour if none is Built yet
+            if (UpgradeOrBuild(typeof(Harbour)))
+            {
+                builtHarbour = true;
+                return typeof(TradeAi);
+            }
+        }
+
         Rock rock = Array.Find<Rock>(PlacementController.instance.rocks, r => r.team == mainbuilding.team && !r.occupied); ;
         if (rock != null)
         {
-            UpgradeOrBuild(typeof(Mine));
-            return typeof(TradeAi);
+            if (UpgradeOrBuild(typeof(Mine)))
+                return typeof(TradeAi);
         }
 
         return typeof(TradeAi);
@@ -68,22 +74,29 @@ public class BuildingAi : BaseAi
         }
     }
 
-    private void UpgradeOrBuild(Type type)
+    private bool UpgradeOrBuild(Type type)
     {
-        //Try Levelling Up
-        foreach (var building in buildingList[type])
+        int val = UnityEngine.Random.Range(0, 10);
+        if (val < master.personality.building)
         {
-            if (gold >= building.levelCost && building.LevelUp())
-                return;
+            //Try Levelling Up
+            foreach (var building in buildingList[type])
+            {
+                if (gold >= building.levelCost && building.LevelUp())
+                    return false;
+            }
         }
+        else
+        {
+            //check if there is enough money to build new Building
+            if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
+                return false;
 
-        //check if there is enough money to build new Building
-        if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
-            return;
+            //Didnt Level up, so we need a new one
+            return PlaceBuilding(type);
+        }
+        return false;
 
-
-        //Didnt Level up, so we need a new one
-        PlaceBuilding(type);
     }
 
     private bool PlaceBuilding(Type type)
