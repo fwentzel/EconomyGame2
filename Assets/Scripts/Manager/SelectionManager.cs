@@ -53,14 +53,11 @@ public class SelectionManager : MonoBehaviour
         {
             OnSelectionChange?.Invoke();
         }
-
-
     }
     private void SetSelectedObject(GameObject obj)
     {
+        print("selected: "+ obj.name);
         SelectedObject = obj;
-        
-
     }
 
     public void Deselect()

@@ -8,13 +8,15 @@ using UnityEngine;
 
 public class Utils : MonoBehaviour
 {
+    static LayerMask defaultMask = LayerMask.GetMask("Default");
+    static int groundMask = LayerMask.GetMask("Ground");
     public static Vector3 GetMouseGroundPosition(Vector2 mouseScreenPos)
     {
         //Get Mouseposition in World coordinates on Ground Collider
         Ray ray = Camera.main.ScreenPointToRay(mouseScreenPos);
         RaycastHit hitInfo;
-        int layermask = LayerMask.GetMask("Ground");
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layermask))
+        
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask))
         {
             return hitInfo.point;
         }
@@ -26,7 +28,8 @@ public class Utils : MonoBehaviour
         //Get Mouseposition in World coordinates on Ground Collider
         Ray ray = Camera.main.ScreenPointToRay(mouseScreenPos);
         RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity))
+        
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, defaultMask))
         {
             return hitInfo.collider.gameObject;
         }

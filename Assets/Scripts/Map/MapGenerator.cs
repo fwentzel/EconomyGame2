@@ -44,16 +44,16 @@ public class MapGenerator : MonoBehaviour
     }
     private void Awake()
     {
-        print("BUILDING MAP!");
+
         SetDimension();
-#if !UNITY_EDITOR
         SetupMap();
+#if !UNITY_EDITOR
 #endif
     }
 
     public void SetupMap()
     {
-
+        print("BUILDING MAP!");
         waterMaterial.SetFloat("StartTime", -999);
         GenerateMap();
 
@@ -310,7 +310,7 @@ public class MapGenerator : MonoBehaviour
     private void BuildWaterMesh()
     {
         GameObject waterObj = new GameObject("Water", typeof(MeshFilter), typeof(MeshRenderer));
-        waterObj.transform.position = new Vector3((xSize / 2)+.5f, 0, (zSize / 2)+.5f);
+        waterObj.transform.position = new Vector3((xSize / 2) + .5f, 0, (zSize / 2) + .5f);
         waterObj.transform.parent = transform;
         waterMesh = new Mesh();
         waterObj.GetComponent<MeshFilter>().sharedMesh = waterMesh;

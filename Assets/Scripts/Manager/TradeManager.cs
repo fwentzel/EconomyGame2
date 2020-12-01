@@ -46,7 +46,7 @@ public class TradeManager : MonoBehaviour
     private void Start()
     {
         GameManager.instance.OnGameStart += Setup;
-        GameManager.instance.OnGameStart += ()=>StartCoroutine(AnnounceNewTradesCoroutine(1));
+        GameManager.instance.OnGameStart += ()=>StartCoroutine(AnnounceNewTradesCoroutine(30));
     }
 
     void Setup(){

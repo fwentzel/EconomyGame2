@@ -98,8 +98,6 @@ public class CameraController : MonoBehaviour
         }
         v /= 120;
         desiredScrollposition = Mathf.Clamp(desiredScrollposition - v * scrollSensitivity, cameraMinHeight, cameraMaxHeight); ;
-
-
     }
 
     private void FixedUpdate()
@@ -221,13 +219,11 @@ public class CameraController : MonoBehaviour
 
     public void MoveCamOverObjectAt(Vector3 objectPos)
     {
-
         float y = TheCamera.transform.position.y;
         float rotation = TheCamera.transform.rotation.eulerAngles.x * Mathf.Deg2Rad;
         float offset = (y / Mathf.Tan(rotation));
         this.mainbuildingPos = objectPos;
         float newZ = objectPos.z - offset;
         TheCamera.transform.position = new Vector3(objectPos.x, y, newZ);
-
     }
 }
