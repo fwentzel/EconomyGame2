@@ -5,15 +5,35 @@ using UnityEngine.VFX;
 
 public class VFXManager : MonoBehaviour
 {
-	public static GameObject levelUpEffect;
+    public GameObject levelUpEffect;
+    public GameObject buildEffect;
 
+    public static VFXManager instance;
 
-	public static void PlayEffect( Vector3 pos)
-	{
-		if(levelUpEffect== null) return;
-		//TODO Pooling=
-		GameObject newEffect = Instantiate(levelUpEffect, new Vector3(pos.x, levelUpEffect.transform.position.y, pos.z), Quaternion.identity);
-		Destroy(newEffect, 4);
-		
-	}
+    private void Awake()
+    {
+        //singleton Check
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(this);
+    }
+    public void PlayEffect(Vector3 pos, effect eff)
+    {
+        GameObject chosenEffect=null;
+        if (eff == effect.LEVEL_UP)
+            chosenEffect = levelUpEffect;
+        if (eff == effect.BUILD)
+            chosenEffect = buildEffect;
+
+        GameObject newEffect = Instantiate(chosenEffect, new Vector3(pos.x, chosenEffect.transform.position.y, pos.z), Quaternion.identity);
+
+        Destroy(newEffect, 6);
+
+    }
+}
+public enum effect
+{
+    LEVEL_UP,
+    BUILD
 }

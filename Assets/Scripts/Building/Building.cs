@@ -72,7 +72,7 @@ public class Building : MonoBehaviour, ISelectable
             TriggerBonusLevel();
 
         resourceManager.ChangeRessourceAmount(resource.gold, -levelCost);
-        VFXManager.PlayEffect(transform.position);
+        VFXManager.instance.PlayEffect(transform.position, effect.LEVEL_UP);
         SetLevelMesh();
         levelCost = (int)(levelCost * 1.5f);
         CheckCanLevelUp();
@@ -98,7 +98,7 @@ public class Building : MonoBehaviour, ISelectable
             //Building not registered yet
             PlacementSpotsManager.spots[GetType()] = new List<BuildingPlacementInfo>();
         }
-        BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(),t);
+        BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(), t);
         if (info == null || info.possibleSpots.Count == 0)
         {
             SetupPossiblePlacements(t);
@@ -109,7 +109,10 @@ public class Building : MonoBehaviour, ISelectable
     public virtual void OnBuild(bool subtractResource = true)
     {
         if (subtractResource)
+        {
+            VFXManager.instance.PlayEffect(transform.position, effect.BUILD);
             resourceManager.ChangeRessourceAmount(resource.gold, -buildCost);
+        }
         levelCost = Mathf.RoundToInt(buildCost * 2.5f);
         maxLevel = meshlevels.Length + 1;
 
@@ -133,7 +136,7 @@ public class Building : MonoBehaviour, ISelectable
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(),team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
+            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(), team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
             return;
         }
 
