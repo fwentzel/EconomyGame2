@@ -8,7 +8,7 @@ public class PlacementController : MonoBehaviour
 {
     [HideInInspector] public static PlacementController instance { get; private set; }
     public bool isPlacing { get; private set; } = false;
-    public int maxPlacementRange { get; private set; } = 4;
+    public int maxPlacementRadius { get; private set; } = 4;
 
     public bool canBuild { get; private set; } = true;
 
@@ -183,7 +183,7 @@ public class PlacementController : MonoBehaviour
     private void ConfigureGrid()
     {
         Vector3 pos = ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position;
-        Vector4 posRange = new Vector4(pos.x, pos.y, pos.z, maxPlacementRange + .5f);
+        Vector4 posRange = new Vector4(pos.x, pos.y, pos.z, maxPlacementRadius + .5f);
         gridMaterial.SetVector("MainBuildPos", posRange);
         gridMaterial.SetInt("UseBuildingRange", placeableObject.GetComponent<Building>().UseMaxPlacementRange ? 1 : 0);
         SetCanBuild(false);

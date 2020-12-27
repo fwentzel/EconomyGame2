@@ -30652,6 +30652,9 @@ MonoBehaviour:
   - tradeType: 1
     prefab: {fileID: 4003468575060279391, guid: 7aff871ca34c75a42aae0705f7fc24bc,
       type: 3}
+  constraints:
+  - fromTraderAmount: 999
+  - fromTraderAmount: 999
 --- !u!114 &830050750
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -148,7 +149,6 @@ public class ResourceManager : MonoBehaviour
         citizens.Remove(citizen);
         if (citizens.Count <= 0 && !mainbuilding.gameOver)
         {
-            
             GameManager.instance.setPlayerGameOver(mainbuilding);
         }
     }
@@ -172,5 +172,6 @@ public enum resource
     loyalty,
     gold,
     citizens,
-    stone
+    stone,
+    none // Für Trade Generation. TODO HACKY
 }

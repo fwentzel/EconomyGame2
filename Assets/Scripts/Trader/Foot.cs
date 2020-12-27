@@ -21,7 +21,7 @@ public class Foot : TradeVehicle
             offsetDir = new Vector2(Random.Range(-1, 2), Random.Range(-1, 2));
         }
 
-        offsetDir = (PlacementController.instance.maxPlacementRange + 1) * offsetDir;
+        offsetDir = (PlacementController.instance.maxPlacementRadius + 1) * offsetDir;
         transform.position = new Vector3(rm.transform.position.x + offsetDir.x, transform.position.y, rm.transform.position.z + offsetDir.y);
     }
 

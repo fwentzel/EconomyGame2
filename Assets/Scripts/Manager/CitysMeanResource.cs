@@ -52,6 +52,7 @@ public class CitysMeanResource : MonoBehaviour
         resource[] resources= resourseMeanDict.Keys.ToArray();
         foreach (resource res in resources)
         {
+            if(res==resource.none)continue;
             mean = 0;
             foreach (ResourceManager resourceManager in resourceManagers)
             {

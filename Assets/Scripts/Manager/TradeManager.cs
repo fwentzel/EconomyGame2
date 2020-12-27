@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 
 public class TradeManager : MonoBehaviour
@@ -29,6 +30,8 @@ public class TradeManager : MonoBehaviour
     int synchronizedValues = 4;//Workaround to know how big the stepsize for listtransformation is
     int[,] randomTradeValues;
 
+    [SerializeField] TradeConstraint[] constraints;
+
 
 
     private void Awake()
@@ -46,10 +49,11 @@ public class TradeManager : MonoBehaviour
     private void Start()
     {
         GameManager.instance.OnGameStart += Setup;
-        GameManager.instance.OnGameStart += ()=>StartCoroutine(AnnounceNewTradesCoroutine(30));
+        GameManager.instance.OnGameStart += () => StartCoroutine(AnnounceNewTradesCoroutine(3));
     }
 
-    void Setup(){
+    void Setup()
+    {
         int i = 0;
         //TODO ABhängigkeit weg
         foreach (TradeElement tradeElement in tradeUiPanel.transform.GetComponentsInChildren<TradeElement>())
@@ -70,7 +74,7 @@ public class TradeManager : MonoBehaviour
             Trade newTrade = GenerateTrade(i);
 
             tradeToElementMapping[newTrade] = tradeElements[i];
-            tradeElements[i].Init(newTrade,ResourceUiManager.instance?.activeResourceMan);
+            tradeElements[i].Init(newTrade, ResourceUiManager.instance?.activeResourceMan);
             tradeElements[i].gameObject.SetActive(true);
         }
         acceptedTrades = 0;
@@ -78,14 +82,16 @@ public class TradeManager : MonoBehaviour
 
     private Trade GenerateTrade(int i)
     {
+        bool useConstraint = i < constraints.Length;
         // [0,4] , [50,100] , [0,4] 
         Trade newTrade = new Trade
         {
-            toTrader = tradingResources[randomTradeValues[i, 0]],
-            toTraderAmount = randomTradeValues[i, 1],
 
-            fromTrader = tradingResources[randomTradeValues[i, 2]],
-            fromTraderAmount = randomTradeValues[i, 1] - 30,
+            toTrader = useConstraint && constraints[i].toTrader != resource.none ? Array.Find(tradingResources, x => x.resource == constraints[i].toTrader) : tradingResources[randomTradeValues[i, 0]],
+            toTraderAmount = useConstraint && constraints[i].toTraderAmount > -1 ? constraints[i].toTraderAmount : randomTradeValues[i, 1],
+
+            fromTrader = useConstraint && constraints[i].fromTrader != resource.none ? Array.Find(tradingResources, x => x.resource == constraints[i].fromTrader) : tradingResources[randomTradeValues[i, 2]],
+            fromTraderAmount = useConstraint && constraints[i].fromTraderAmount > -1 ? constraints[i].fromTraderAmount : randomTradeValues[i, 1] - 30,
             // type = tradeType.ship
             type = (tradeType)Enum.GetValues(typeof(tradeType)).GetValue(randomTradeValues[i, 3])
 
@@ -101,7 +107,14 @@ public class TradeManager : MonoBehaviour
         {
             int toTrader = Random.Range(0, tradingResources.Length);
             int toTraderAmount = Random.Range(50, 100);
-            int fromTrader = Random.Range(0, tradingResources.Length); ;
+            int fromTrader = toTrader;
+            
+            //To get different Resources for in an output
+            while (fromTrader == toTrader)
+            {
+                fromTrader = Random.Range(0, tradingResources.Length);
+            }
+
             int type = Random.Range(0, 2); ;
 
             tradeRandoms.Add(toTrader);
@@ -185,5 +198,17 @@ public enum tradeType
     ship,
     foot,
     instant,
+
+}
+
+[System.Serializable]
+class TradeConstraint
+{
+
+    public resource toTrader = resource.none;
+    public int toTraderAmount = -1;
+    public resource fromTrader = resource.none;
+    public int fromTraderAmount = -1;
+
 
 }

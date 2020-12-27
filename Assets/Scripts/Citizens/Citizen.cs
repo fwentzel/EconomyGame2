@@ -50,6 +50,7 @@ public class Citizen : MonoBehaviour
         {
             happiness -= 5;
         }
+        
         //Main building settings
         happiness += Mathf.FloorToInt(((mainbuilding.maxTaxes / 2) - mainbuilding.Taxes) / 3f);
         happiness += (mainbuilding.foodPerDayPerCitizen - 2) * 2;
