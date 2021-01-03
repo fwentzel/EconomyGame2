@@ -8,6 +8,9 @@ public class AiMaster : MonoBehaviour
     public StateMachine StateMachine => GetComponent<StateMachine>();
     public AiPersonality personality;
 
+    public Brain brain { get; private set; }
+
+
 
     private void Awake()
     {
@@ -15,19 +18,26 @@ public class AiMaster : MonoBehaviour
             personality = PersonalityManager.instance.personalities[mainbuilding.team.teamID];
         else
             personality = PersonalityManager.instance.defaultPersonality;
+
+        brain = GetComponent<Brain>();
+
         InitializeStateMachine();
+
+
     }
 
     private void InitializeStateMachine()
     {
-        Dictionary<Type, BaseAi> states = new Dictionary<Type, BaseAi>() {
-            { typeof(TaxesAi),new TaxesAi(100,20,this)},
-            { typeof(BuildingAi),new BuildingAi(this)},
-			// { typeof(TradeVehicleAi),new TradeVehicleAi(this)},
-			{ typeof(TradeAi),new TradeAi(this)}
+        Dictionary<goal, BaseAi> states = new Dictionary<goal, BaseAi>() {
+            { goal.INCREASE_MONEY   ,new MoneyAi(this)},
+            { goal.INCREASE_CITIZENS,new CitizenManagementAi(this)},
+            { goal.HINDER_OTHERS    ,new TradeVehicleAi(this)},
+            { goal.INCREASE_FOOD    ,new FoodAi(this)},
+            { goal.INCREASE_LOYALTY ,new LoyaltyAi(this)}
         };
+        GetComponent<StateMachine>().currentState = states[goal.INCREASE_CITIZENS];
+        GetComponent<StateMachine>().SetStates(states, this);
 
-        GetComponent<StateMachine>().availableStates = states;
     }
 
 }

@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
-    public Dictionary<Type, BaseAi> availableStates;
     public BaseAi currentState;
     public event Action<BaseAi> OnStateChanged;
 
+     Dictionary<goal, BaseAi> availableStates;
+    Brain brain;
     private void Awake()
     {
         if (GameManager.instance == null)
@@ -19,25 +20,26 @@ public class StateMachine : MonoBehaviour
         GameManager.instance.OnGameStart += () => InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
     }
 
-    private void StateMachineUpdate()
-    {
-        if (currentState == null)
-        {
-            currentState = availableStates[typeof(BuildingAi)];
-        }
-        var nextState = currentState.Tick();
-
-        if (nextState != null && nextState != currentState.GetType())
-        {
-            SwitchToNewState(nextState);
-        }
+    public void SetStates(Dictionary<goal,BaseAi> newStates, AiMaster master){
+        availableStates=newStates;
+        brain=master.brain;
     }
 
-    private void SwitchToNewState(Type nextState)
+    private void StateMachineUpdate()
     {
-        //TODO only for debugging when removing different states
-        currentState = availableStates.ContainsKey(nextState) ? availableStates[nextState] : availableStates.ElementAt(UnityEngine.Random.Range(0, availableStates.Count)).Value;
+        //Perform Tick for Ai of current goal
+        currentState.Tick();
 
-        OnStateChanged?.Invoke(currentState);
+        //Swap to new State accoridng to new goal
+        SwitchToNewState();
+
+    }
+
+    private void SwitchToNewState()
+    {
+
+        currentState = availableStates[brain.goalData.goal];
+
+       // OnStateChanged?.Invoke(currentState);
     }
 }

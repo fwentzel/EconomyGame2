@@ -15,7 +15,7 @@ public class BuildingAi : BaseAi
 
     }
 
-    public override Type Tick()
+    public override goal Tick()
     {
         gold = resourceManager.GetAmount(resource.gold);
 
@@ -24,7 +24,7 @@ public class BuildingAi : BaseAi
         if (resourceManager.foodChange <= -5 || resourceManager.isLoyaltyDecreasing)
         {
             if (UpgradeOrBuild(typeof(Farm)))
-                return typeof(TradeAi);
+                return goal.INCREASE_FOOD;
         }
 
         if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team.teamID].Count == 0
@@ -33,7 +33,7 @@ public class BuildingAi : BaseAi
         {
             //Act and Build 
             if (UpgradeOrBuild(typeof(House)))
-                return typeof(TradeAi);
+                return goal.INCREASE_CITIZENS;
         }
 
         if (!builtHarbour)
@@ -42,7 +42,7 @@ public class BuildingAi : BaseAi
             if (UpgradeOrBuild(typeof(Harbour)))
             {
                 builtHarbour = true;
-                return typeof(TradeAi);
+                return goal.INCREASE_MONEY;//Trading
             }
         }
 
@@ -50,10 +50,10 @@ public class BuildingAi : BaseAi
         if (rock != null)
         {
             if (UpgradeOrBuild(typeof(Mine)))
-                return typeof(TradeAi);
+                return goal.INCREASE_STONE;
         }
 
-        return typeof(TradeAi);
+        return goal.INCREASE_FOOD;
     }
 
 
@@ -74,28 +74,24 @@ public class BuildingAi : BaseAi
         }
     }
 
-    private bool UpgradeOrBuild(Type type)
+    public bool UpgradeOrBuild(Type type)
     {
-        int val = UnityEngine.Random.Range(0, 10);
-        if (val < master.personality.building)
-        {
-            //Try Levelling Up
-            foreach (var building in buildingList[type])
-            {
-                if (gold >= building.levelCost && building.LevelUp())
-                    return false;
-            }
-        }
-        else
-        {
-            //check if there is enough money to build new Building
-            if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
-                return false;
+        gold = resourceManager.GetAmount(resource.gold);
 
-            //Didnt Level up, so we need a new one
-            return PlaceBuilding(type);
+        //Try Levelling Up
+        foreach (var building in buildingList[type])
+        {
+            if (gold >= building.levelCost && building.LevelUp())
+                return true;
         }
-        return false;
+
+        //check if there is enough money to build new Building
+        if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
+            return false;
+
+        //Didnt Level up, so we need a new one
+        return PlaceBuilding(type);
+
 
     }
 

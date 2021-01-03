@@ -34,6 +34,7 @@ public class Mainbuilding : Building
         {
             //Add AI Elements
             gameObject.AddComponent<StateMachine>();
+            gameObject.AddComponent<Brain>();
             gameObject.AddComponent<AiMaster>();
         }
     }
@@ -75,7 +76,7 @@ public class Mainbuilding : Building
     {
         Building building = Instantiate(possibleBuildings[buildingType]).GetComponent<Building>();
         building.GetPossibleBuildSpots(team);
-        List<Vector2> spots = Utils.GetBuildInfoForTeam(buildingType,team).possibleSpots;
+        List<Vector2> spots = Utils.GetBuildInfoForTeam(buildingType, team).possibleSpots;
 
         foreach (Vector2 spot in spots)
         {

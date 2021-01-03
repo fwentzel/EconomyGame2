@@ -11,22 +11,18 @@ public class TradeAi : BaseAi
     {
     }
 
-    public override Type Tick()
+    public override goal Tick()
     {
         foreach (Trade trade in TradeManager.instance.tradeToElementMapping.Keys)
         {
             if (CanAcceptTrade(trade))
-            { //Berechnen wie viel Prozent der Ressourcen für diesen Trade abgeben werden. unter einem Threshold kann bedenkenlos getraded werden
-                int val = UnityEngine.Random.Range(0,10);
-                if (val < master.personality.trade)
-                {
-                    TradeManager.instance.AcceptTrade(trade, resourceManager);
-                    nextAction = Time.time + tradeCD;
-                    break;
-                }
+            {
+                TradeManager.instance.AcceptTrade(trade, resourceManager);
+                nextAction = Time.time + tradeCD;
+                break;
             }
         }
-        return typeof(TaxesAi);
+        return goal.INCREASE_MONEY;
         // return typeof(TradeVehicleAi);
     }
 

@@ -9,10 +9,10 @@ public class TradeVehicleAi : BaseAi
 
     }
 
-    public override Type Tick()
+    public override goal Tick()
     {
 
-        return typeof(BuildingAi);
+        return goal.HINDER_OTHERS;
     }
 
 }

@@ -8,15 +8,17 @@ public abstract class BaseAi
     
     public AiMaster master;
 
+    Brain brain;
+
     public BaseAi(AiMaster master)
     {
         this.master = master;
+        brain=master.brain;
         mainbuilding = master.mainbuilding;
-        resourceManager = mainbuilding.resourceManager;
-        
+        resourceManager = mainbuilding.resourceManager;        
     }
 
-    public abstract Type Tick();
+    public abstract goal Tick();
     protected int resAmount(resource res)
     {
         return resourceManager.GetAmount(res);
