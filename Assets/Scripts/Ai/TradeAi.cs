@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-public class TradeAi : BaseAi
+public class TradeAi : BaseUtilityAi
 {
     float nextAction = 0f;
     float tradeCD = 30;
@@ -11,19 +11,20 @@ public class TradeAi : BaseAi
     {
     }
 
-    public override goal Tick()
+    public bool Trade(resource receiveResource)
     {
         foreach (Trade trade in TradeManager.instance.tradeToElementMapping.Keys)
         {
+            if (trade.fromTrader.resource != receiveResource) continue;
+
             if (CanAcceptTrade(trade))
             {
                 TradeManager.instance.AcceptTrade(trade, resourceManager);
                 nextAction = Time.time + tradeCD;
-                break;
+                return true;
             }
         }
-        return goal.INCREASE_MONEY;
-        // return typeof(TradeVehicleAi);
+        return false;
     }
 
     private bool CanAcceptTrade(Trade trade)
@@ -38,7 +39,7 @@ public class TradeAi : BaseAi
         {
             return false;
         }
-        //cant take Trade since no harbour for ship
+        //cant take Trade since no harbour for ship  - - - - - - TODO ohne Find!
         else if (trade.type == tradeType.ship && mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
         {
             return false;

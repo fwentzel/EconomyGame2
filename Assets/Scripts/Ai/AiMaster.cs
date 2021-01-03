@@ -10,6 +10,11 @@ public class AiMaster : MonoBehaviour
 
     public Brain brain { get; private set; }
 
+    //Utility AIs
+    public BuildingAi buildingAi;
+    public TradeAi tradeAi;
+    public MultiplicatorAi multiplicatorAi;
+    public BuildingAi buildingAi;
 
 
     private void Awake()
@@ -21,9 +26,16 @@ public class AiMaster : MonoBehaviour
 
         brain = GetComponent<Brain>();
 
+        SetupUtilityAi();
+
         InitializeStateMachine();
 
 
+    }
+
+    private void SetupUtilityAi()
+    {
+        buildingAi = new BuildingAi(this)
     }
 
     private void InitializeStateMachine()

@@ -10,6 +10,10 @@ public class LoyaltyAi : BaseAi
 
     public override goal Tick()
     {
+        //Decrease Taxes
+
+        //Increase Food Multiplier
+
         return goal.INCREASE_LOYALTY;
     }
 }

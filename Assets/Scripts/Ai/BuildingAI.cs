@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingAi : BaseAi
+public class BuildingAi : BaseUtilityAi
 {
     Dictionary<Type, List<Building>> buildingList;
     int previousEnd;
@@ -15,45 +15,23 @@ public class BuildingAi : BaseAi
 
     }
 
-    public override goal Tick()
+    public bool UpgradeOrBuild(Type type)
     {
         gold = resourceManager.GetAmount(resource.gold);
 
-        int foodChange = resourceManager.CalculateFoodGenerated() - resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen;
-
-        if (resourceManager.foodChange <= -5 || resourceManager.isLoyaltyDecreasing)
+        //Try Levelling Up
+        foreach (var building in buildingList[type])
         {
-            if (UpgradeOrBuild(typeof(Farm)))
-                return goal.INCREASE_FOOD;
+            if (gold >= building.levelCost && building.LevelUp())
+                return true;
         }
 
-        if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team.teamID].Count == 0
-        && (resourceManager.foodChange >= 0
-        || resourceManager.GetAmount(resource.food) > (resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen) * 2))//double the food that is needed for ctizens
-        {
-            //Act and Build 
-            if (UpgradeOrBuild(typeof(House)))
-                return goal.INCREASE_CITIZENS;
-        }
+        //check if there is enough money to build new Building
+        if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
+            return false;
 
-        if (!builtHarbour)
-        {
-            //Build Harbour if none is Built yet
-            if (UpgradeOrBuild(typeof(Harbour)))
-            {
-                builtHarbour = true;
-                return goal.INCREASE_MONEY;//Trading
-            }
-        }
-
-        Rock rock = Array.Find<Rock>(PlacementController.instance.rocks, r => r.team == mainbuilding.team && !r.occupied); ;
-        if (rock != null)
-        {
-            if (UpgradeOrBuild(typeof(Mine)))
-                return goal.INCREASE_STONE;
-        }
-
-        return goal.INCREASE_FOOD;
+        //Didnt Level up, so we need a new one
+        return PlaceBuilding(type);
     }
 
 
@@ -74,26 +52,7 @@ public class BuildingAi : BaseAi
         }
     }
 
-    public bool UpgradeOrBuild(Type type)
-    {
-        gold = resourceManager.GetAmount(resource.gold);
 
-        //Try Levelling Up
-        foreach (var building in buildingList[type])
-        {
-            if (gold >= building.levelCost && building.LevelUp())
-                return true;
-        }
-
-        //check if there is enough money to build new Building
-        if (buildingList[type].Count > 0 && gold < buildingList[type][0].buildCost)
-            return false;
-
-        //Didnt Level up, so we need a new one
-        return PlaceBuilding(type);
-
-
-    }
 
     private bool PlaceBuilding(Type type)
     {

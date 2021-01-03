@@ -39,7 +39,7 @@ public class StateMachine : MonoBehaviour
     {
 
         currentState = availableStates[brain.goalData.goal];
-
+        print("NEW STATE: " +currentState);
        // OnStateChanged?.Invoke(currentState);
     }
 }

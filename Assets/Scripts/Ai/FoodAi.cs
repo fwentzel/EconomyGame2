@@ -10,6 +10,12 @@ public class FoodAi : BaseAi
 
     public override goal Tick()
     {
+// lower Multiplier
+
+//Build / Upgrade Farm
+
+
+
         return goal.INCREASE_FOOD;
     }
 }

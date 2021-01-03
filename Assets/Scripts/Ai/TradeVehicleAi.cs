@@ -11,7 +11,7 @@ public class TradeVehicleAi : BaseAi
 
     public override goal Tick()
     {
-
+        
         return goal.HINDER_OTHERS;
     }
 
