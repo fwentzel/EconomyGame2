@@ -10,11 +10,16 @@ public class FoodAi : BaseAi
 
     public override goal Tick()
     {
-// lower Multiplier
+        // lower Multiplier
 
-//Build / Upgrade Farm
+        //Build / Upgrade Farm
+        int foodChange = resourceManager.CalculateFoodGenerated() - resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen;
 
-
+        if (resourceManager.foodChange <= -5 || resourceManager.isLoyaltyDecreasing)
+        {
+            if (!master.buildingAi.UpgradeOrBuild(typeof(Farm)))
+                return goal.INCREASE_GOLD;
+        }
 
         return goal.INCREASE_FOOD;
     }

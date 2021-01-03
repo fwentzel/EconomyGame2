@@ -6,13 +6,9 @@ public abstract class BaseUtilityAi
     public Mainbuilding mainbuilding;
     public ResourceManager resourceManager;
     public AiMaster master;
-
-    Brain brain;
-
     public BaseUtilityAi(AiMaster master)
     {
-        this.master = master;
-        brain = master.brain;
+        this.master=master;
         mainbuilding = master.mainbuilding;
         resourceManager = mainbuilding.resourceManager;
     }

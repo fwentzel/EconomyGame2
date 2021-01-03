@@ -5,17 +5,14 @@ public abstract class BaseAi
 {
     public Mainbuilding mainbuilding;
     public ResourceManager resourceManager;
-    
-    public AiMaster master;
 
-    Brain brain;
+    public AiMaster master;
 
     public BaseAi(AiMaster master)
     {
         this.master = master;
-        brain=master.brain;
         mainbuilding = master.mainbuilding;
-        resourceManager = mainbuilding.resourceManager;        
+        resourceManager = mainbuilding.resourceManager;
     }
 
     public abstract goal Tick();

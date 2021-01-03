@@ -3,25 +3,18 @@ using UnityEngine;
 
 public class MultiplicatorAi : BaseUtilityAi
 {
-    int baseTax = 0;
 
-    public MultiplicatorAi(int goldRaiseTaxesThresholdBase, int lowerTaxesLoyaltyThresholdBase, AiMaster master) : base(master)
+    public MultiplicatorAi(AiMaster master) : base(master)
     {
-        baseTax = master.personality.moneyPriority;
     }
 
 
-    public void ChangeTax()
+    public bool ChangeTax()
     {
-        if (resourceManager.isLoyaltyDecreasing)
-            mainbuilding.Taxes -= 1;
-        else if (mainbuilding.Taxes <= baseTax)
-        {
-            mainbuilding.Taxes = baseTax;
-        }
+        throw new NotImplementedException();
     }
 
-    public void ChangeFood()
+    public bool ChangeFood()
     {
         throw new NotImplementedException();
     }

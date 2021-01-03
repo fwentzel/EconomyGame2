@@ -14,7 +14,6 @@ public class AiMaster : MonoBehaviour
     public BuildingAi buildingAi;
     public TradeAi tradeAi;
     public MultiplicatorAi multiplicatorAi;
-    public BuildingAi buildingAi;
 
 
     private void Awake()
@@ -35,13 +34,15 @@ public class AiMaster : MonoBehaviour
 
     private void SetupUtilityAi()
     {
-        buildingAi = new BuildingAi(this)
+        buildingAi = new BuildingAi(this);
+        tradeAi = new TradeAi(this);
+        multiplicatorAi = new MultiplicatorAi(this);
     }
 
     private void InitializeStateMachine()
     {
         Dictionary<goal, BaseAi> states = new Dictionary<goal, BaseAi>() {
-            { goal.INCREASE_MONEY   ,new MoneyAi(this)},
+            { goal.INCREASE_GOLD   ,new MoneyAi(this)},
             { goal.INCREASE_CITIZENS,new CitizenManagementAi(this)},
             { goal.HINDER_OTHERS    ,new TradeVehicleAi(this)},
             { goal.INCREASE_FOOD    ,new FoodAi(this)},
