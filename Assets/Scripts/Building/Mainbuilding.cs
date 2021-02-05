@@ -34,7 +34,6 @@ public class Mainbuilding : Building
         {
             //Add AI Elements
             gameObject.AddComponent<StateMachine>();
-            gameObject.AddComponent<Brain>();
             gameObject.AddComponent<AiMaster>();
         }
     }

@@ -38,22 +38,38 @@ public class TradeAi : BaseUtilityAi
         return false;
     }
 
+    public resource BestResourceNeededForTrade(resource receiveResource){
+        int receiveAmount=0;
+        resource bestResource=resource.gold;
+        foreach (Trade trade in TradeManager.instance.tradeToElementMapping.Keys)
+        {
+            if (trade.fromTrader.resource != receiveResource) continue;
+            if(trade.fromTraderAmount>receiveAmount){
+                receiveAmount=trade.fromTraderAmount;
+                bestResource=trade.fromTrader.resource;
+            }
+            
+        }
+        return bestResource;
+    }
+
     private bool CanAcceptTrade(Trade trade)
     {
-        //Trade is no longer available 
-        if (TradeManager.instance.tradeToElementMapping[trade].accepted)
+        //Trade is no longer available  or  Tradecooldown still active 
+        if (TradeManager.instance.tradeToElementMapping[trade].accepted || Time.time < nextAction)
         {
             return false;
         }
-        //Tradecooldown still active 
-        else if (Time.time < nextAction)
-        {
-            return false;
-        }
+        
         //cant take Trade since no harbour for ship  - - - - - - TODO ohne Find!
         else if (trade.type == tradeType.ship && !builtHarbour)//mainbuilding.buildings.Find(t => t.GetType() == typeof(Harbour)) == null)
         {
             //Couldnt accept trade since Harbour not built
+            if (master.buildingAi.UpgradeOrBuild(typeof(Harbour)))
+            {
+                builtHarbour = true;
+                return true;
+            }
             return false;
         }
 

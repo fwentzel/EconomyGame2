@@ -10,30 +10,35 @@ public class MoneyAi : BaseAi
 
     }
 
-    public override goal Tick()
+    public override GoalData Tick()
     {
         //raise Taxes
-        if (master.multiplicatorAi.ChangeTax())
+        if (multiplicatorAi.ChangeTax(+1))
         {
-
+            return new GoalData(goal.INCREASE_GOLD, brain.GoalData.priority);
         }
-
         //Trade
-        //TODO Komosch, dass hier gecheckt wird, ob hafen steht bzw hafen errichtet wird
-        if (!master.tradeAi.builtHarbour)
+
+        if (!tradeAi.Trade(resource.gold))
         {
-            //Some check
-            if (master.buildingAi.UpgradeOrBuild(typeof(Harbour)))
+            goal goalForTradeResource=goal.INCREASE_GOLD;
+            switch (tradeAi.BestResourceNeededForTrade(resource.gold))
             {
-                master.tradeAi.builtHarbour = true;
-                return goal.INCREASE_GOLD;//Trading
+                case resource.stone:
+                    goalForTradeResource = goal.INCREASE_STONE;
+                    break;
+                case resource.food:
+                    goalForTradeResource = goal.INCREASE_FOOD;
+                    break;
+               
             }
+            return new GoalData(goalForTradeResource, brain.GoalData.priority, returnToPreviousGoal: true);
         }
 
-        if (master.tradeAi.Trade(resource.gold))
 
-            return goal.INCREASE_GOLD;
 
-        return goal.INCREASE_GOLD;
+
+
+        return brain.previousGoalData;
     }
 }

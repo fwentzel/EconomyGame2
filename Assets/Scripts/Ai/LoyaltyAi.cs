@@ -8,12 +8,22 @@ public class LoyaltyAi : BaseAi
     {
     }
 
-    public override goal Tick()
+    public override GoalData Tick()
     {
-        //Decrease Taxes
+        if (master.personality.foodPriority >= master.personality.moneyPriority)
+        {
+            if (multiplicatorAi.ChangeTax(-1))
+            {
+                return new GoalData(goal.INCREASE_GOLD, brain.GoalData.priority);
+            }
+        }
 
-        //Increase Food Multiplier
+        if (master.personality.foodPriority < master.personality.moneyPriority)
+        {
+           if (multiplicatorAi.ChangeFood(1))
+            return new GoalData(goal.INCREASE_FOOD, brain.GoalData.priority);
+        }
 
-        return goal.INCREASE_LOYALTY;
+        return new GoalData(goal.INCREASE_GOLD, brain.GoalData.priority);
     }
 }

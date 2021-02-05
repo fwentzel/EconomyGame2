@@ -37,7 +37,6 @@ public class Harbour : Building
              base.SetupPossiblePlacements(t);
              return;
         }
-        print("checkingHarour placements");
         MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
         for (int x = 0; x < mapGenerator.xSize; x++)
         {

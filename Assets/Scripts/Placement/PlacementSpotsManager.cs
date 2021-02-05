@@ -16,8 +16,7 @@ public class PlacementSpotsManager : MonoBehaviour
     }
 
     void GetPlacements()
-    {
-        print("GETTING POSSIBLE PLACEMENTS");
+    {       
         foreach (var item in com.colorObjectMappings)
         {
             Building building = item.placeable.GetComponent<Building>();

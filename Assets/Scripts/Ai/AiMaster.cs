@@ -11,9 +11,9 @@ public class AiMaster : MonoBehaviour
     public Brain brain { get; private set; }
 
     //Utility AIs
-    public BuildingAi buildingAi;
-    public TradeAi tradeAi;
-    public MultiplicatorAi multiplicatorAi;
+    public BuildingAi buildingAi { get; private set; }
+    public TradeAi tradeAi { get; private set; }
+    public MultiplicatorAi multiplicatorAi { get; private set; }
 
 
     private void Awake()
@@ -23,7 +23,7 @@ public class AiMaster : MonoBehaviour
         else
             personality = PersonalityManager.instance.defaultPersonality;
 
-        brain = GetComponent<Brain>();
+        brain = gameObject.AddComponent<Brain>();
 
         SetupUtilityAi();
 

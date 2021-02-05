@@ -9,14 +9,28 @@ public class MultiplicatorAi : BaseUtilityAi
     }
 
 
-    public bool ChangeTax()
+    public bool ChangeTax(int changeValue)
     {
-        throw new NotImplementedException();
+        if(mainbuilding.Taxes==0){
+            return false;
+        }
+        else
+        {
+            mainbuilding.Taxes+=changeValue;
+            return true;
+        }
     }
 
-    public bool ChangeFood()
+    public bool ChangeFood(int changeValue)
     {
-        throw new NotImplementedException();
+         if(mainbuilding.foodPerDayPerCitizen==0){
+            return false;
+        }
+        else
+        {
+            mainbuilding.Taxes+=changeValue;
+            return true;
+        }
     }
 
 

@@ -9,10 +9,10 @@ public class TradeVehicleAi : BaseAi
 
     }
 
-    public override goal Tick()
+    public override GoalData Tick()
     {
         
-        return goal.HINDER_OTHERS;
+        return new GoalData(goal.INCREASE_CITIZENS, brain.GoalData.priority);
     }
 
 }
