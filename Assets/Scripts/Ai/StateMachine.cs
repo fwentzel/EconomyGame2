@@ -21,7 +21,7 @@ public class StateMachine : MonoBehaviour
         }
         GameManager.instance.OnGameStart += () => InvokeRepeating("StateMachineUpdate", 0, GameManager.instance.calcResourceIntervall);
     }
-
+ 
     public void SetStates(Dictionary<goal, BaseAi> newStates, AiMaster master)
     {
         availableStates = newStates;
@@ -42,8 +42,9 @@ public class StateMachine : MonoBehaviour
         
         if (returnToPrevious&& !brain.GoalData.returnToPreviousGoal)
         {
+           
             //next goal was finished, so go back to previous one
-            brain.GoalData = brain.previousGoalData;
+            brain.GoalData =new GoalData(brain.previousGoalData.goal,brain.previousGoalData.priority);
         }
         returnToPrevious=brain.GoalData.returnToPreviousGoal;
         currentState = availableStates[brain.GoalData.goal];

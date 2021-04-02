@@ -40,7 +40,7 @@ public struct GoalData
     public goal goal { get; private set; }
     public int priority { get; private set; }
 
-    public bool returnToPreviousGoal { get; private set; }
+    public bool returnToPreviousGoal;
 
     public GoalData(goal goal, int priority, bool returnToPreviousGoal = false)
     {
