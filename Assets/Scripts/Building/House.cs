@@ -73,7 +73,9 @@ public class House : Building
     {
         for (int i = 0; i < amount; i++)
         {
-            Citizen citizen = Instantiate(CitizenManager.instance.citizenPrefab, new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Citizen>();
+            if (!CitizenManager.instance.HasFreeCitizens())
+                return;
+            Citizen citizen = CitizenManager.instance.GetFreeCitizen();
             citizen.Init(this, 1f, 1f);
             ChangeCitizenAmount(1, citizen);
         }

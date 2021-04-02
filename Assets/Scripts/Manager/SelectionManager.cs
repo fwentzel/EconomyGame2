@@ -29,24 +29,30 @@ public class SelectionManager : MonoBehaviour
             instance = this;
         else
             Destroy(this);
-        
+
         mouse = Mouse.current;
     }
-    private void Start() {
+    private void Start()
+    {
         input = InputMasterManager.instance.inputMaster;
         input.Selection.Click.started += _ => GetObjectFromClick();
         input.Selection.Enable();
     }
-    
+
 
     private void GetObjectFromClick()
     {
-        bool t=EventSystem.current.IsPointerOverGameObject();
+        bool t = EventSystem.current.IsPointerOverGameObject();
         if (EventSystem.current.IsPointerOverGameObject() || PlacementController.instance.isPlacing)
             return;
         GameObject obj = Utils.GetObjectAtMousePos(mouse.position.ReadValue());
+        print(obj);
         if (obj == null)
+        {
+            ContextUiManager.instance.CloseAll();
             return;
+        }
+
         selectedObject = obj;
 
         if (ContextUiManager.instance.OpenContext(obj))//false, if there is no type for selection or trying to select Obj from other team
@@ -56,7 +62,7 @@ public class SelectionManager : MonoBehaviour
     }
     private void SetSelectedObject(GameObject obj)
     {
-        print("selected: "+ obj.name);
+        print("selected: " + obj.name);
         SelectedObject = obj;
     }
 

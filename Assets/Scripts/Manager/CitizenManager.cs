@@ -7,10 +7,12 @@ using System.Linq;
 public class CitizenManager : MonoBehaviour
 {
     public static CitizenManager instance { get; private set; }
-    public GameObject citizenPrefab;
+    [SerializeField] GameObject citizenPrefab;
 
-    public Dictionary<int, List<Citizen>> freeCitizensPerTeam { get; private set; } = new Dictionary<int, List<Citizen>>();
+    [SerializeField]
+    int totalAmountFreeCitizens = 1;
     List<Citizen> citizens = new List<Citizen>();
+
 
     private void Awake()
     {
@@ -19,18 +21,18 @@ public class CitizenManager : MonoBehaviour
             instance = this;
         else
             Destroy(this);
-    }
-    private void Start()
-    {
-        GameManager.instance.OnGameStart += SetupFreeCitizens;
+
+        SetupFreeCitizens();
     }
 
     private void SetupFreeCitizens()
     {
-        for (int i = 1; i <= GameManager.instance.players.Length; i++)
+
+        for (int i = 0; i < totalAmountFreeCitizens; i++)
         {
-            freeCitizensPerTeam[i] = new List<Citizen>();
+            citizens.Add(Instantiate(citizenPrefab, new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Citizen>());
         }
+
     }
 
     public void TakeOverCitizen(ResourceManager from, ResourceManager to, int amount)
@@ -87,14 +89,26 @@ public class CitizenManager : MonoBehaviour
                         //Remove Citizen from old home
                         oldHouse.ChangeCitizenAmount(-1, unhappyCitizen);
                         MessageSystem.instance.Message($"Citizen went from {oldHouse.team} to {house.team}");
-                        
+
                         break;
                     }
                 }
             }
         }
+    }
 
+    public bool HasFreeCitizens(){
+        return citizens.Count>0;
+    }
 
+    public Citizen GetFreeCitizen(){
+        Citizen citizen = citizens.First();
+        citizens.Remove(citizen);
+        return citizen;
+    }
+
+    public void SetCitizenFree(Citizen citizen){
+        citizens.Add(citizen);
     }
 
 

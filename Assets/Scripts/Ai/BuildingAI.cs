@@ -17,7 +17,7 @@ public class BuildingAi : BaseUtilityAi
 
     public bool UpgradeOrBuild(Type type)
     {
-        gold = resourceManager.GetAmount(resource.gold);
+        gold = resAmount(resource.gold);
 
         //Try Levelling Up
         foreach (var building in buildingList[type])

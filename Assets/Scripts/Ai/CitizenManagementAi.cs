@@ -11,12 +11,12 @@ public class CitizenManagementAi : BaseAi
 
     public override GoalData Tick()
     {
-        if (CitizenManager.instance.freeCitizensPerTeam[resourceManager.mainbuilding.team.teamID].Count > 0)
+        if (mainbuilding.maxCitizens- resAmount(resource.citizens) > 0 &&resAmount(resource.loyalty)<100)
         {
             return new GoalData(goal.INCREASE_LOYALTY, brain.GoalData.priority,true);
         }
 
-        if (resourceManager.foodChange < 0 || resourceManager.GetAmount(resource.food) < (resourceManager.GetAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen))
+        if (resourceManager.foodChange < 0 || resAmount(resource.food) < (resAmount(resource.citizens) * mainbuilding.foodPerDayPerCitizen))
             return new GoalData(goal.INCREASE_FOOD, brain.GoalData.priority,true);
 
         

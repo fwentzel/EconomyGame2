@@ -11,7 +11,6 @@ public class BuildUiElement : MonoBehaviour
     int buildCost;
     GameObject prefab;
     ResourceManager activeRM;
-    bool disableWhenFreeCitizens;
 
     private void Awake()
     {
@@ -30,7 +29,6 @@ public class BuildUiElement : MonoBehaviour
         activeRM = ResourceUiManager.instance.activeResourceMan;
         activeRM.OnResourceChange += CheckInteractable;
 
-        disableWhenFreeCitizens = building is House;
 
         button.interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= buildCost;
     }
@@ -38,8 +36,6 @@ public class BuildUiElement : MonoBehaviour
     private void CheckInteractable()
     {
         bool interactable = ResourceUiManager.instance.activeResourceMan.GetAmount(resource.gold) >= buildCost;
-        if (disableWhenFreeCitizens)
-            interactable &= CitizenManager.instance.freeCitizensPerTeam[activeRM.mainbuilding.team.teamID].Count == 0;
 
 
         button.interactable = interactable;
