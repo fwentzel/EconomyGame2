@@ -49,7 +49,7 @@ public class ResourceUiManager : MonoBehaviour
         foreach (Resource res in res.resourceStartValues.Keys)
         {
             if (res.resource == resource.loyalty)
-                res.uiText.color = activeResourceMan.isLoyaltyDecreasing ? Color.red : defaultTextColor;
+                res.uiText.color = activeResourceMan.loyaltyChange<0 ? Color.red : defaultTextColor;
             res.uiText.text = currentRessouceManagerToShow.GetAmountUI(res.resource);
         }
     }
@@ -59,7 +59,7 @@ public class ResourceUiManager : MonoBehaviour
 
         Resource _res = res.resourceStartValues.FirstOrDefault(pair => pair.Key.resource == resourceType).Key;
         if (_res.resource == resource.loyalty)
-            _res.uiText.color = activeResourceMan.isLoyaltyDecreasing ? Color.red : defaultTextColor;
+            _res.uiText.color = activeResourceMan.loyaltyChange<0 ? Color.red : defaultTextColor;
         _res.uiText.text = currentRessouceManagerToShow.GetAmountUI(_res.resource);
 
     }

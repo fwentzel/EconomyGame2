@@ -48,6 +48,6 @@ public class StateMachine : MonoBehaviour
         }
         returnToPrevious=brain.GoalData.returnToPreviousGoal;
         currentState = availableStates[brain.GoalData.goal];
-        print("NEW STATE: " + currentState +" ("+brain.GoalData.goal+")");
+        //print("NEW STATE: " + currentState +" ("+brain.GoalData.goal+")");
     }
 }

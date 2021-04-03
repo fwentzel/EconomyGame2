@@ -15,7 +15,7 @@ public class MoneyAi : BaseAi
         //raise Taxes
         if (multiplicatorAi.ChangeTax(+1))
         {
-            return new GoalData(goal.INCREASE_GOLD, brain.GoalData.priority);
+            return new GoalData(goal.INCREASE_FOOD, brain.GoalData.priority);
         }
         //Trade
 
@@ -34,11 +34,6 @@ public class MoneyAi : BaseAi
             }
             return new GoalData(goalForTradeResource, brain.GoalData.priority, returnToPreviousGoal: true);
         }
-
-
-
-
-
-        return brain.previousGoalData;
+        return new GoalData(goal.INCREASE_FOOD, brain.GoalData.priority);
     }
 }

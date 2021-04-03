@@ -46,7 +46,6 @@ public class SelectionManager : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject() || PlacementController.instance.isPlacing)
             return;
         GameObject obj = Utils.GetObjectAtMousePos(mouse.position.ReadValue());
-        print(obj);
         if (obj == null)
         {
             ContextUiManager.instance.CloseAll();

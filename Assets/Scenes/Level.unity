@@ -9333,7 +9333,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.000000034411467, y: 0}
   m_AnchorMax: {x: 0.9988615, y: 1.0000004}
-  m_AnchoredPosition: {x: 0, y: 0.000091552734}
+  m_AnchoredPosition: {x: 0, y: -0.000030517578}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &465411804
@@ -17793,6 +17793,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   citizenPrefab: {fileID: 3872429354527944290, guid: 857d1c34d9b6b7f4bb22a4f239115d9e,
     type: 3}
+  totalAmountFreeCitizens: 6
 --- !u!114 &830050744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24019,7 +24020,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 349671548}
   m_HandleRect: {fileID: 349671547}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

@@ -11,7 +11,7 @@ public class MultiplicatorAi : BaseUtilityAi
 
     public bool ChangeTax(int changeValue)
     {
-        if(mainbuilding.Taxes==0){
+        if(mainbuilding.Taxes==0 ||mainbuilding.Taxes==mainbuilding.maxTaxes){
             return false;
         }
         else

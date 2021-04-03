@@ -13,6 +13,7 @@ public class Citizen : MonoBehaviour
     Mainbuilding mainbuilding;
     public int happiness = 70;
     public int lookNewCityThreshold = 20;
+    public int maxDiffHappinessToAllMeanLoyalty=10;
 
     public void Init(House house, float taxesMultiplier, float foodMultiplier)
     {
@@ -37,6 +38,9 @@ public class Citizen : MonoBehaviour
 
     private void UpdateHappiness()
     {
+        if (house == null)
+            return;
+            
         if (taxesMultiplier > house.resourceManager.meanTaxesMultiplier)
             happiness -= 1;
         else if (taxesMultiplier < house.resourceManager.meanTaxesMultiplier)
@@ -50,10 +54,12 @@ public class Citizen : MonoBehaviour
         {
             happiness -= 5;
         }
-        
+
         //Main building settings
         happiness += Mathf.FloorToInt(((mainbuilding.maxTaxes / 2) - mainbuilding.Taxes) / 3f);
         happiness += (mainbuilding.foodPerDayPerCitizen - 2) * 2;
+
+        happiness +=Mathf.FloorToInt((happiness- CitysMeanResource.instance.resourseMeanDict[resource.loyalty])/10);
 
         happiness = Mathf.Clamp(happiness, 0, 100);
 

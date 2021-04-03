@@ -13,7 +13,7 @@ public class ResourceManager : MonoBehaviour
     public Mainbuilding mainbuilding;
     public Curve foodRatioToLoyaltyChange;
     public event Action OnResourceChange = delegate { };
-    public bool isLoyaltyDecreasing = false;
+    public int loyaltyChange = 0;
     public List<Citizen> citizens = new List<Citizen>();
     public int foodChange { get; private set; }
     public bool canTakeCitizen { get; private set; }
@@ -53,7 +53,7 @@ public class ResourceManager : MonoBehaviour
     {
         int newCitizenAmount = amountOf[resource.citizens] + 1;
         canTakeCitizen = amountOf[resource.food] > mainbuilding.foodPerDayPerCitizen * newCitizenAmount
-                            && newCitizenAmount < mainbuilding.maxCitizens;
+                            && newCitizenAmount <= mainbuilding.maxCitizens;
     }
 
     private void CheckGameOver()
@@ -127,7 +127,7 @@ public class ResourceManager : MonoBehaviour
         }
         loyalty /= citizens.Count;
 
-        isLoyaltyDecreasing = loyalty < amountOf[resource.loyalty];
+        loyaltyChange = loyalty - amountOf[resource.loyalty];
         amountOf[resource.loyalty] = loyalty;
     }
 

@@ -11,7 +11,11 @@ public class CitizenManager : MonoBehaviour
 
     [SerializeField]
     int totalAmountFreeCitizens = 1;
+    [SerializeField]
+    int LOOSE_CITIZEN_COOLDOWN_DAYS = 3;
     List<Citizen> citizens = new List<Citizen>();
+
+    Dictionary<Team, int> looseCitizenCooldown = new Dictionary<Team, int>();
 
 
     private void Awake()
@@ -24,7 +28,17 @@ public class CitizenManager : MonoBehaviour
 
         SetupFreeCitizens();
     }
-
+    private void Start()
+    {
+        GameManager.instance.OnGameStart += SetupCooldowns;
+    }
+    private void SetupCooldowns()
+    {
+        foreach (Player player in GameManager.instance.players)
+        {
+            looseCitizenCooldown.Add(player.team, 0);
+        }
+    }
     private void SetupFreeCitizens()
     {
 
@@ -71,25 +85,28 @@ public class CitizenManager : MonoBehaviour
 
     public void FindNewHome(Citizen unhappyCitizen)
     {
+        print(unhappyCitizen.team +"  "+(looseCitizenCooldown[unhappyCitizen.team] >= GameManager.instance.dayIndex));
+        if (looseCitizenCooldown[unhappyCitizen.team] >= GameManager.instance.dayIndex)
+            return;
         House oldHouse = unhappyCitizen.house;
+
         //Find new Home
-        ResourceManager[] orderedRM = CitysMeanResource.instance.resourceManagers.OrderBy(t => t.GetAmount(resource.loyalty)).ToArray();
-        for (int i = 0; i < orderedRM.Length; i++)
+        ResourceManager[] orderedResourceManagers = CitysMeanResource.instance.resourceManagers.OrderBy(t => t.GetAmount(resource.loyalty)).ToArray();
+        for (int i = 0; i < orderedResourceManagers.Length; i++)
         {
-            if (orderedRM[i].canTakeCitizen && unhappyCitizen.team != orderedRM[i].mainbuilding.team)
+            if (orderedResourceManagers[i].canTakeCitizen && unhappyCitizen.team != orderedResourceManagers[i].mainbuilding.team)
             {
 
-                List<Citizen> tradedCitizens = new List<Citizen>() { unhappyCitizen };
-                foreach (House house in orderedRM[i].mainbuilding.buildings.FindAll(t => t.GetType() == typeof(House)))
+                foreach (House house in orderedResourceManagers[i].mainbuilding.buildings.FindAll(t => t.GetType() == typeof(House)))
                 {
                     //Add Citizen to new Home
-                    tradedCitizens = house.ReceiveCitizens(tradedCitizens);
-                    if (tradedCitizens.Count == 0)
+
+                    if (house.ReceiveCitizen(unhappyCitizen))
                     {
                         //Remove Citizen from old home
                         oldHouse.ChangeCitizenAmount(-1, unhappyCitizen);
                         MessageSystem.instance.Message($"Citizen went from {oldHouse.team} to {house.team}");
-
+                        looseCitizenCooldown[unhappyCitizen.team] = GameManager.instance.dayIndex + LOOSE_CITIZEN_COOLDOWN_DAYS;
                         break;
                     }
                 }
@@ -97,17 +114,20 @@ public class CitizenManager : MonoBehaviour
         }
     }
 
-    public bool HasFreeCitizens(){
-        return citizens.Count>0;
+    public bool HasFreeCitizens()
+    {
+        return citizens.Count > 0;
     }
 
-    public Citizen GetFreeCitizen(){
+    public Citizen GetFreeCitizen()
+    {
         Citizen citizen = citizens.First();
         citizens.Remove(citizen);
         return citizen;
     }
 
-    public void SetCitizenFree(Citizen citizen){
+    public void SetCitizenFree(Citizen citizen)
+    {
         citizens.Add(citizen);
     }
 

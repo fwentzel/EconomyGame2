@@ -121,7 +121,7 @@ public class House : Building
         {
             if (currentAmount == capacity)
                 break;
-            Citizen citizen = newCitizens[0];
+            Citizen citizen = newCitizens[i];
             ChangeCitizenAmount(1, citizen);
             citizen.Init(this);
         }
@@ -130,6 +130,16 @@ public class House : Building
         else
             newCitizens.Clear();
         return newCitizens;
+    }
+
+    public bool ReceiveCitizen(Citizen newCitizen)
+    {
+        
+        if (currentAmount == capacity)
+            return false;
+        ChangeCitizenAmount(1, newCitizen);
+        newCitizen.Init(this);
+        return true;
     }
 
 }
