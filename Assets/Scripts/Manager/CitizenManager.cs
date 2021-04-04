@@ -85,7 +85,6 @@ public class CitizenManager : MonoBehaviour
 
     public void FindNewHome(Citizen unhappyCitizen)
     {
-        print(unhappyCitizen.team +"  "+(looseCitizenCooldown[unhappyCitizen.team] >= GameManager.instance.dayIndex));
         if (looseCitizenCooldown[unhappyCitizen.team] >= GameManager.instance.dayIndex)
             return;
         House oldHouse = unhappyCitizen.house;

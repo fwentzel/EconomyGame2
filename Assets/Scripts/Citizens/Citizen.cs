@@ -41,15 +41,23 @@ public class Citizen : MonoBehaviour
         if (house == null)
             return;
             
+
+
+        //Multipliers check (for citizens that got bough in )
         if (taxesMultiplier > house.resourceManager.meanTaxesMultiplier)
             happiness -= 1;
         else if (taxesMultiplier < house.resourceManager.meanTaxesMultiplier)
             happiness += 1;
+
         if (foodMultiplier > house.resourceManager.meanFoodMultiplier)
             happiness += 1;
         else if (foodMultiplier < house.resourceManager.meanFoodMultiplier)
             happiness -= 1;
 
+        if(Mathf.FloorToInt((happiness- CitysMeanResource.instance.resourseMeanDict[resource.loyalty])/2)<0){
+            happiness -= 1;
+        }
+        
         if (mainbuilding.resourceManager.GetAmount(resource.food) == 0)
         {
             happiness -= 5;
@@ -59,8 +67,8 @@ public class Citizen : MonoBehaviour
         happiness += Mathf.FloorToInt(((mainbuilding.maxTaxes / 2) - mainbuilding.Taxes) / 3f);
         happiness += (mainbuilding.foodPerDayPerCitizen - 2) * 2;
 
-        happiness +=Mathf.FloorToInt((happiness- CitysMeanResource.instance.resourseMeanDict[resource.loyalty])/10);
-
+        happiness +=mainbuilding.maxCitizens-mainbuilding.resourceManager.GetAmount(resource.citizens)/2;
+        
         happiness = Mathf.Clamp(happiness, 0, 100);
 
         if (happiness < lookNewCityThreshold)

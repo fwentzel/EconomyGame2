@@ -56,13 +56,12 @@ public class House : Building
         {
             for (int z = mainBuildingPos.z - maxPlaceRange; z <= mainBuildingPos.z + maxPlaceRange; z++)
             {
-                Vector2 pos = new Vector2(x, z);
-                float dist = Vector3.Distance(mainBuildingPos, new Vector3(x, 0, z));
-                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h == 0) && dist <= maxPlaceRange
-                )
-                {
-                    if (dist == 0)
+                float dist = Mathf.Abs(x - mainBuildingPos.x) + Mathf.Abs(z - mainBuildingPos.z);
+                 if (dist == 0)
                         continue;
+                if (PlacementController.instance.CheckSurroundingTiles(new Vector2(x, z), 0, h => h == 0) && dist <= maxPlaceRange)
+                {
+                   
                     possiblePlacementsCache.Add(new Vector2(x, z));
                 }
             }

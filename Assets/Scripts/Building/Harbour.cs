@@ -38,17 +38,23 @@ public class Harbour : Building
              return;
         }
         MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
+        int waterDepth=Array.Find<ColorToHeight>(mapGenerator.colorToHeightMapping.colorHeightMappings, r => r.name.Equals("Water") ).vertexHight;
+       
         for (int x = 0; x < mapGenerator.xSize; x++)
         {
             for (int z = 0; z < mapGenerator.zSize; z++)
             {
                 Vector2 pos = new Vector2(x, z);
-                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < 0))
+                //Waterdepth/2 because there should be atleast 2 tiles with water next to harbour
+                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < waterDepth/2))
                 {
                     possiblePlacementsCache.Add(new Vector2(x, z));
                 }
             }
         }
+        
+       
+        
         base.SetupPossiblePlacements(t);
     }
 

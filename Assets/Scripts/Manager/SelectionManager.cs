@@ -48,7 +48,7 @@ public class SelectionManager : MonoBehaviour
         GameObject obj = Utils.GetObjectAtMousePos(mouse.position.ReadValue());
         if (obj == null)
         {
-            ContextUiManager.instance.CloseAll();
+            Deselect();
             return;
         }
 

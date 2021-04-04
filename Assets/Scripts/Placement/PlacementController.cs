@@ -23,6 +23,8 @@ public class PlacementController : MonoBehaviour
     int zSize;
     Mouse mouse;
 
+    List<GameObject> buildSpotMarker = new List<GameObject>();
+
     private void Awake()
     {
         //Singleton Check
@@ -70,7 +72,8 @@ public class PlacementController : MonoBehaviour
         bool result = false;
         if (GetMeanHeightSurrounding(pos) == objDesiredHeight)
         {
-            result = heightComparison(GetMeanHeightSurrounding(pos + Vector2.up)) ||
+            result =
+            heightComparison(GetMeanHeightSurrounding(pos + Vector2.up)) ||
             heightComparison(GetMeanHeightSurrounding(pos + Vector2.down)) ||
             heightComparison(GetMeanHeightSurrounding(pos + Vector2.left)) ||
             heightComparison(GetMeanHeightSurrounding(pos + Vector2.right));
@@ -103,9 +106,9 @@ public class PlacementController : MonoBehaviour
         int size = xSize + 1;
 
         float newY = groundMesh.vertices[((newZ - 1) * size) + newX].y +
-                    groundMesh.vertices[((newZ - 1) * size) + newX - 1].y +
+                     groundMesh.vertices[((newZ - 1) * size) + newX - 1].y +
                      groundMesh.vertices[(newZ * size) + newX - 1].y +
-                    groundMesh.vertices[(newZ * size) + newX].y;
+                     groundMesh.vertices[(newZ * size) + newX].y;
         newY /= 4;
         return newY;
     }
@@ -144,6 +147,12 @@ public class PlacementController : MonoBehaviour
         isPlacing = false;
         toggleGrid(0);
 
+        foreach (GameObject obj in buildSpotMarker)
+        {
+            Destroy(obj);
+        }
+        buildSpotMarker.Clear();
+
 
     }
 
@@ -154,6 +163,12 @@ public class PlacementController : MonoBehaviour
         isPlacing = false;
         toggleGrid(0);
         Destroy(placeableObject);
+
+        foreach (GameObject obj in buildSpotMarker)
+        {
+            Destroy(obj);
+        }
+        buildSpotMarker.Clear();
     }
 
     public void NewPlaceableObject(GameObject placeable)
@@ -185,11 +200,43 @@ public class PlacementController : MonoBehaviour
         Vector3 pos = ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position;
         Vector4 posRange = new Vector4(pos.x, pos.y, pos.z, maxPlacementRadius + .5f);
         gridMaterial.SetVector("MainBuildPos", posRange);
-        gridMaterial.SetInt("UseBuildingRange", placeableObject.GetComponent<Building>().UseMaxPlacementRange ? 1 : 0);
+        Building building = placeableObject.GetComponent<Building>();
+        if (building.UseMaxPlacementRange)
+        {
+            gridMaterial.SetInt("UseBuildingRange", 1);
+        }
+        else
+        {
+            gridMaterial.SetInt("UseBuildingRange", 0);
+            //Harbour or Mine
+            ShowPlaceholderForBuildSpots(building);
+        }
+
         SetCanBuild(false);
         toggleGrid(1);
     }
 
+    private void ShowPlaceholderForBuildSpots(Building building)
+    {
+        //TODO POOLING!
+        List<BuildingPlacementInfo> buildingPlacementInfos = PlacementSpotsManager.spots[building.GetType()];
+
+        foreach (BuildingPlacementInfo info in buildingPlacementInfos)
+        {
+            if (info.team == building.team)
+            {
+                foreach (Vector2 spot in info.possibleSpots)
+                {
+                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    cube.GetComponent<BoxCollider>().enabled = false;
+                    cube.transform.position = new Vector3(spot.x, 0.3f, spot.y);
+                    cube.transform.localScale = new Vector3(.2f, .2f, .2f);
+
+                }
+
+            }
+        }
+    }
     private void toggleGrid(int activateGrid)
     {
         //Set float (0,1) in shader to activate or deactivate the grid

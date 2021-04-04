@@ -48,7 +48,9 @@ public class Building : MonoBehaviour, ISelectable
         possiblePlacementsCache = possiblePlacementsCache.OrderBy(spot => Vector2.Distance(mainPos, spot)).ToList();
 
         PlacementSpotsManager.spots[GetType()].Add(new BuildingPlacementInfo(t, possiblePlacementsCache));
+       
         possiblePlacementsCache = new List<Vector2>();
+
     }
 
 

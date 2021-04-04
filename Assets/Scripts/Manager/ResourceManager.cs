@@ -20,6 +20,8 @@ public class ResourceManager : MonoBehaviour
     public float meanTaxesMultiplier { get; private set; } = 0;
     public float meanFoodMultiplier { get; private set; } = 0;
 
+    [SerializeField] int maxLoyaltyChange=5;
+
     private void Awake()
     {
         amountOf = new Dictionary<resource, int>();
@@ -127,7 +129,7 @@ public class ResourceManager : MonoBehaviour
         }
         loyalty /= citizens.Count;
 
-        loyaltyChange = loyalty - amountOf[resource.loyalty];
+        loyaltyChange =Mathf.Clamp(loyalty - amountOf[resource.loyalty],-maxLoyaltyChange,maxLoyaltyChange) ;
         amountOf[resource.loyalty] = loyalty;
     }
 
