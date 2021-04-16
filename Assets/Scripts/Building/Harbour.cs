@@ -26,19 +26,19 @@ public class Harbour : Building
     }
     private void Awake()
     {
-        UseMaxPlacementRange = false;
+        spotType = buildSpotType.harbour;
     }
-    protected override void SetupPossiblePlacements(Team t)
+    protected override void SetupPossiblePlacements()
     {
-        if (PlacementSpotsManager.spots[GetType()].Count > 0)
+        if (PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType].Count > 0)
         {
             //just copy previous spots, since they are identical
-            possiblePlacementsCache=PlacementSpotsManager.spots[GetType()][0].possibleSpots;
-             base.SetupPossiblePlacements(t);
+            possiblePlacementsCache=PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType][team];
+             base.SetupPossiblePlacements();
              return;
         }
+
         MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
-        int waterDepth=Array.Find<ColorToHeight>(mapGenerator.colorToHeightMapping.colorHeightMappings, r => r.name.Equals("Water") ).vertexHight;
        
         for (int x = 0; x < mapGenerator.xSize; x++)
         {
@@ -46,16 +46,13 @@ public class Harbour : Building
             {
                 Vector2 pos = new Vector2(x, z);
                 //Waterdepth/2 because there should be atleast 2 tiles with water next to harbour
-                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < waterDepth/2))
+                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < mapGenerator.waterVertexHeight/2))
                 {
                     possiblePlacementsCache.Add(new Vector2(x, z));
                 }
             }
-        }
-        
-       
-        
-        base.SetupPossiblePlacements(t);
+        }        
+        base.SetupPossiblePlacements();
     }
 
 
@@ -65,7 +62,7 @@ public class Harbour : Building
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(), team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
+            PlacementController.instance.SetCanBuild(spotType, team,new Vector2(transform.position.x, transform.position.z));
             return;
         }
 

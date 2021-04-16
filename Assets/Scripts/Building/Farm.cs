@@ -9,6 +9,7 @@ public class Farm : Building
     public override void OnBuild(bool subtractResource = true)
     {
         resourceManager.ChangeRessourceAmount(resource.food, unitsPerIntervall);
+       
         base.OnBuild(subtractResource);
     }
 
@@ -36,16 +37,16 @@ public class Farm : Building
         return $"Farm\nLevel {level}\nGenerates {unitsPerIntervall} food";
     }
 
-    protected override void SetupPossiblePlacements(Team t)
+    protected override void SetupPossiblePlacements()
     {
-        Vector3 tempMainPos = Array.Find(CitysMeanResource.instance.resourceManagers, resourceManager => resourceManager.mainbuilding.team == t).transform.position;
-        Vector3Int mainBuildingPos = new Vector3Int((int)tempMainPos.x, (int)tempMainPos.y, (int)tempMainPos.z);
+        Vector3 buildingPos = transform.position;
+        Vector3Int intBuildingPos = new Vector3Int((int)buildingPos.x, (int)buildingPos.y, (int)buildingPos.z);
         int maxPlaceRange = PlacementController.instance.maxPlacementRadius;
-        for (int x = mainBuildingPos.x - maxPlaceRange; x <= mainBuildingPos.x + maxPlaceRange; x++)
+        for (int x = intBuildingPos.x - maxPlaceRange; x <= intBuildingPos.x + maxPlaceRange; x++)
         {
-            for (int z = mainBuildingPos.z - maxPlaceRange; z <= mainBuildingPos.z + maxPlaceRange; z++)
+            for (int z = intBuildingPos.z - maxPlaceRange; z <= intBuildingPos.z + maxPlaceRange; z++)
             {
-                float dist = Mathf.Abs(x - mainBuildingPos.x) + Mathf.Abs(z - mainBuildingPos.z);
+                float dist = Mathf.Abs(x - intBuildingPos.x) + Mathf.Abs(z - intBuildingPos.z);
                  if (dist == 0)
                         continue;
                 if (PlacementController.instance.CheckSurroundingTiles(new Vector2(x, z), 0, h => h == 0) && dist <= maxPlaceRange)
@@ -54,7 +55,7 @@ public class Farm : Building
                 }
             }
         }
-        base.SetupPossiblePlacements(t);
+        base.SetupPossiblePlacements();
     }
 
 }

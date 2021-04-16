@@ -16,8 +16,8 @@ public class Building : MonoBehaviour, ISelectable
 
     public int level { get; private set; } = 1;
     public bool canLevelUp { get; private set; } = false;
-    public bool UseMaxPlacementRange { get; protected set; } = true;
-    public List<Vector2> possiblePlacementsCache = new List<Vector2>();
+    public buildSpotType spotType { get; protected set; } = buildSpotType.normal;
+    public HashSet<Vector2> possiblePlacementsCache = new HashSet<Vector2>();
     int maxLevel;
 
     private void Awake()
@@ -25,32 +25,28 @@ public class Building : MonoBehaviour, ISelectable
         SetLevelMesh();
     }
 
-    // private void OnDrawGizmos()
-    // {
-    //     Dictionary<Type,Color> colormapping= new Dictionary<Type, Color>{{typeof(Harbour),Color.blue}, {typeof(House),Color.red},{typeof(Farm),Color.yellow},{typeof(Mine),Color.black}};
-    //     if (PlacementSpotsManager.spots.ContainsKey(GetType()))
-    //     {
-    //         BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(),team);
-    //         if (info != null && info.possibleSpots.Count > 0)
-    //         {
-    //             foreach (var item in info.possibleSpots)
-    //             {
-    //                 Gizmos.color=colormapping[this.GetType()];
-    //                 Gizmos.DrawCube(new Vector3(item.x, 0, item.y), new Vector3(1, 1, 1));
-    //             }
-    //         }
-    //     }
-    // }
-    protected virtual void SetupPossiblePlacements(Team t)
+    private void OnDrawGizmos()
     {
-        Transform mainBuilding = Array.Find<ResourceManager>(CitysMeanResource.instance.resourceManagers, r => r.mainbuilding.team == t).transform;
-        Vector2 mainPos = new Vector2(mainBuilding.position.x, mainBuilding.position.z);
-        possiblePlacementsCache = possiblePlacementsCache.OrderBy(spot => Vector2.Distance(mainPos, spot)).ToList();
-
-        PlacementSpotsManager.spots[GetType()].Add(new BuildingPlacementInfo(t, possiblePlacementsCache));
+         if (!PlacementSpotsManager.spotsForBuildingTypeAndTeam.ContainsKey(spotType)||!PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType].ContainsKey(team))
+        {
+            return;
+        }
        
-        possiblePlacementsCache = new List<Vector2>();
-
+        Gizmos.color=Color.blue;
+       foreach (var item in PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType][team])
+       {
+            Gizmos.DrawCube(new Vector3(item.x, 0, item.y), new Vector3(.2f, .2f, .2f));
+       }
+    }
+    protected virtual void SetupPossiblePlacements()
+    {
+        HashSet<Vector2> set = PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType][team];
+        foreach (Vector2 item in possiblePlacementsCache)
+        {
+            set.Add(item);
+        }
+        PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType][team] = set;
+        possiblePlacementsCache = new HashSet<Vector2>();
     }
 
 
@@ -93,18 +89,21 @@ public class Building : MonoBehaviour, ISelectable
         }
     }
 
-    public virtual void GetPossibleBuildSpots(Team t)
+    public virtual void GetPossibleBuildSpots()
     {
-        if (!PlacementSpotsManager.spots.ContainsKey(GetType()))
+        if (!PlacementSpotsManager.spotsForBuildingTypeAndTeam.ContainsKey(spotType))
         {
             //Building not registered yet
-            PlacementSpotsManager.spots[GetType()] = new List<BuildingPlacementInfo>();
+            PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType] = new Dictionary<Team, HashSet<Vector2>>();
         }
-        BuildingPlacementInfo info = Utils.GetBuildInfoForTeam(GetType(), t);
-        if (info == null || info.possibleSpots.Count == 0)
+
+        if (!PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType].ContainsKey(team))
         {
-            SetupPossiblePlacements(t);
+            //Team not registered yet
+            PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType][team] = new HashSet<Vector2>();
         }
+        SetupPossiblePlacements();
+
     }
 
 
@@ -117,7 +116,7 @@ public class Building : MonoBehaviour, ISelectable
         }
         levelCost = Mathf.RoundToInt(buildCost * 2.5f);
         maxLevel = meshlevels.Length + 1;
-
+        GetPossibleBuildSpots();
     }
 
     public virtual void DestroyBuilding()
@@ -138,7 +137,7 @@ public class Building : MonoBehaviour, ISelectable
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(Utils.GetBuildInfoForTeam(GetType(), team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)));
+            PlacementController.instance.SetCanBuild(spotType, team, new Vector2(transform.position.x, transform.position.z));
             return;
         }
 

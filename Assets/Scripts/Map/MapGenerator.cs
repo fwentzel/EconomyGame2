@@ -46,9 +46,9 @@ public class MapGenerator : MonoBehaviour
     {
 
         SetDimension();
+
         SetupMap();
-#if !UNITY_EDITOR
-#endif
+
     }
 
     public void SetupMap()

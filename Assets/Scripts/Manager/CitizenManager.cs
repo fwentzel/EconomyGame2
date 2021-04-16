@@ -10,9 +10,8 @@ public class CitizenManager : MonoBehaviour
     [SerializeField] GameObject citizenPrefab;
 
     [SerializeField]
-    int totalAmountFreeCitizens = 1;
-    [SerializeField]
-    int LOOSE_CITIZEN_COOLDOWN_DAYS = 3;
+   public int totalAmountFreeCitizens { get; private set; }= 20;
+    [SerializeField] int LOOSE_CITIZEN_COOLDOWN_DAYS = 3;
     List<Citizen> citizens = new List<Citizen>();
 
     Dictionary<Team, int> looseCitizenCooldown = new Dictionary<Team, int>();

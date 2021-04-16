@@ -9,7 +9,7 @@ public class Mine : Building
     private Collider[] overlapResults = new Collider[5];
     private void Awake()
     {
-        UseMaxPlacementRange = false;
+        spotType = buildSpotType.mine;
     }
 
     public override void OnBuild(bool subtractResource = true)
@@ -26,14 +26,14 @@ public class Mine : Building
         resourceManager.ChangeRessourceAmount(resource.stone, -unitsPerIntervall);
         base.DestroyBuilding();
     }
-    protected override void SetupPossiblePlacements(Team t)
+    protected override void SetupPossiblePlacements()
     {
-        Rock[] rocks = Array.FindAll<Rock>(PlacementController.instance.rocks, rock => rock.team == t);
+        Rock[] rocks = Array.FindAll<Rock>(PlacementController.instance.rocks, rock => rock.team == team);
         foreach (Rock rock in rocks)
         {
             possiblePlacementsCache.Add(new Vector2(rock.transform.position.x, rock.transform.position.z));
         }
-        base.SetupPossiblePlacements(t);
+        base.SetupPossiblePlacements();
 
 
     }
@@ -56,7 +56,7 @@ public class Mine : Building
     {
         if (other == null) return;
 
-        if (onEnter &&Utils.GetBuildInfoForTeam(GetType(),team).possibleSpots.Contains(new Vector2(transform.position.x, transform.position.z)))
+        if (onEnter &&PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType][team].Contains(new Vector2(transform.position.x, transform.position.z)))
         {
             Rock rock = other.GetComponent<Rock>();
             PlacementController.instance.SetCanBuild(rock != null && !rock.occupied);

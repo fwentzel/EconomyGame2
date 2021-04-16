@@ -36,11 +36,6 @@ public class Utils : MonoBehaviour
         return null;
     }
 
-    public static BuildingPlacementInfo GetBuildInfoForTeam(Type type, Team team)
-    {
-        return PlacementSpotsManager.spots[type].Find(spots => spots.team == team);
-    }
-
     /// <summary>Gets an array of assets of type T at a given path. This path is relative to /Assets.</summary>
     /// <returns>An array of assets of type T.</returns>
     /// <param name="path">The file path relative to /Assets.</param>

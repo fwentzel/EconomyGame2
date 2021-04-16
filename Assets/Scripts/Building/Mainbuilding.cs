@@ -59,6 +59,8 @@ public class Mainbuilding : Building
             }
         }
 
+        GetPossibleBuildSpots();
+
     }
 
     public void AddBuilding(Building building, bool subtractFromResource = true)
@@ -74,8 +76,8 @@ public class Mainbuilding : Building
     public Building AddBuilding(Type buildingType)
     {
         Building building = Instantiate(possibleBuildings[buildingType]).GetComponent<Building>();
-        building.GetPossibleBuildSpots(team);
-        List<Vector2> spots = Utils.GetBuildInfoForTeam(buildingType, team).possibleSpots;
+
+        HashSet<Vector2> spots = PlacementSpotsManager.spotsForBuildingTypeAndTeam[building.spotType][team];
 
         foreach (Vector2 spot in spots)
         {
@@ -92,6 +94,28 @@ public class Mainbuilding : Building
         //Didnt find free spot
         Destroy(building.gameObject);
         return null;
+    }
+
+    protected override void SetupPossiblePlacements()
+    {
+        Vector3 buildingPos = transform.position;
+        Vector3Int intBuildingPos = new Vector3Int((int)buildingPos.x, (int)buildingPos.y, (int)buildingPos.z);
+        int maxPlaceRange = PlacementController.instance.maxPlacementRadius;
+        for (int x = intBuildingPos.x - maxPlaceRange; x <= intBuildingPos.x + maxPlaceRange; x++)
+        {
+            for (int z = intBuildingPos.z - maxPlaceRange; z <= intBuildingPos.z + maxPlaceRange; z++)
+            {
+                float dist = Mathf.Abs(x - intBuildingPos.x) + Mathf.Abs(z - intBuildingPos.z);
+                if (dist == 0)
+                    continue;
+                if (PlacementController.instance.CheckSurroundingTiles(new Vector2(x, z), 0, h => h == 0) && dist <= maxPlaceRange)
+                {
+
+                    possiblePlacementsCache.Add(new Vector2(x, z));
+                }
+            }
+        }
+        base.SetupPossiblePlacements();
     }
 
 

@@ -40,7 +40,7 @@ Material:
     - Vector1_BEB5CD7E: 204.1
     - Vector1_C30DE6E: 3
     - Vector1_C9015BF8: 130.7
-    - WaveHeight: 0.15
+    - WaveHeight: 0.05
     - Wavespeed: 1.69
     - YOffset: -0.36
     - isEditor: 0

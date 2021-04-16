@@ -163,7 +163,7 @@ public class ResourceManager : MonoBehaviour
     internal String GetAmountUI(resource resource)
     {
         if (resource == resource.citizens)
-            return GetAmount(resource) + "/" + mainbuilding.maxCitizens;
+            return GetAmount(resource) + "/" + mainbuilding.maxCitizens + " ["+CitizenManager.instance.totalAmountFreeCitizens+"]";
 
         return amountOf[resource].ToString();
     }

@@ -3,14 +3,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlacementController : MonoBehaviour
 {
     [HideInInspector] public static PlacementController instance { get; private set; }
     public bool isPlacing { get; private set; } = false;
-    public int maxPlacementRadius { get; private set; } = 4;
+    public int maxPlacementRadius { get; private set; } =2;
 
     public bool canBuild { get; private set; } = true;
+    public Building closestBuilding { get; private set; }
 
     public Rock[] rocks;
     Material gridMaterial;
@@ -23,7 +25,10 @@ public class PlacementController : MonoBehaviour
     int zSize;
     Mouse mouse;
 
+    bool useMaxPlacementRange = false;
+
     List<GameObject> buildSpotMarker = new List<GameObject>();
+
 
     private void Awake()
     {
@@ -184,7 +189,7 @@ public class PlacementController : MonoBehaviour
         Building building = placeableObject.GetComponent<Building>();
         building.enabled = false;
         building.team = GameManager.instance.localPlayer.mainbuilding.team;
-        building.GetPossibleBuildSpots(GameManager.instance.localPlayer.mainbuilding.team);
+        building.GetPossibleBuildSpots();
         placeableObject.AddComponent<Buildcheck>();
         placeableObject.GetComponent<BoxCollider>().isTrigger = true;
         isPlacing = true;
@@ -197,11 +202,10 @@ public class PlacementController : MonoBehaviour
 
     private void ConfigureGrid()
     {
-        Vector3 pos = ResourceUiManager.instance.activeResourceMan.mainbuilding.transform.position;
-        Vector4 posRange = new Vector4(pos.x, pos.y, pos.z, maxPlacementRadius + .5f);
-        gridMaterial.SetVector("MainBuildPos", posRange);
+        SetGridPosToNearestBuilding();
         Building building = placeableObject.GetComponent<Building>();
-        if (building.UseMaxPlacementRange)
+        useMaxPlacementRange = building.spotType==buildSpotType.normal;
+        if (useMaxPlacementRange)
         {
             gridMaterial.SetInt("UseBuildingRange", 1);
         }
@@ -216,25 +220,27 @@ public class PlacementController : MonoBehaviour
         toggleGrid(1);
     }
 
+    private void SetGridPosToNearestBuilding()
+    {
+        Mainbuilding mainbuilding = ResourceUiManager.instance.activeResourceMan.mainbuilding;
+        closestBuilding = mainbuilding.buildings.OrderBy(t => (t.transform.position - mousePos).sqrMagnitude).First();
+        if ((mainbuilding.transform.position - mousePos).sqrMagnitude < (closestBuilding.transform.position - mousePos).sqrMagnitude)
+            closestBuilding = mainbuilding;
+
+        Vector4 posRange = new Vector4(closestBuilding.transform.position.x, closestBuilding.transform.position.y, closestBuilding.transform.position.z, maxPlacementRadius + .5f);
+        gridMaterial.SetVector("MainBuildPos", posRange);
+    }
+
     private void ShowPlaceholderForBuildSpots(Building building)
     {
         //TODO POOLING!
-        List<BuildingPlacementInfo> buildingPlacementInfos = PlacementSpotsManager.spots[building.GetType()];
-
-        foreach (BuildingPlacementInfo info in buildingPlacementInfos)
+        foreach (Vector2 spot in PlacementSpotsManager.spotsForBuildingTypeAndTeam[building.spotType][building.team])
         {
-            if (info.team == building.team)
-            {
-                foreach (Vector2 spot in info.possibleSpots)
-                {
-                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube.GetComponent<BoxCollider>().enabled = false;
-                    cube.transform.position = new Vector3(spot.x, 0.3f, spot.y);
-                    cube.transform.localScale = new Vector3(.2f, .2f, .2f);
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.GetComponent<BoxCollider>().enabled = false;
+            cube.transform.position = new Vector3(spot.x, 0.3f, spot.y);
+            cube.transform.localScale = new Vector3(.2f, .2f, .2f);
 
-                }
-
-            }
         }
     }
     private void toggleGrid(int activateGrid)
@@ -245,6 +251,8 @@ public class PlacementController : MonoBehaviour
 
     private void UpdateGridPosition()
     {
+        if (useMaxPlacementRange)
+            SetGridPosToNearestBuilding();
         //send current calculated mouseposition to shader
         gridMaterial.SetVector("MousePos", mousePos);
     }
@@ -255,7 +263,18 @@ public class PlacementController : MonoBehaviour
         gridMaterial.SetColor("Color_31DF09FF", gridColor);
     }
 
-    public void SetCanBuild(bool canBuild)
+    public void SetCanBuild(buildSpotType spotType, Team team, Vector2 pos)
+    {
+        //Set canBuildvariable and set Gridcolor depending on value of _canBuild
+        this.canBuild = PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType][team].Contains(pos);
+        if (canBuild)
+            UpdateGridColor(Color.white);
+        else
+            UpdateGridColor(Color.red);
+
+
+    }
+    public void SetCanBuild(Boolean canBuild)
     {
         //Set canBuildvariable and set Gridcolor depending on value of _canBuild
         this.canBuild = canBuild;

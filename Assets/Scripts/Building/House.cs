@@ -32,41 +32,44 @@ public class House : Building
     }
     protected override void TriggerBonusLevel()
     {
-        capacity += 4;
-        resourceManager.mainbuilding.maxCitizens += 4;
-        GenerateNewCitizens(2);
+        IncreaseCapacity(4);
     }
 
     protected override void OnLevelUp()
     {
         base.OnLevelUp();
-        GenerateNewCitizens(1);
-        capacity += 2;
-        resourceManager.mainbuilding.maxCitizens += 2;
+        IncreaseCapacity(2);
         //ResourceUiManager.instance.UpdateRessourceUI(resource.citizens);
 
     }
 
-    protected override void SetupPossiblePlacements(Team t)
+    void IncreaseCapacity(int amount)
     {
-        Vector3 tempMainPos = Array.Find(CitysMeanResource.instance.resourceManagers, resourceManager => resourceManager.mainbuilding.team == t).transform.position;
-        Vector3Int mainBuildingPos = new Vector3Int((int)tempMainPos.x, (int)tempMainPos.y, (int)tempMainPos.z);
+        capacity += amount;
+        resourceManager.mainbuilding.maxCitizens += amount;
+        GenerateNewCitizens(amount);
+    }
+
+    protected override void SetupPossiblePlacements()
+    {
+        Vector3 buildingPos = transform.position;
+        Vector3Int intBuildingPos = new Vector3Int((int)buildingPos.x, (int)buildingPos.y, (int)buildingPos.z);
         int maxPlaceRange = PlacementController.instance.maxPlacementRadius;
-        for (int x = mainBuildingPos.x - maxPlaceRange; x <= mainBuildingPos.x + maxPlaceRange; x++)
+        for (int x = intBuildingPos.x - maxPlaceRange; x <= intBuildingPos.x + maxPlaceRange; x++)
         {
-            for (int z = mainBuildingPos.z - maxPlaceRange; z <= mainBuildingPos.z + maxPlaceRange; z++)
+            for (int z = intBuildingPos.z - maxPlaceRange; z <= intBuildingPos.z + maxPlaceRange; z++)
             {
-                float dist = Mathf.Abs(x - mainBuildingPos.x) + Mathf.Abs(z - mainBuildingPos.z);
-                 if (dist == 0)
-                        continue;
+                float dist = Mathf.Abs(x - intBuildingPos.x) + Mathf.Abs(z - intBuildingPos.z);
+                if (dist == 0)
+                    continue;
                 if (PlacementController.instance.CheckSurroundingTiles(new Vector2(x, z), 0, h => h == 0) && dist <= maxPlaceRange)
                 {
-                   
+
                     possiblePlacementsCache.Add(new Vector2(x, z));
                 }
             }
         }
-        base.SetupPossiblePlacements(t);
+        base.SetupPossiblePlacements();
     }
     void GenerateNewCitizens(int amount)
     {
@@ -133,7 +136,7 @@ public class House : Building
 
     public bool ReceiveCitizen(Citizen newCitizen)
     {
-        
+
         if (currentAmount == capacity)
             return false;
         ChangeCitizenAmount(1, newCitizen);
