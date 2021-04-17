@@ -1,5 +1,23 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &7104029032016109117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8521476323181846518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83633cfbe0d1d3d4b904bd13664e9ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceManager: {fileID: 0}
+  team: {fileID: 11400000, guid: 68bb35727d1d53049b9954f111b32415, type: 2}
+  renderTexture: {fileID: 8400000, guid: 1e6e31a7496dfda43bd2ed36c37bbe84, type: 2}
+  spotType: 0
+  meshlevels: []
+  buildCost: 300
 --- !u!1 &8146257842854821829
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,23 +48,6 @@ Transform:
   m_Father: {fileID: 5368957537725805013}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7104029032016109117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8521476323181846518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83633cfbe0d1d3d4b904bd13664e9ee8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceManager: {fileID: 0}
-  team: {fileID: 11400000, guid: 68bb35727d1d53049b9954f111b32415, type: 2}
-  renderTexture: {fileID: 8400000, guid: 1e6e31a7496dfda43bd2ed36c37bbe84, type: 2}
-  meshlevels: []
-  buildCost: 300
 --- !u!1001 &4850762707451080693
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ public class Building : MonoBehaviour, ISelectable
     public ResourceManager resourceManager;
     public Team team = null;
     public RenderTexture renderTexture;
+    public buildSpotType spotType= buildSpotType.normal;
 
     [SerializeField] Mesh[] meshlevels = null;
 
@@ -16,7 +17,6 @@ public class Building : MonoBehaviour, ISelectable
 
     public int level { get; private set; } = 1;
     public bool canLevelUp { get; private set; } = false;
-    public buildSpotType spotType { get; protected set; } = buildSpotType.normal;
     public HashSet<Vector2> possiblePlacementsCache = new HashSet<Vector2>();
     int maxLevel;
 

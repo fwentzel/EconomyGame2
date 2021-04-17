@@ -7,10 +7,6 @@ public class Mine : Building
     public int unitsPerIntervall;
 
     private Collider[] overlapResults = new Collider[5];
-    private void Awake()
-    {
-        spotType = buildSpotType.mine;
-    }
 
     public override void OnBuild(bool subtractResource = true)
     {

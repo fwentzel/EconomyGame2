@@ -26,8 +26,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceManager: {fileID: 0}
-  team: -1
+  team: {fileID: 0}
   renderTexture: {fileID: 8400000, guid: c0228741d2d2d2449ad5c0a5ea1044da, type: 2}
+  spotType: 1
   meshlevels: []
   buildCost: 200
   unitsPerIntervall: 10

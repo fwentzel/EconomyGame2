@@ -24,34 +24,34 @@ public class Harbour : Building
         }
         base.OnBuild();
     }
-    private void Awake()
-    {
-        spotType = buildSpotType.harbour;
-    }
+   
     protected override void SetupPossiblePlacements()
     {
-        if (PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType].Count > 0)
+        foreach (var item in PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType])
         {
-            //just copy previous spots, since they are identical
-            possiblePlacementsCache=PlacementSpotsManager.spotsForBuildingTypeAndTeam[spotType][team];
-             base.SetupPossiblePlacements();
-             return;
+            if (item.Value.Count > 0)
+            {
+                possiblePlacementsCache = item.Value;
+                base.SetupPossiblePlacements();
+                return;
+            }
+
         }
 
         MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
-       
+        float halfWaterHeight = mapGenerator.waterVertexHeight / 2;
         for (int x = 0; x < mapGenerator.xSize; x++)
         {
             for (int z = 0; z < mapGenerator.zSize; z++)
             {
                 Vector2 pos = new Vector2(x, z);
                 //Waterdepth/2 because there should be atleast 2 tiles with water next to harbour
-                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < mapGenerator.waterVertexHeight/2))
+                if (PlacementController.instance.CheckSurroundingTiles(pos, 0, h => h < halfWaterHeight))
                 {
                     possiblePlacementsCache.Add(new Vector2(x, z));
                 }
             }
-        }        
+        }
         base.SetupPossiblePlacements();
     }
 
@@ -62,7 +62,7 @@ public class Harbour : Building
         //only distance check
         if (other == null)
         {
-            PlacementController.instance.SetCanBuild(spotType, team,new Vector2(transform.position.x, transform.position.z));
+            PlacementController.instance.SetCanBuild(spotType, team, new Vector2(transform.position.x, transform.position.z));
             return;
         }
 

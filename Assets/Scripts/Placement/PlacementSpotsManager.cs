@@ -7,29 +7,34 @@ public class PlacementSpotsManager : MonoBehaviour
 {
 
     public static PlacementSpotsManager instance { get; private set; }
-    public static Dictionary<buildSpotType, Dictionary<Team,HashSet<Vector2>>> spotsForBuildingTypeAndTeam = new Dictionary<buildSpotType, Dictionary<Team, HashSet<Vector2>>>();
+    public static Dictionary<buildSpotType, Dictionary<Team, HashSet<Vector2>>> spotsForBuildingTypeAndTeam = new Dictionary<buildSpotType, Dictionary<Team, HashSet<Vector2>>>();
 
     public ColorToObjectMapping com;
     private void Start()
     {
-      GameManager.instance.OnGameStart+= GetPlacements;
+        GameManager.instance.OnGameStart += GetPlacements;
     }
 
     void GetPlacements()
-    {       
-        // foreach (var item in com.colorObjectMappings)
-        // {
-        //     Building building = item.placeable.GetComponent<Building>();
-        //     if(building==null)continue;
-        //     foreach (Player player in GameManager.instance.players)
-        //     {
-        //         building.GetPossibleBuildSpots(player.team);
-        //     }
-        // }
+    {
+        foreach (var item in com.colorObjectMappings)
+        {
+            Building building = item.placeable.GetComponent<Building>();
+
+            if (building != null && building.spotType.Equals(buildSpotType.harbour))
+            {
+                foreach (Player player in GameManager.instance.players)
+                {
+                    building.GetPossibleBuildSpots();
+                }
+            }
+
+        }
     }
 }
 
-public enum buildSpotType{
+public enum buildSpotType
+{
     harbour,
     mine,
     normal
